@@ -174,20 +174,20 @@ export function createMenu(): void {
       role: 'help',
       submenu: [
         {
-          label: 'Documentation',
+          label: '使用文档',
           click: async () => {
             await shell.openExternal('https://claw-x.com');
           },
         },
         {
-          label: 'Report Issue',
+          label: '问题反馈',
           click: async () => {
-            await shell.openExternal('https://github.com/ValueCell-ai/ClawX/issues');
+            await shell.openExternal('https://github.com/guiyingyi2021/ClawX/issues');
           },
         },
         { type: 'separator' },
         {
-          label: 'OpenClaw Documentation',
+          label: 'OpenClaw 文档',
           click: async () => {
             await shell.openExternal('https://docs.openclaw.ai');
           },
