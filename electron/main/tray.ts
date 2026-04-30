@@ -57,7 +57,7 @@ export function createTray(mainWindow: BrowserWindow): Tray {
   tray = new Tray(icon);
   
   // Set tooltip
-  tray.setToolTip('ClawX - AI Assistant');
+  tray.setToolTip('Dclaw - AI 助手');
   
   const showWindow = () => {
     if (mainWindow.isDestroyed()) return;
@@ -68,18 +68,18 @@ export function createTray(mainWindow: BrowserWindow): Tray {
   // Create context menu
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: 'Show ClawX',
+      label: '显示窗口',
       click: showWindow,
     },
     {
       type: 'separator',
     },
     {
-      label: 'Gateway Status',
+      label: '网关状态',
       enabled: false,
     },
     {
-      label: '  Running',
+      label: '  运行中',
       type: 'checkbox',
       checked: true,
       enabled: false,
@@ -88,10 +88,10 @@ export function createTray(mainWindow: BrowserWindow): Tray {
       type: 'separator',
     },
     {
-      label: 'Quick Actions',
+      label: '快捷操作',
       submenu: [
         {
-          label: 'Open Chat',
+          label: '打开聊天',
           click: () => {
             if (mainWindow.isDestroyed()) return;
             mainWindow.show();
@@ -99,7 +99,7 @@ export function createTray(mainWindow: BrowserWindow): Tray {
           },
         },
         {
-          label: 'Open Settings',
+          label: '打开设置',
           click: () => {
             if (mainWindow.isDestroyed()) return;
             mainWindow.show();
@@ -112,7 +112,7 @@ export function createTray(mainWindow: BrowserWindow): Tray {
       type: 'separator',
     },
     {
-      label: 'Check for Updates...',
+      label: '检查更新...',
       click: () => {
         if (mainWindow.isDestroyed()) return;
         mainWindow.webContents.send('update:check');
@@ -122,7 +122,7 @@ export function createTray(mainWindow: BrowserWindow): Tray {
       type: 'separator',
     },
     {
-      label: 'Quit ClawX',
+      label: '退出 Dclaw',
       click: () => {
         app.quit();
       },
@@ -157,7 +157,7 @@ export function createTray(mainWindow: BrowserWindow): Tray {
  */
 export function updateTrayStatus(status: string): void {
   if (tray) {
-    tray.setToolTip(`ClawX - ${status}`);
+    tray.setToolTip(`Dclaw - ${status}`);
   }
 }
 
