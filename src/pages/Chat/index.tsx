@@ -99,6 +99,7 @@ export function Chat() {
   // remount and reset. `undefined` values mean "user hasn't toggled, let the
   // card pick a default from its own `active` prop."
   const [graphExpandedOverrides, setGraphExpandedOverrides] = useState<Record<string, boolean>>({});
+
   const graphStepCache: Record<string, GraphStepCacheEntry> = graphStepCacheStore.get(currentSessionKey) ?? {};
   const minLoading = useMinLoading(loading && messages.length > 0);
   const { contentRef, scrollRef } = useStickToBottomInstant(currentSessionKey);

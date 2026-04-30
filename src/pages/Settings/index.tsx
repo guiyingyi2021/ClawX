@@ -1088,6 +1088,7 @@ export function Settings() {
               <p>{t('about.basedOn')}</p>
               <p>{t('about.version', { version: currentVersion })}</p>
               <div className="flex gap-4 pt-3">
+                {/* 官网和 GitHub 已隐藏
                 <Button
                   variant="link"
                   className="h-auto p-0 text-sm text-blue-500 hover:text-blue-600 font-medium"
@@ -1102,10 +1103,11 @@ export function Settings() {
                 >
                   {t('about.github')}
                 </Button>
+                */}
                 <Button
                   variant="link"
                   className="h-auto p-0 text-sm text-blue-500 hover:text-blue-600 font-medium"
-                  onClick={() => window.electron.openExternal('https://icnnp7d0dymg.feishu.cn/wiki/UyfOwQ2cAiJIP6kqUW8cte5Bnlc')}
+                  onClick={() => window.electron.openExternal('https://my.feishu.cn/wiki/VNuAweEcDixl5JkHDoycGNsLnDe')}
                 >
                   {t('about.faq')}
                 </Button>

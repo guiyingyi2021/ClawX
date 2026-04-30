@@ -53,6 +53,13 @@ async function setupTarget(id) {
   const tempDir = path.join(ROOT_DIR, 'temp_uv_extract');
   const archivePath = path.join(ROOT_DIR, target.filename);
   const downloadUrl = `${BASE_URL}/${target.filename}`;
+  const destBin = path.join(targetDir, target.binName);
+
+  // Skip if already exists
+  if (await fs.pathExists(destBin)) {
+    echo(chalk.green`✅ ${destBin} already exists, skipping.`);
+    return;
+  }
 
   echo(chalk.blue`\n📦 Setting up uv for ${id}...`);
 

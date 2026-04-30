@@ -217,11 +217,32 @@ export async function repairClawXOnlyBootstrapFiles(): Promise<void> {
 /**
  * ClawX ships a default desktop identity and does not need OpenClaw's
  * chat-first personalization script. Once the Gateway has seeded the regular
- * workspace files, remove BOOTSTRAP.md so sessions start normally.
+ * workspace files AND ClawX has generated the core config files (IDENTITY.md,
+ * USER.md, SOUL.md), remove BOOTSTRAP.md so sessions start normally.
+ *
+ * If the workspace has NO core config files yet (fresh first run), keep
+ * BOOTSTRAP.md so the agent can guide the initialization conversation.
  */
 export async function removeChatFirstBootstrapFiles(): Promise<void> {
   const workspaceDirs = await resolveAllWorkspaceDirs();
+  const CORE_CONFIG_FILES = ['IDENTITY.md', 'USER.md', 'SOUL.md'];
+
   for (const { dir: workspaceDir } of workspaceDirs) {
+    // Check if core config files exist — if not, this is a fresh workspace
+    // that needs BOOTSTRAP.md for agent-led initialization
+    let hasCoreConfig = false;
+    for (const coreFile of CORE_CONFIG_FILES) {
+      if (await fileExists(join(workspaceDir, coreFile))) {
+        hasCoreConfig = true;
+        break;
+      }
+    }
+
+    if (!hasCoreConfig) {
+      // Fresh workspace — keep BOOTSTRAP.md so agent can lead initialization
+      continue;
+    }
+
     const bootstrapPath = join(workspaceDir, 'BOOTSTRAP.md');
     if (!(await fileExists(bootstrapPath))) continue;
 

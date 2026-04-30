@@ -824,6 +824,8 @@ function InstallingContent({ skills, onComplete, onSkip }: InstallingContentProp
     </div>
   );
 }
+
+// Helper functions for extracting names from config files
 interface CompleteContentProps {
   installedSkills: string[];
 }

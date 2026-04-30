@@ -1,4 +1,8 @@
 import type { IncomingMessage, ServerResponse } from 'http';
+import { readFile, writeFile } from 'fs/promises';
+import { join, resolve } from 'path';
+import { homedir } from 'os';
+import { access, constants } from 'fs/promises';
 import {
   assignChannelToAgent,
   clearChannelBinding,
@@ -247,6 +251,59 @@ export async function handleAgentRoutes(
       }
       return true;
     }
+  }
+
+  // ── Expert summon endpoint ──────────────────────────────────────────
+  if (url.pathname === '/api/experts/summon' && req.method === 'POST') {
+    try {
+      const body = await parseJsonBody<{
+        expertId: string;
+        expertName: string;
+        soulContent: string;
+        identityContent: string;
+      }>(req);
+
+      console.log('[Expert summon] Starting:', body.expertId, body.expertName);
+
+      // 1. Create the agent
+      const snapshot = await createAgent(body.expertName, { inheritWorkspace: false });
+      console.log('[Expert summon] Agent created, snapshot agents:', snapshot.agents.map(a => a.id));
+
+      // 2. Get the actual workspace path from the created agent
+      // createAgent returns the actual agent ID, which may have a suffix if duplicate
+      const createdAgent = snapshot.agents.find(a => a.name === body.expertName || a.id === body.expertId);
+      if (!createdAgent) {
+        console.error('[Expert summon] Agent not found in snapshot. Available:', snapshot.agents.map(a => ({id: a.id, name: a.name})));
+        throw new Error(`Agent not found in snapshot. Available: ${snapshot.agents.map(a => a.id).join(', ')}`);
+      }
+      console.log('[Expert summon] Found agent:', createdAgent.id);
+      
+      const openclawDir = join(homedir(), '.openclaw');
+      const workspaceDir = resolve(openclawDir, `workspace-${createdAgent.id}`);
+      console.log('[Expert summon] Workspace dir:', workspaceDir);
+
+      // 3. Write expert configuration files
+      await writeFile(join(workspaceDir, 'SOUL.md'), body.soulContent, 'utf-8');
+      await writeFile(join(workspaceDir, 'IDENTITY.md'), body.identityContent, 'utf-8');
+      console.log('[Expert summon] Config files written');
+
+      // 4. Remove BOOTSTRAP.md if it exists
+      try {
+        await access(join(workspaceDir, 'BOOTSTRAP.md'), constants.F_OK);
+        const { unlink } = await import('fs/promises');
+        await unlink(join(workspaceDir, 'BOOTSTRAP.md'));
+      } catch { /* no bootstrap, that's fine */ }
+
+      // 5. Reload gateway so new agent is recognized
+      scheduleGatewayReload(ctx, 'summon-expert');
+      console.log('[Expert summon] Done!');
+
+      sendJson(res, 200, { success: true, agentId: createdAgent.id, ...snapshot });
+    } catch (error) {
+      console.error('[Expert summon] Error:', error);
+      sendJson(res, 500, { success: false, error: String(error) });
+    }
+    return true;
   }
 
   return false;

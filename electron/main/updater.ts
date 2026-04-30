@@ -13,7 +13,7 @@ import { EventEmitter } from 'events';
 import { setQuitting } from './app-state';
 
 /** Base CDN URL (without trailing channel path) */
-const OSS_BASE_URL = 'https://oss.intelli-spectrum.com';
+const OSS_BASE_URL = 'http://localhost/invalid'; // Disabled for Dclaw white-label
 
 export interface UpdateStatus {
   status: 'idle' | 'checking' | 'available' | 'not-available' | 'downloading' | 'downloaded' | 'error';
@@ -60,7 +60,7 @@ export class AppUpdater extends EventEmitter {
     });
     
     autoUpdater.autoDownload = false;
-    autoUpdater.autoInstallOnAppQuit = true;
+    autoUpdater.autoInstallOnAppQuit = false; // Disable auto-install for white-label
     
     autoUpdater.logger = {
       info: (msg: string) => logger.info('[Updater]', msg),

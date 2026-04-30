@@ -18,6 +18,7 @@ import {
   ExternalLink,
   Trash2,
   Cpu,
+  Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { rendererExtensionRegistry } from '@/extensions/registry';
@@ -216,6 +217,7 @@ export function Sidebar() {
   const extraNavItems = rendererExtensionRegistry.getExtraNavItems();
 
   const coreNavItems = [
+    { to: '/experts', icon: <Sparkles className="h-[18px] w-[18px]" strokeWidth={2} />, label: '专家中心', testId: 'sidebar-nav-experts' },
     { to: '/models', icon: <Cpu className="h-[18px] w-[18px]" strokeWidth={2} />, label: t('sidebar.models'), testId: 'sidebar-nav-models' },
     { to: '/agents', icon: <Bot className="h-[18px] w-[18px]" strokeWidth={2} />, label: t('sidebar.agents'), testId: 'sidebar-nav-agents' },
     { to: '/channels', icon: <Network className="h-[18px] w-[18px]" strokeWidth={2} />, label: t('sidebar.channels'), testId: 'sidebar-nav-channels' },
@@ -245,9 +247,9 @@ export function Sidebar() {
       <div className={cn("flex items-center p-2 h-12", sidebarCollapsed ? "justify-center" : "justify-between")}>
         {!sidebarCollapsed && (
           <div className="flex items-center gap-2 px-2 overflow-hidden">
-            <img src={logoSvg} alt="ClawX" className="h-5 w-auto shrink-0" />
+            <img src={logoSvg} alt="Dclaw" className="h-5 w-auto shrink-0" />
             <span className="text-sm font-semibold truncate whitespace-nowrap text-foreground/90">
-              ClawX
+              Dclaw
             </span>
           </div>
         )}
