@@ -8,6 +8,12 @@ import path from 'path';
 import { app, shell } from 'electron';
 import { getOpenClawConfigDir, ensureDir, getClawHubCliBinPath, getClawHubCliEntryPath, quoteForCmd } from '../utils/paths';
 
+// Chinese mirror registries for skills (fallback order)
+const SKILL_REGISTRIES = [
+    'https://cn.clawhub-mirror.com',
+    'https://lightmake.site/api/v1',
+];
+
 export interface ClawHubSearchParams {
     query: string;
     limit?: number;
@@ -142,9 +148,9 @@ export class ClawHubService {
     }
 
     /**
-     * Run a ClawHub CLI command
+     * Run a ClawHub CLI command with Chinese mirror registry
      */
-    private async runCommand(args: string[]): Promise<string> {
+    private async runCommand(args: string[], attemptRegistryIndex = 0): Promise<string> {
         return new Promise((resolve, reject) => {
             if (this.useNodeRunner && !fs.existsSync(this.cliEntryPath)) {
                 reject(new Error(`ClawHub CLI entry not found at: ${this.cliEntryPath}`));
@@ -156,9 +162,13 @@ export class ClawHubService {
                 return;
             }
 
-            const commandArgs = this.useNodeRunner ? [this.cliEntryPath, ...args] : args;
+            // Use Chinese mirror registry
+            const registry = SKILL_REGISTRIES[attemptRegistryIndex] || SKILL_REGISTRIES[0];
+            const commandArgs = this.useNodeRunner
+                ? [this.cliEntryPath, '--registry', registry, ...args]
+                : ['--registry', registry, ...args];
             const displayCommand = [this.cliPath, ...commandArgs].join(' ');
-            console.log(`Running ClawHub command: ${displayCommand}`);
+            console.log(`Running ClawHub command (registry: ${registry}): ${displayCommand}`);
 
             const isWin = process.platform === 'win32';
             const useShell = isWin && !this.useNodeRunner;
@@ -201,6 +211,14 @@ export class ClawHubService {
 
             child.on('close', (code) => {
                 if (code !== 0 && code !== null) {
+                    // If this registry failed and we have more to try, retry with next registry
+                    if (attemptRegistryIndex < SKILL_REGISTRIES.length - 1) {
+                        console.warn(`Registry ${registry} failed (code ${code}), trying next mirror...`);
+                        this.runCommand(args, attemptRegistryIndex + 1)
+                            .then(resolve)
+                            .catch(reject);
+                        return;
+                    }
                     console.error(`ClawHub command failed with code ${code}`);
                     console.error('Stderr:', stderr);
                     reject(new Error(`Command failed: ${stderr || stdout}`));
