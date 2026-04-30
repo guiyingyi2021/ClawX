@@ -101,7 +101,7 @@ function SkillDetailDialog({ skill, isOpen, onClose, onToggle, onUninstall, onOp
 
   const handleOpenClawhub = async () => {
     if (!skill?.slug) return;
-    await invokeIpc('shell:openExternal', `https://clawhub.ai/s/${skill.slug}`);
+    await invokeIpc('shell:openExternal', `https://cn.clawhub-mirror.com/s/${skill.slug}`);
   };
 
   const handleOpenEditor = async () => {
