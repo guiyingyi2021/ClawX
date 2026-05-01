@@ -48,6 +48,7 @@ import { deviceOAuthManager } from '../utils/device-oauth';
 import { browserOAuthManager } from '../utils/browser-oauth';
 import { setupAigcLogin } from './aigc-login';
 import { setupAigcPanel } from './aigc-panel';
+import { registerAgentHandlers } from './ipc/agent-handlers';
 import { whatsAppLoginManager } from '../utils/whatsapp-login';
 import { syncAllProviderAuthToRuntime } from '../services/providers/provider-runtime-sync';
 
@@ -343,6 +344,9 @@ async function initialize(): Promise<void> {
 
   // Register IPC handlers
   registerIpcHandlers(gatewayManager, clawHubService, window);
+
+  // Register Agent handlers (专家召唤功能)
+  registerAgentHandlers();
 
   // Setup AIGC login handler
   setupAigcLogin();

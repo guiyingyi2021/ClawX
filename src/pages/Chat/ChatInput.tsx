@@ -19,6 +19,7 @@ import { useAgentsStore } from '@/stores/agents';
 import { useChatStore } from '@/stores/chat';
 import type { AgentSummary } from '@/types/agent';
 import type { QuickAccessSkill } from '@/types/skill';
+import { EXPERT_MAP } from '@/pages/Experts/experts.config';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { rendererExtensionRegistry } from '@/extensions/registry';
@@ -675,7 +676,7 @@ export function ChatInput({ onSend, onStop, disabled = false, sending = false, i
                 className="inline-flex items-center gap-1.5 rounded-lg border border-primary/20 bg-primary/5 px-2.5 py-1 text-meta font-medium text-foreground transition-colors hover:bg-primary/10"
                 title={t('composer.clearTarget')}
               >
-                <span>{t('composer.targetChip', { agent: selectedTarget.name })}</span>
+                <span>{t('composer.targetChip', { agent: EXPERT_MAP[selectedTarget.id]?.role || EXPERT_MAP[`expert-${selectedTarget.name.toLowerCase()}`]?.role || selectedTarget.name })}</span>
                 <X className="h-3 w-3 text-muted-foreground" />
               </button>
             </div>
@@ -980,7 +981,7 @@ function AgentPickerItem({
   selected: boolean;
   onSelect: () => void;
 }) {
-  return (
+    return (
     <button
       type="button"
       onClick={onSelect}
@@ -989,7 +990,9 @@ function AgentPickerItem({
         selected ? 'bg-primary/10 text-foreground' : 'hover:bg-black/5 dark:hover:bg-white/5'
       )}
     >
-      <span className="text-sm font-medium text-foreground">{agent.name}</span>
+      <span className="text-sm font-medium text-foreground">
+        {EXPERT_MAP[agent.id]?.role || EXPERT_MAP[`expert-${agent.name.toLowerCase()}`]?.role || agent.name}
+      </span>
       <span className="text-tiny text-muted-foreground">
         {agent.modelDisplay}
       </span>

@@ -143,6 +143,11 @@ const electronAPI = {
         'openclaw:getConfigDir',
         'openclaw:getSkillsDir',
         'openclaw:getCliCommand',
+        // Agent (召唤专家)
+        'agent:summon',
+        'agent:remove',
+        'agent:isInstalled',
+        'agent:getInstalled',
       ];
 
       if (validChannels.includes(channel)) {

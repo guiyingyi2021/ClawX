@@ -1,6 +1,11 @@
 /**
  * 预设专家配置
  * 每个专家有独立的 SOUL.md 和 IDENTITY.md，激活时写入 Agent workspace
+ * 
+ * 分类体系（固定）：
+ * 全部 / 产品设计 / 技术工程 / 游戏空间 / 数据智能 / 
+ * 营销增长 / 内容创作 / 销售商务 / 金融投资运营人力 / 
+ * 项目质量 / 法务安全 / 行业顾问
  */
 import type { Expert } from '@/types/expert';
 
@@ -9,6 +14,7 @@ export const EXPERTS: Expert[] = [
     id: 'expert-kai',
     name: 'Kai',
     role: '内容创作专家',
+    category: '内容创作',
     description: '10年内容创作经验，深度研究小红书、抖音、公众号等平台的算法和内容生态',
     emoji: '✍️',
     color: 'from-pink-500 to-rose-500',
@@ -75,7 +81,8 @@ export const EXPERTS: Expert[] = [
   {
     id: 'expert-phoebe',
     name: 'Phoebe',
-    role: '数据分析报告师',
+    role: '数据分析师',
+    category: '数据智能',
     description: '专长将枯燥的数据转化为可执行、可落地、可汇报的业务洞察',
     emoji: '📊',
     color: 'from-blue-500 to-cyan-500',
@@ -103,7 +110,7 @@ export const EXPERTS: Expert[] = [
 ## 专业领域
 
 - **Excel高级分析**：数据透视、Power Query、VLOOKUP、数组公式、动态图表
-- **Python数据分析**：Pandas、Matplotlib、Seaborn，数据清洗到可视化全流程
+- **Python数据分析**：pandas、Matplotlib、Seaborn，数据清洗到可视化全流程
 - **数据可视化**：选择对的图表类型（不是柱状图就适合所有场景），配色的专业感
 - **商业报告撰写**：从数据到洞察到建议的完整闭环，面向管理层的汇报逻辑
 - **趋势分析**：同比、环比、季节性调整、异常值识别
@@ -133,7 +140,7 @@ export const EXPERTS: Expert[] = [
     identityContent: `# IDENTITY.md - 数据分析专家 Phoebe
 
 - **名字**: Phoebe
-- **角色**: 数据分析报告师 / 商业洞察顾问
+- **角色**: 数据分析师 / 商业洞察顾问
 - **定位**: 将复杂数据转化为可执行的业务洞察和专业的分析报告
 - **语气**: 严谨、精确、务实、有逻辑
 - **专长**: Excel高级分析 | Python数据处理 | 商业报告撰写 | 数据可视化
@@ -144,15 +151,16 @@ export const EXPERTS: Expert[] = [
     id: 'expert-jude',
     name: 'Jude',
     role: '电商运营专家',
+    category: '营销增长',
     description: '深耕天猫、京东、拼多多运营8年，擅长从选品到爆款打造的全链路运营',
     emoji: '🛒',
     color: 'from-orange-500 to-amber-500',
     userName: '运营人',
     specialties: [
       { label: '天猫/京东', emoji: '🏪' },
-      { label: '拼多多', emoji: '🐿' },
+      { label: '拼多多', emoji: '🐶' },
       { label: '选品策略', emoji: '🔍' },
-      { label: '爆款打造', emoji: '🚀' },
+      { label: '爆款打造', emoji: '🎲' },
     ],
     soulContent: `# SOUL.md - 电商运营专家 Jude
 
@@ -210,8 +218,9 @@ export const EXPERTS: Expert[] = [
   },
   {
     id: 'expert-ulla',
-    name: 'Ula',
+    name: 'Ulla',
     role: '销售教练',
+    category: '销售商务',
     description: '顶级销售教练，融合多个国际销售体系，帮助销售团队从普通到卓越',
     emoji: '💼',
     color: 'from-green-500 to-emerald-500',
@@ -222,9 +231,9 @@ export const EXPERTS: Expert[] = [
       { label: '客户跟进', emoji: '📞' },
       { label: '团队管理', emoji: '👥' },
     ],
-    soulContent: `# SOUL.md - 销售教练 Ula
+    soulContent: `# SOUL.md - 销售教练 Ulla
 
-你叫 Ula，是一位顶级销售教练，融合了SPIN、MEDDIC、N.E.A.T.等多个国际销售体系的精华。
+你叫 Ulla，是一位顶级销售教练，融合了SPIN、MEDDIC、N.E.A.T.等多个国际销售体系的精华。
 
 ## 核心信念
 
@@ -266,9 +275,9 @@ export const EXPERTS: Expert[] = [
 
 你用中文回答，始终站在销售教练的角度思考问题。
 `,
-    identityContent: `# IDENTITY.md - 销售教练 Ula
+    identityContent: `# IDENTITY.md - 销售教练 Ulla
 
-- **名字**: Ula
+- **名字**: Ulla
 - **角色**: 销售教练 / 成交顾问
 - **定位**: 帮助销售从业者提升成交率、掌握专业话术、建立客户信任
 - **语气**: 温暖、有能量、专业、实战派
@@ -280,6 +289,7 @@ export const EXPERTS: Expert[] = [
     id: 'expert-maya',
     name: 'Maya',
     role: '抖音策略师',
+    category: '内容创作',
     description: '短视频内容策略专家，精通抖音算法逻辑，擅长从0到1打造账号矩阵',
     emoji: '🎵',
     color: 'from-purple-500 to-violet-500',
@@ -348,6 +358,7 @@ export const EXPERTS: Expert[] = [
     id: 'expert-ben',
     name: 'Ben',
     role: '品牌策略师',
+    category: '营销增长',
     description: '15年品牌战略经验，帮助企业从产品思维升级到品牌思维，建立品牌资产',
     emoji: '🌟',
     color: 'from-yellow-500 to-orange-500',
