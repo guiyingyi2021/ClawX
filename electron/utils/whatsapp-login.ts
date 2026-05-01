@@ -5,6 +5,7 @@ import { EventEmitter } from 'events';
 import { existsSync, mkdirSync, rmSync, readdirSync } from 'fs';
 import { deflateSync } from 'zlib';
 import { getOpenClawDir, getOpenClawResolvedDir } from './paths';
+import { resolveOpenClawRuntimeModulePath } from './runtime-package-resolution';
 
 const require = createRequire(import.meta.url);
 
@@ -12,7 +13,7 @@ const require = createRequire(import.meta.url);
 const openclawPath = getOpenClawDir();
 const openclawResolvedPath = getOpenClawResolvedDir();
 // Primary: resolves from openclaw's real (dereferenced) path in pnpm store.
-// In packaged builds this is the staged resources/openclaw-runtime/<openclaw-versioned-dir>/node_modules.
+// In packaged builds this is the flat `resources/openclaw/node_modules/`.
 const openclawRequire = createRequire(join(openclawResolvedPath, 'package.json'));
 // Fallback: resolves from the symlink path (`node_modules/openclaw`).
 // In dev mode, Node walks UP from here to `<project>/node_modules/`, which
@@ -33,22 +34,6 @@ function resolveOpenClawPackageJson(packageName: string): string {
         const reason = err instanceof Error ? err.message : String(err);
         throw new Error(
             `Failed to resolve "${packageName}" from OpenClaw context. ` +
-            `openclawPath=${openclawPath}, resolvedPath=${openclawResolvedPath}. ${reason}`,
-            { cause: err }
-        );
-    }
-}
-
-function resolveOpenClawModule(specifier: string): string {
-    try {
-        return openclawRequire.resolve(specifier);
-    } catch { /* fall through */ }
-    try {
-        return projectRequire.resolve(specifier);
-    } catch (err) {
-        const reason = err instanceof Error ? err.message : String(err);
-        throw new Error(
-            `Failed to resolve "${specifier}" from OpenClaw context. ` +
             `openclawPath=${openclawPath}, resolvedPath=${openclawResolvedPath}. ${reason}`,
             { cause: err }
         );
@@ -100,8 +85,10 @@ function getQrRenderDeps(): QrRenderDeps {
         return qrRenderDeps;
     }
 
-    const qrCodeModulePath = resolveOpenClawModule('qrcode-terminal/vendor/QRCode/index.js');
-    const qrErrorCorrectLevelPath = resolveOpenClawModule('qrcode-terminal/vendor/QRCode/QRErrorCorrectLevel.js');
+    const qrCodeModulePath = resolveOpenClawRuntimeModulePath('qrcode-terminal/vendor/QRCode/index.js');
+    const qrErrorCorrectLevelPath = resolveOpenClawRuntimeModulePath(
+        'qrcode-terminal/vendor/QRCode/QRErrorCorrectLevel.js',
+    );
     qrRenderDeps = {
         QRCode: require(qrCodeModulePath),
         QRErrorCorrectLevel: require(qrErrorCorrectLevelPath),
