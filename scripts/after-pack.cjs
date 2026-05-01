@@ -688,15 +688,6 @@ exports.default = async function afterPack(context) {
     }
   }
 
-  // 4.1 Move the finalized OpenClaw tree into the shape OpenClaw already
-  // recognizes as an external runtime root:
-  //   resources/openclaw-runtime/openclaw-<version>-<hash>
-  //
-  // At runtime ClawX sets OPENCLAW_PLUGIN_STAGE_DIR to resources/openclaw-runtime
-  // and launches from the staged openclaw-* directory. This avoids a first-run
-  // copy while still preventing OpenClaw from running npm install.
-  stageOpenClawRuntimeForPackagedApp(resourcesDir, openclawRoot);
-
   // 5. Patch lru-cache in app.asar.unpacked
   //
   // Production dependencies (electron-updater → semver → lru-cache@6,
