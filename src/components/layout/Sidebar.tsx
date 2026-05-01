@@ -19,6 +19,7 @@ import {
   Trash2,
   Cpu,
   Sparkles,
+  ImageIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { rendererExtensionRegistry } from '@/extensions/registry';
@@ -218,6 +219,7 @@ export function Sidebar() {
 
   const coreNavItems = [
     { to: '/experts', icon: <Sparkles className="h-[18px] w-[18px]" strokeWidth={2} />, label: '专家中心', testId: 'sidebar-nav-experts' },
+    { to: '/aigc', icon: <ImageIcon className="h-[18px] w-[18px]" strokeWidth={2} />, label: 'AIGC', testId: 'sidebar-nav-aigc' },
     { to: '/models', icon: <Cpu className="h-[18px] w-[18px]" strokeWidth={2} />, label: t('sidebar.models'), testId: 'sidebar-nav-models' },
     { to: '/agents', icon: <Bot className="h-[18px] w-[18px]" strokeWidth={2} />, label: t('sidebar.agents'), testId: 'sidebar-nav-agents' },
     { to: '/channels', icon: <Network className="h-[18px] w-[18px]" strokeWidth={2} />, label: t('sidebar.channels'), testId: 'sidebar-nav-channels' },

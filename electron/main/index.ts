@@ -16,6 +16,7 @@ import { warmupNetworkOptimization } from '../utils/uv-env';
 import { initTelemetry } from '../utils/telemetry';
 
 import { ClawHubService } from '../gateway/clawhub';
+import { SkillShopService } from '../gateway/skillshop';
 import { extensionRegistry } from '../extensions/registry';
 import { loadExtensionsFromManifest } from '../extensions/loader';
 import { registerAllBuiltinExtensions } from '../extensions/builtin';
@@ -45,6 +46,8 @@ import { startHostApiServer } from '../api/server';
 import { HostEventBus } from '../api/event-bus';
 import { deviceOAuthManager } from '../utils/device-oauth';
 import { browserOAuthManager } from '../utils/browser-oauth';
+import { setupAigcLogin } from './aigc-login';
+import { setupAigcPanel } from './aigc-panel';
 import { whatsAppLoginManager } from '../utils/whatsapp-login';
 import { syncAllProviderAuthToRuntime } from '../services/providers/provider-runtime-sync';
 
@@ -122,6 +125,7 @@ const gotTheLock = gotElectronLock && gotFileLock;
 let mainWindow: BrowserWindow | null = null;
 let gatewayManager!: GatewayManager;
 let clawHubService!: ClawHubService;
+let skillShopService!: SkillShopService;
 let hostEventBus!: HostEventBus;
 let hostApiServer: Server | null = null;
 const mainWindowFocusState = createMainWindowFocusState();
@@ -306,6 +310,9 @@ async function initialize(): Promise<void> {
   // Create the main window
   const window = createMainWindow();
 
+  // Setup AIGC Panel (BrowserView for embedded AIGC site)
+  setupAigcPanel(window);
+
   // Create system tray
   if (!isE2EMode) {
     createTray(window);
@@ -337,9 +344,13 @@ async function initialize(): Promise<void> {
   // Register IPC handlers
   registerIpcHandlers(gatewayManager, clawHubService, window);
 
+  // Setup AIGC login handler
+  setupAigcLogin();
+
   hostApiServer = startHostApiServer({
     gatewayManager,
     clawHubService,
+    skillShopService,
     eventBus: hostEventBus,
     mainWindow: window,
   });
@@ -532,6 +543,7 @@ if (gotTheLock) {
 
   gatewayManager = new GatewayManager();
   clawHubService = new ClawHubService();
+  skillShopService = new SkillShopService();
   hostEventBus = new HostEventBus();
 
   // Register builtin extensions and load manifest

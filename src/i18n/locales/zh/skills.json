@@ -108,5 +108,13 @@
         "noResults": "未找到匹配的技能。",
         "emptyPrompt": "搜索新技能以扩展您的能力。",
         "searchError": "技能市场搜索失败。请检查您的网络连接。"
+    },
+    "skillShop": {
+        "title": "技能商店",
+        "subtitle": "精选国内优质 AI 技能",
+        "searchPlaceholder": "搜索技能...",
+        "source": "skillhub.cn",
+        "hotlist": "热门推荐",
+        "loading": "加载中..."
     }
 }

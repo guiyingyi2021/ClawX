@@ -236,6 +236,25 @@ const electronAPI = {
     },
 
     /**
+     * Send one-way message to main process (fire-and-forget)
+     */
+    send: (channel: string, ...args: unknown[]) => {
+      const validSendChannels = [
+        'aigc:show-view',
+        'aigc:hide-view',
+        'aigc:toggle-view',
+        'aigc:update-bounds',
+      ];
+
+      if (validSendChannels.includes(channel)) {
+        ipcRenderer.send(channel, ...args);
+        return;
+      }
+
+      throw new Error(`Invalid IPC send channel: ${channel}`);
+    },
+
+    /**
      * Remove all listeners for a channel
      */
     off: (channel: string, callback?: (...args: unknown[]) => void) => {

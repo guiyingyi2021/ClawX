@@ -2,6 +2,7 @@ import type { IncomingMessage, ServerResponse } from 'http';
 import { getAllSkillConfigs, updateSkillConfig } from '../../utils/skill-config';
 import { collectQuickAccessSkills, filterEnabledQuickAccessSkills, type QuickAccessRuntimeSkillStatus } from '../../utils/skill-quick-access';
 import type { ClawHubInstallParams, ClawHubSearchParams, ClawHubUninstallParams } from '../../gateway/clawhub';
+import type { SkillShopInstallParams } from '../../gateway/skillshop';
 import type { HostApiContext } from '../context';
 import { parseJsonBody, sendJson } from '../route-utils';
 
@@ -134,6 +135,67 @@ export async function handleSkillRoutes(
     try {
       const body = await parseJsonBody<{ slug?: string; skillKey?: string; baseDir?: string }>(req);
       await ctx.clawHubService.openSkillPath(body.skillKey || body.slug || '', body.slug, body.baseDir);
+      sendJson(res, 200, { success: true });
+    } catch (error) {
+      sendJson(res, 500, { success: false, error: String(error) });
+    }
+    return true;
+  }
+
+  // ==================== SkillShop (技能商店) Routes ====================
+
+  if (url.pathname === '/api/skillshop/capability' && req.method === 'GET') {
+    try {
+      sendJson(res, 200, {
+        success: true,
+        capability: await ctx.skillShopService.getCapability(),
+      });
+    } catch (error) {
+      sendJson(res, 500, { success: false, error: String(error) });
+    }
+    return true;
+  }
+
+  if (url.pathname === '/api/skillshop/hotlist' && req.method === 'POST') {
+    try {
+      const body = await parseJsonBody<{ limit?: number }>(req);
+      sendJson(res, 200, {
+        success: true,
+        results: await ctx.skillShopService.getHotlist(body),
+      });
+    } catch (error) {
+      sendJson(res, 500, { success: false, error: String(error) });
+    }
+    return true;
+  }
+
+  if (url.pathname === '/api/skillshop/search' && req.method === 'POST') {
+    try {
+      const body = await parseJsonBody<{ query: string; limit?: number }>(req);
+      sendJson(res, 200, {
+        success: true,
+        results: await ctx.skillShopService.search(body),
+      });
+    } catch (error) {
+      sendJson(res, 500, { success: false, error: String(error) });
+    }
+    return true;
+  }
+
+  if (url.pathname === '/api/skillshop/install' && req.method === 'POST') {
+    try {
+      const body = await parseJsonBody<SkillShopInstallParams>(req);
+      await ctx.skillShopService.install(body);
+      sendJson(res, 200, { success: true });
+    } catch (error) {
+      sendJson(res, 500, { success: false, error: String(error) });
+    }
+    return true;
+  }
+
+  if (url.pathname === '/api/skillshop/clear-cache' && req.method === 'POST') {
+    try {
+      ctx.skillShopService.clearCache();
       sendJson(res, 200, { success: true });
     } catch (error) {
       sendJson(res, 500, { success: false, error: String(error) });

@@ -26,6 +26,8 @@ type RouteHandler = (
   ctx: HostApiContext,
 ) => Promise<boolean>;
 
+import { handleAigcRoutes } from './routes/aigc';
+
 const coreRouteHandlers: RouteHandler[] = [
   handleAppRoutes,
   handleGatewayRoutes,
@@ -40,6 +42,7 @@ const coreRouteHandlers: RouteHandler[] = [
   handleDiagnosticsRoutes,
   handleLogRoutes,
   handleUsageRoutes,
+  handleAigcRoutes,
 ];
 
 function buildRouteHandlers(): RouteHandler[] {

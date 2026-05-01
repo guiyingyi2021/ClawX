@@ -87,6 +87,7 @@
         "installTimeoutError": "Installation timed out, check network. You can also download the ZIP from ClawHub.ai and extract it to \"{{path}}\"",
         "searchRateLimitError": "Search rate limit exceeded. You can also search on ClawHub.ai, download the ZIP, and extract it to \"{{path}}\"",
         "installRateLimitError": "Installation rate limit exceeded. You can also download the ZIP from ClawHub.ai and extract it to \"{{path}}\"",
+        "rateLimitError": "Rate limit exceeded, please try again later. You can also visit the mirror site to search and download skill archives, then extract to \"{{path}}\"",
         "fetchTimeoutError": "Fetching skills timed out, please check your network connection.",
         "fetchRateLimitError": "Fetching skills rate limit exceeded, please try again later.",
         "noBatchEnableTargets": "All visible skills are already enabled.",
@@ -107,5 +108,13 @@
         "noResults": "No skills found matching your search.",
         "emptyPrompt": "Search for new skills to expand your capabilities.",
         "searchError": "ClawHub search failed. Check your connection or installation."
+    },
+    "skillShop": {
+        "title": "Skill Shop",
+        "subtitle": "Curated Chinese AI Skills",
+        "searchPlaceholder": "Search skills...",
+        "source": "skillhub.cn",
+        "hotlist": "Popular",
+        "loading": "Loading..."
     }
 }

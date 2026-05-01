@@ -420,6 +420,8 @@ export function Skills() {
   const [searchQuery, setSearchQuery] = useState('');
   const [installQuery, setInstallQuery] = useState('');
   const [installSheetOpen, setInstallSheetOpen] = useState(false);
+  const [skillShopQuery, setSkillShopQuery] = useState('');
+  const [skillShopSheetOpen, setSkillShopSheetOpen] = useState(false);
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
   const [selectedSource, setSelectedSource] = useState<'all' | 'built-in' | 'marketplace'>('all');
 
@@ -601,6 +603,89 @@ export function Skills() {
     }
   }, [installSkill, enableSkill, t, skillsDirPath]);
 
+  // SkillShop (技能商店) handlers
+  const [skillShopSearching, setSkillShopSearching] = useState(false);
+  const [skillShopResults, setSkillShopResults] = useState<Array<{
+    slug: string;
+    name: string;
+    description: string;
+    version?: string;
+    author?: string;
+    downloads?: number;
+    stars?: number;
+    category?: string;
+  }>>([]);
+  const [skillShopError, setSkillShopError] = useState<string | null>(null);
+  const [skillShopInstalling, setSkillShopInstalling] = useState<Record<string, boolean>>({});
+
+  const searchSkillShop = useCallback(async (query: string) => {
+    setSkillShopSearching(true);
+    setSkillShopError(null);
+    try {
+      let result;
+      if (!query || query.trim() === '') {
+        // Get hotlist
+        result = await hostApiFetch<{ success: boolean; results?: any[]; error?: string }>('/api/skillshop/hotlist', {
+          method: 'POST',
+          body: JSON.stringify({ limit: 50 }),
+        });
+      } else {
+        // Search
+        result = await hostApiFetch<{ success: boolean; results?: any[]; error?: string }>('/api/skillshop/search', {
+          method: 'POST',
+          body: JSON.stringify({ query, limit: 20 }),
+        });
+      }
+      if (result.success && result.results) {
+        setSkillShopResults(result.results);
+      } else {
+        setSkillShopError(result.error || 'Search failed');
+      }
+    } catch (err) {
+      setSkillShopError(String(err));
+    } finally {
+      setSkillShopSearching(false);
+    }
+  }, []);
+
+  const handleSkillShopInstall = useCallback(async (slug: string) => {
+    setSkillShopInstalling(prev => ({ ...prev, [slug]: true }));
+    try {
+      await installSkill(slug);
+      await enableSkill(slug);
+      toast.success(t('toast.installed'));
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      if (INSTALL_ERROR_CODES.has(errorMessage)) {
+        toast.error(t(`toast.${errorMessage}`, { path: skillsDirPath }), { duration: 10000 });
+      } else {
+        toast.error(t('toast.failedInstall') + ': ' + errorMessage);
+      }
+    } finally {
+      setSkillShopInstalling(prev => {
+        const next = { ...prev };
+        delete next[slug];
+        return next;
+      });
+    }
+  }, [installSkill, enableSkill, t, skillsDirPath]);
+
+  // Effect to load hotlist when opening skill shop
+  useEffect(() => {
+    if (!skillShopSheetOpen) return;
+    searchSkillShop('');
+  }, [skillShopSheetOpen, searchSkillShop]);
+
+  // Effect to search with debounce
+  useEffect(() => {
+    if (!skillShopSheetOpen) return;
+    const query = skillShopQuery.trim();
+    const timer = setTimeout(() => {
+      searchSkillShop(query);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [skillShopQuery, skillShopSheetOpen, searchSkillShop]);
+
   const handleUninstall = useCallback(async (slug: string) => {
     try {
       await uninstallSkill(slug);
@@ -727,6 +812,17 @@ export function Skills() {
               className="h-8 text-meta font-medium rounded-md px-3 border-black/10 dark:border-white/10 bg-transparent hover:bg-black/5 dark:hover:bg-white/5 shadow-none"
             >
               {t('actions.installSkill')}
+            </Button>
+            <Button
+              variant="default"
+              size="sm"
+              onClick={() => {
+                setSkillShopQuery('');
+                setSkillShopSheetOpen(true);
+              }}
+              className="h-8 text-meta font-medium rounded-md px-3 border-black/10 dark:border-white/10 bg-blue-500 hover:bg-blue-600 text-white shadow-none"
+            >
+              {t('skillShop.title', '技能商店')}
             </Button>
             <Button
               variant="outline"
@@ -883,7 +979,7 @@ export function Skills() {
                     <div
                       key={skill.slug}
                       className="group flex flex-row items-center justify-between py-3.5 px-3 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer border-b border-black/5 dark:border-white/5 last:border-0"
-                      onClick={() => invokeIpc('shell:openExternal', `https://clawhub.ai/s/${skill.slug}`)}
+                      onClick={() => invokeIpc('shell:openExternal', `https://www.skillhub.cn/skills/${skill.slug}`)}
                     >
                       <div className="flex items-start gap-4 flex-1 overflow-hidden pr-4">
                         <div className="h-10 w-10 shrink-0 flex items-center justify-center text-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-xl overflow-hidden">
@@ -939,6 +1035,149 @@ export function Skills() {
               <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
                 <Package className="h-10 w-10 mb-4 opacity-50" />
                 <p>{installQuery.trim() ? t('marketplace.noResults') : t('marketplace.emptyPrompt')}</p>
+              </div>
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* SkillShop (技能商店) Sheet */}
+      <Sheet open={skillShopSheetOpen} onOpenChange={setSkillShopSheetOpen}>
+        <SheetContent
+          className="w-full sm:max-w-[560px] p-0 flex flex-col border-l border-black/10 dark:border-white/10 bg-surface-modal shadow-[0_0_40px_rgba(0,0,0,0.2)]"
+          side="right"
+        >
+          <div className="px-7 py-6 border-b border-black/10 dark:border-white/10">
+            <h2 className="text-2xl font-serif text-foreground font-normal tracking-tight">{t('skillShop.title', '技能商店')}</h2>
+            <p className="mt-1 text-meta text-foreground/70">{t('skillShop.subtitle', '精选国内优质 AI 技能')}</p>
+            <div className="mt-4 flex flex-col md:flex-row gap-2">
+              <div className="relative flex items-center bg-black/5 dark:bg-white/5 rounded-xl px-3 py-2 border border-black/10 dark:border-white/10 flex-1">
+                <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
+                <Input
+                  placeholder={t('skillShop.searchPlaceholder', '搜索技能...')}
+                  value={skillShopQuery}
+                  onChange={(e) => setSkillShopQuery(e.target.value)}
+                  className="ml-2 h-auto border-0 bg-transparent p-0 shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 text-meta"
+                />
+                {skillShopQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSkillShopQuery('')}
+                    className="text-foreground/50 hover:text-foreground shrink-0 ml-1"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
+              <Button
+                variant="outline"
+                disabled
+                className="h-10 rounded-xl border-black/10 dark:border-white/10 bg-transparent text-muted-foreground"
+              >
+                {t('skillShop.source', 'skillhub.cn')}
+              </Button>
+            </div>
+          </div>
+
+          <div className="flex-1 overflow-y-auto px-6 py-4">
+            {skillShopError && (
+              <div className="mb-4 p-4 rounded-xl border border-destructive/50 bg-destructive/10 text-destructive text-sm font-medium flex items-center gap-2">
+                <AlertCircle className="h-5 w-5 shrink-0" />
+                <span>{skillShopError}</span>
+              </div>
+            )}
+
+            {skillShopSearching && (
+              <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+                <LoadingSpinner size="lg" />
+                <p className="mt-4 text-sm">{t('marketplace.searching')}</p>
+              </div>
+            )}
+
+            {!skillShopSearching && skillShopResults.length > 0 && (
+              <div className="flex flex-col gap-1">
+                {!skillShopQuery && (
+                  <div className="mb-2 text-xs text-muted-foreground font-medium">
+                    {t('skillShop.hotlist', '热门推荐')}
+                  </div>
+                )}
+                {skillShopResults.map((skill) => {
+                  const isInstalled = safeSkills.some(s => s.id === skill.slug || s.name === skill.name);
+                  const isInstallLoading = !!skillShopInstalling[skill.slug];
+
+                  return (
+                    <div
+                      key={skill.slug}
+                      className="group flex flex-row items-center justify-between py-3.5 px-3 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer border-b border-black/5 dark:border-white/5 last:border-0"
+                      onClick={() => invokeIpc('shell:openExternal', `https://www.skillhub.cn/skills/${skill.slug}`)}
+                    >
+                      <div className="flex items-start gap-4 flex-1 overflow-hidden pr-4">
+                        <div className="h-10 w-10 shrink-0 flex items-center justify-center text-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-xl overflow-hidden">
+                          {skill.category === 'code' ? '💻' :
+                           skill.category === 'writing' ? '✍️' :
+                           skill.category === 'data' ? '📊' :
+                           skill.category === 'image' ? '🖼️' :
+                           skill.category === 'video' ? '🎬' :
+                           '📦'}
+                        </div>
+                        <div className="flex flex-col overflow-hidden">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="text-sm font-semibold text-foreground truncate">{skill.name}</h3>
+                            {skill.author && (
+                              <span className="text-xs text-muted-foreground">• {skill.author}</span>
+                            )}
+                          </div>
+                          <p className="text-sm text-muted-foreground line-clamp-1 pr-6 leading-relaxed">
+                            {skill.description}
+                          </p>
+                          <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
+                            {skill.downloads !== undefined && skill.downloads > 0 && (
+                              <span>⬇️ {skill.downloads >= 1000 ? `${(skill.downloads / 1000).toFixed(1)}k` : skill.downloads}</span>
+                            )}
+                            {skill.stars !== undefined && skill.stars > 0 && (
+                              <span>⭐ {skill.stars >= 1000 ? `${(skill.stars / 1000).toFixed(1)}k` : skill.stars}</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4 shrink-0" onClick={e => e.stopPropagation()}>
+                        {skill.version && (
+                          <span className="text-meta font-mono text-muted-foreground mr-2">
+                            v{skill.version}
+                          </span>
+                        )}
+                        {isInstalled ? (
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleUninstall(skill.slug)}
+                            disabled={isInstallLoading}
+                            className="h-8 shadow-none"
+                          >
+                            {isInstallLoading ? <LoadingSpinner size="sm" /> : <Trash2 className="h-3.5 w-3.5" />}
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="default"
+                            size="sm"
+                            onClick={() => handleSkillShopInstall(skill.slug)}
+                            disabled={isInstallLoading}
+                            className="h-8 px-4 rounded-full shadow-none font-medium text-xs bg-blue-500 hover:bg-blue-600"
+                          >
+                            {isInstallLoading ? <LoadingSpinner size="sm" /> : t('marketplace.install', '安装')}
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {!skillShopSearching && skillShopResults.length === 0 && !skillShopError && (
+              <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+                <Package className="h-10 w-10 mb-4 opacity-50" />
+                <p>{skillShopQuery.trim() ? t('marketplace.noResults') : t('skillShop.loading', '加载中...')}</p>
               </div>
             )}
           </div>
