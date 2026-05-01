@@ -73,7 +73,7 @@
         "errors": {
             "outsideSandbox": "路径越界，已拒绝访问",
             "outsideSandboxTitle": "此文件位于沙盒外",
-            "outsideSandboxHint": "出于安全考虑，ClawX 仅允许预览 ~/.openclaw、应用资源以及内置技能目录中的文件。可在 Finder 中查看。",
+            "outsideSandboxHint": "出于安全考虑，Dclaw 仅允许预览 ~/.openclaw、应用资源以及内置技能目录中的文件。可在 Finder 中查看。",
             "readOnlyRoot": "该文件位于只读位置（如内置技能），无法修改",
             "tooLarge": "文件过大（{{size}}），已禁用预览",
             "binary": "二进制文件不支持文本预览",

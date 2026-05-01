@@ -370,7 +370,7 @@ export function FilePreviewBody({
             <p className="max-w-md text-xs leading-relaxed text-muted-foreground">
               {t(
                 'filePreview.errors.outsideSandboxHint',
-                '出于安全考虑，ClawX 仅允许预览 ~/.openclaw、应用资源以及内置技能目录中的文件。可在 Finder 中查看。',
+                '出于安全考虑，Dclaw 仅允许预览 ~/.openclaw、应用资源以及内置技能目录中的文件。可在 Finder 中查看。',
               )}
             </p>
           </div>

@@ -182,7 +182,7 @@ export function createMenu(): void {
         {
           label: '问题反馈',
           click: async () => {
-            await shell.openExternal('https://github.com/guiyingyi2021/ClawX/issues');
+            await shell.openExternal('https://github.com/guiyingyi2021/Dclaw/issues');
           },
         },
         { type: 'separator' },

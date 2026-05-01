@@ -29,11 +29,11 @@ function isCurrentOpenClawPath(p: string): boolean {
 // ── Pure helpers (no I/O) ────────────────────────────────────────
 
 /**
- * Merge a ClawX context section into an existing file's content.
+ * Merge a Dclaw context section into an existing file's content.
  * If markers already exist, replaces the section in-place.
  * Otherwise appends it at the end.
  */
-export function mergeClawXSection(existing: string, section: string): string {
+export function mergeDclawSection(existing: string, section: string): string {
   const wrapped = `${CLAWX_BEGIN}\n${section.trim()}\n${CLAWX_END}`;
   const beginIdx = existing.indexOf(CLAWX_BEGIN);
   const endIdx = existing.indexOf(CLAWX_END);
@@ -46,7 +46,7 @@ export function mergeClawXSection(existing: string, section: string): string {
 /**
  * Strip the "## First Run" section from workspace AGENTS.md content.
  * This section is seeded by the OpenClaw Gateway but is unnecessary
- * for ClawX-managed workspaces.  Removes everything from the heading
+ * for Dclaw-managed workspaces.  Removes everything from the heading
  * line until the next markdown heading (any level) or end of content.
  */
 export function stripFirstRunSection(content: string): string {
@@ -173,10 +173,10 @@ async function resolveAllWorkspaceDirs(): Promise<WorkspaceDir[]> {
 // ── Bootstrap file repair ────────────────────────────────────────
 
 /**
- * Detect and remove bootstrap .md files that contain only ClawX markers
+ * Detect and remove bootstrap .md files that contain only Dclaw markers
  * with no meaningful OpenClaw content outside them.
  */
-export async function repairClawXOnlyBootstrapFiles(): Promise<void> {
+export async function repairDclawOnlyBootstrapFiles(): Promise<void> {
   const workspaceDirs = await resolveAllWorkspaceDirs();
   for (const { dir: workspaceDir } of workspaceDirs) {
     if (!(await fileExists(workspaceDir))) continue;
@@ -205,9 +205,9 @@ export async function repairClawXOnlyBootstrapFiles(): Promise<void> {
       if (before === '' && after === '') {
         try {
           await unlink(filePath);
-          logger.info(`Removed ClawX-only bootstrap file for re-seeding: ${file} (${workspaceDir})`);
+          logger.info(`Removed Dclaw-only bootstrap file for re-seeding: ${file} (${workspaceDir})`);
         } catch {
-          logger.warn(`Failed to remove ClawX-only bootstrap file: ${filePath}`);
+          logger.warn(`Failed to remove Dclaw-only bootstrap file: ${filePath}`);
         }
       }
     }
@@ -215,9 +215,9 @@ export async function repairClawXOnlyBootstrapFiles(): Promise<void> {
 }
 
 /**
- * ClawX ships a default desktop identity and does not need OpenClaw's
+ * Dclaw ships a default desktop identity and does not need OpenClaw's
  * chat-first personalization script. Once the Gateway has seeded the regular
- * workspace files AND ClawX has generated the core config files (IDENTITY.md,
+ * workspace files AND Dclaw has generated the core config files (IDENTITY.md,
  * USER.md, SOUL.md), remove BOOTSTRAP.md so sessions start normally.
  *
  * If the workspace has NO core config files yet (fresh first run), keep
@@ -248,7 +248,7 @@ export async function removeChatFirstBootstrapFiles(): Promise<void> {
 
     try {
       await unlink(bootstrapPath);
-      logger.info(`Removed chat-first bootstrap file from ClawX workspace (${workspaceDir})`);
+      logger.info(`Removed chat-first bootstrap file from Dclaw workspace (${workspaceDir})`);
     } catch {
       logger.warn(`Failed to remove chat-first bootstrap file: ${bootstrapPath}`);
     }
@@ -258,7 +258,7 @@ export async function removeChatFirstBootstrapFiles(): Promise<void> {
 // ── Context merging ──────────────────────────────────────────────
 
 /**
- * Merge ClawX context snippets into workspace bootstrap files that already
+ * Merge Dclaw context snippets into workspace bootstrap files that already
  * exist on disk. Missing files are only retryable for startup-owned workspaces.
  */
 type MergeResult = {
@@ -266,7 +266,7 @@ type MergeResult = {
   retryableMissing: number;
 };
 
-type EnsureClawXContextOptions = {
+type EnsureDclawContextOptions = {
   /**
    * Startup should only wait for the default workspace. Explicit provisioning
    * flows can opt in so a freshly-created agent workspace gets patched after
@@ -275,10 +275,10 @@ type EnsureClawXContextOptions = {
   waitForAllConfiguredWorkspaces?: boolean;
 };
 
-async function mergeClawXContextOnce(options: EnsureClawXContextOptions = {}): Promise<MergeResult> {
+async function mergeDclawContextOnce(options: EnsureDclawContextOptions = {}): Promise<MergeResult> {
   const contextDir = join(getResourcesDir(), 'context');
   if (!(await fileExists(contextDir))) {
-    logger.debug('ClawX context directory not found, skipping context merge');
+    logger.debug('Dclaw context directory not found, skipping context merge');
     return { missing: 0, retryableMissing: 0 };
   }
 
@@ -332,12 +332,12 @@ async function mergeClawXContextOnce(options: EnsureClawXContextOptions = {}): P
         }
       }
 
-      const merged = mergeClawXSection(existing, section);
+      const merged = mergeDclawSection(existing, section);
       // Compare against on-disk content so we persist changes even when only
-      // First Run stripping happened and the ClawX section stayed identical.
+      // First Run stripping happened and the Dclaw section stayed identical.
       if (merged !== originalExisting) {
         await writeFile(targetPath, merged, 'utf-8');
-        logger.info(`Merged ClawX context into ${targetName} (${workspaceDir})`);
+        logger.info(`Merged Dclaw context into ${targetName} (${workspaceDir})`);
       }
     }
   }
@@ -347,50 +347,50 @@ async function mergeClawXContextOnce(options: EnsureClawXContextOptions = {}): P
 
 const RETRY_INTERVAL_MS = 2000;
 const MAX_RETRIES = 5;
-let ensureClawXContextPromise: Promise<void> | null = null;
-let ensureClawXContextWaitsForAll = false;
+let ensureDclawContextPromise: Promise<void> | null = null;
+let ensureDclawContextWaitsForAll = false;
 
 /**
- * Ensure ClawX context snippets are merged into the openclaw workspace
+ * Ensure Dclaw context snippets are merged into the openclaw workspace
  * bootstrap files.
  */
-export async function ensureClawXContext(options: EnsureClawXContextOptions = {}): Promise<void> {
-  if (ensureClawXContextPromise) {
-    if (options.waitForAllConfiguredWorkspaces && !ensureClawXContextWaitsForAll) {
-      return ensureClawXContextPromise.then(() => ensureClawXContext(options));
+export async function ensureDclawContext(options: EnsureDclawContextOptions = {}): Promise<void> {
+  if (ensureDclawContextPromise) {
+    if (options.waitForAllConfiguredWorkspaces && !ensureDclawContextWaitsForAll) {
+      return ensureDclawContextPromise.then(() => ensureDclawContext(options));
     }
-    return ensureClawXContextPromise;
+    return ensureDclawContextPromise;
   }
 
-  ensureClawXContextWaitsForAll = options.waitForAllConfiguredWorkspaces === true;
-  ensureClawXContextPromise = runEnsureClawXContext(options).finally(() => {
-    ensureClawXContextPromise = null;
-    ensureClawXContextWaitsForAll = false;
+  ensureDclawContextWaitsForAll = options.waitForAllConfiguredWorkspaces === true;
+  ensureDclawContextPromise = runEnsureDclawContext(options).finally(() => {
+    ensureDclawContextPromise = null;
+    ensureDclawContextWaitsForAll = false;
   });
-  return ensureClawXContextPromise;
+  return ensureDclawContextPromise;
 }
 
-async function runEnsureClawXContext(options: EnsureClawXContextOptions): Promise<void> {
-  let result = await mergeClawXContextOnce(options);
+async function runEnsureDclawContext(options: EnsureDclawContextOptions): Promise<void> {
+  let result = await mergeDclawContextOnce(options);
   if (result.retryableMissing === 0) {
     await removeChatFirstBootstrapFiles();
     if (result.missing > 0) {
-      logger.debug(`ClawX context merge skipped ${result.missing} non-ready file(s)`);
+      logger.debug(`Dclaw context merge skipped ${result.missing} non-ready file(s)`);
     }
     return;
   }
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     await new Promise((r) => setTimeout(r, RETRY_INTERVAL_MS));
-    result = await mergeClawXContextOnce(options);
+    result = await mergeDclawContextOnce(options);
     if (result.retryableMissing === 0) {
       await removeChatFirstBootstrapFiles();
-      logger.info(`ClawX context merge completed after ${attempt} retry(ies)`);
+      logger.info(`Dclaw context merge completed after ${attempt} retry(ies)`);
       return;
     }
-    logger.debug(`ClawX context merge: ${result.retryableMissing} startup file(s) still missing (retry ${attempt}/${MAX_RETRIES})`);
+    logger.debug(`Dclaw context merge: ${result.retryableMissing} startup file(s) still missing (retry ${attempt}/${MAX_RETRIES})`);
   }
 
-  logger.warn(`ClawX context merge: ${result.retryableMissing} startup file(s) still missing after ${MAX_RETRIES} retries`);
+  logger.warn(`Dclaw context merge: ${result.retryableMissing} startup file(s) still missing after ${MAX_RETRIES} retries`);
   await removeChatFirstBootstrapFiles();
 }

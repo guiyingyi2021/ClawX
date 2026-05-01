@@ -62,21 +62,21 @@ export function getOpenClawSkillsDir(): string {
 }
 
 /**
- * Get ClawX config directory
+ * Get Dclaw config directory
  */
-export function getClawXConfigDir(): string {
+export function getDclawConfigDir(): string {
   return join(homedir(), '.clawx');
 }
 
 /**
- * Get ClawX logs directory
+ * Get Dclaw logs directory
  */
 export function getLogsDir(): string {
   return join(getElectronApp().getPath('userData'), 'logs');
 }
 
 /**
- * Get ClawX data directory
+ * Get Dclaw data directory
  */
 export function getDataDir(): string {
   return getElectronApp().getPath('userData');
