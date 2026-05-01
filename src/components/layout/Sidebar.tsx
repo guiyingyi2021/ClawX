@@ -248,9 +248,9 @@ export function Sidebar() {
       {/* Top Header Toggle */}
       <div className={cn("flex items-center p-2 h-12", sidebarCollapsed ? "justify-center" : "justify-between")}>
         {!sidebarCollapsed && (
-          <div className="flex items-center gap-2 px-2 overflow-hidden">
-            <img src={logoSvg} alt="Dclaw" className="h-5 w-auto shrink-0" />
-            <span className="text-sm font-semibold truncate whitespace-nowrap text-foreground/90">
+          <div className="flex items-center gap-3 px-2 overflow-hidden">
+            <img src={logoSvg} alt="Dclaw" className="h-9 w-auto shrink-0" />
+            <span className="text-lg font-bold tracking-tight truncate whitespace-nowrap text-foreground">
               Dclaw
             </span>
           </div>
