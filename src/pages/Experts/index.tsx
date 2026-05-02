@@ -15,7 +15,7 @@
  * 2. soulContent + identityContent（API）→ 通过 API 创建 Agent
  */
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Zap, ArrowRight, RefreshCw, Clock, Check, Download, Search, Flame, Star, User } from 'lucide-react';
+import { Sparkles, Zap, ArrowRight, RefreshCw, Check, Download, Search, Flame, Star, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { EXPERTS as BUILT_IN_EXPERTS } from './experts.config';
 import type { Expert } from '@/types/expert';
@@ -84,7 +84,7 @@ function ExpertCard({ expert, onSummon, loading, isInstalled }: ExpertCardProps)
 
       {/* 擅长领域标签 */}
       <div className="flex flex-wrap gap-1.5 mb-5">
-        {expert.specialties.map((s) => (
+        {(expert.specialties || []).map((s) => (
           <span
             key={s.label}
             className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground"
@@ -145,8 +145,12 @@ export function ExpertCenter() {
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [experts, setExperts] = useState<Expert[]>(BUILT_IN_EXPERTS);
   const [loadingExperts, setLoadingExperts] = useState(true);
-  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
   const [installedAgents, setInstalledAgents] = useState<Set<string>>(new Set());
+
+  // 远程更新相关状态
+  const [hasUpdates, setHasUpdates] = useState(false);
+  const [pendingExperts, setPendingExperts] = useState<Expert[]>([]);
+  const [newExpertCount, setNewExpertCount] = useState(0);
 
   // 分类和搜索状态
   const [activeCategory, setActiveCategory] = useState<string>('全部');
@@ -181,7 +185,7 @@ export function ExpertCenter() {
         e.name.toLowerCase().includes(query) ||
         e.role.toLowerCase().includes(query) ||
         e.description.toLowerCase().includes(query) ||
-        e.specialties.some(s => 
+        (e.specialties || []).some(s => 
           s.label.toLowerCase().includes(query) ||
           s.emoji.includes(query)
         ) ||
@@ -236,28 +240,59 @@ export function ExpertCenter() {
   // 检查已安装的 Agent
   const checkInstalledAgents = useCallback(async () => {
     try {
-      const installed = await window.electron.ipcRenderer.invoke('agent:getInstalled');
+      const installed = await window.electron.ipcRenderer.invoke('agent:getInstalled') as string[];
       setInstalledAgents(new Set(installed));
     } catch (e) {
       console.warn('检查已安装 Agent 失败:', e);
     }
   }, []);
 
-  const load = useCallback(async (forceRefresh?: boolean) => {
-    setLoadingExperts(true);
-    try {
-      const data = forceRefresh
-        ? await refreshExperts(BUILT_IN_EXPERTS)
-        : await loadExperts(BUILT_IN_EXPERTS);
-      setExperts(data);
-      setLastUpdated(new Date().toLocaleString('zh-CN'));
-      if (forceRefresh) toast.success('专家列表已更新');
-    } catch (e) {
-      toast.error('加载专家配置失败，使用内置默认配置');
-    } finally {
-      setLoadingExperts(false);
+  // 远程有更新时的回调
+  const handleRemoteUpdate = useCallback((newExperts: Expert[]) => {
+    const currentIds = new Set(experts.map(e => e.id));
+    const newCount = newExperts.filter(e => !currentIds.has(e.id)).length;
+    setPendingExperts(newExperts);
+    setHasUpdates(true);
+    setNewExpertCount(newCount > 0 ? newCount : newExperts.length - experts.length);
+  }, [experts]);
+
+  // 应用挂起的更新
+  const applyUpdates = useCallback(() => {
+    if (pendingExperts.length > 0) {
+      setExperts(pendingExperts);
+      setHasUpdates(false);
+      setPendingExperts([]);
+      setNewExpertCount(0);
+      toast.success('专家列表已更新');
     }
-  }, []);
+  }, [pendingExperts]);
+
+  const load = useCallback(async (forceRefresh?: boolean) => {
+    if (forceRefresh) {
+      // 手动刷新：阻塞式，直接应用结果
+      setLoadingExperts(true);
+      try {
+        const data = await refreshExperts(BUILT_IN_EXPERTS);
+        setExperts(data);
+        setHasUpdates(false);
+        setPendingExperts([]);
+        toast.success('专家列表已更新');
+      } catch (e) {
+        toast.error('加载专家配置失败，使用内置默认配置');
+      } finally {
+        setLoadingExperts(false);
+      }
+    } else {
+      // 初始加载：立即返回缓存，后台检测更新
+      setLoadingExperts(true);
+      try {
+        const data = await loadExperts(BUILT_IN_EXPERTS, undefined, handleRemoteUpdate);
+        setExperts(data);
+      } finally {
+        setLoadingExperts(false);
+      }
+    }
+  }, [handleRemoteUpdate]);
 
   useEffect(() => {
     load();
@@ -274,7 +309,7 @@ export function ExpertCenter() {
           'agent:summon',
           expert.id,
           expert.downloadUrl
-        );
+        ) as { success: boolean; message: string };
         if (result.success) {
           toast.success(result.message);
           await checkInstalledAgents();
@@ -345,12 +380,17 @@ export function ExpertCenter() {
             <h1 className="text-2xl font-bold tracking-tight text-foreground">专家中心</h1>
           </div>
           <button
-            onClick={() => load(true)}
+            onClick={() => hasUpdates ? applyUpdates() : load(true)}
             disabled={loadingExperts}
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-muted-foreground hover:bg-muted transition-colors disabled:opacity-50"
+            className="relative flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-muted-foreground hover:bg-muted transition-colors disabled:opacity-50"
           >
             <RefreshCw className={cn('h-3.5 w-3.5', loadingExperts && 'animate-spin')} />
-            <span>{loadingExperts ? '更新中...' : '检查更新'}</span>
+            <span>{loadingExperts ? '更新中...' : hasUpdates ? '有更新' : '检查更新'}</span>
+            {hasUpdates && (
+              <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1 text-xs text-white">
+                {newExpertCount > 0 ? newExpertCount : '!'}
+              </span>
+            )}
           </button>
         </div>
 

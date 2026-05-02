@@ -1,20 +1,13 @@
 /**
  * 专家配置加载器 - 混合模式
- * 优先级：远程配置 > 本地缓存 > 内置配置
+ * 策略：立即返回缓存/内置数据，后台异步检查远程更新
  * 
  * 远程源：GitHub Raw CDN（主要）
  * 备用源：aigc.dayunzhonglian.com（已注释，需要时启用）
  */
 import type { Expert } from '@/types/expert';
 
-interface RemoteExpertConfig {
-  version: string;
-  updated_at: string;
-  experts: Expert[];
-}
-
 const CACHE_KEY = 'dclaw-experts-cache';
-const CACHE_TTL = 1000 * 60 * 30; // 30 分钟缓存
 
 // ============================================================
 // 远程配置 URL 配置
@@ -151,29 +144,41 @@ export function getRemoteUrl(): string {
 
 /**
  * 加载专家配置（混合模式）
- * 优先级：远程 > 缓存 > 内置
+ * 策略：立即返回缓存/内置数据，后台异步检查远程更新
+ * @param onRemoteUpdate - 远程有更新时的回调（传入新专家列表）
  */
 export async function loadExperts(
   builtInExperts: Expert[],
-  remoteUrl?: string
+  remoteUrl?: string,
+  onRemoteUpdate?: (experts: Expert[]) => void
 ): Promise<Expert[]> {
   const url = remoteUrl ?? DEFAULT_REMOTE_URL;
 
-  // 1. 尝试远程获取
-  const remote = await fetchRemoteExperts(url);
-  if (remote) {
-    setCache(remote.experts, remote.version);
-    return remote.experts;
-  }
-
-  // 2. 远程失败，尝试缓存
+  // 1. 立即返回缓存或内置数据（不等待远程）
   const cache = getCache();
-  if (cache && Date.now() - cache.timestamp < CACHE_TTL) {
-    return cache.data;
-  }
+  const cachedData = cache?.data ?? builtInExperts;
 
-  // 3. 都失败，返回内置
-  return builtInExperts;
+  // 2. 后台异步检查远程是否有更新
+  fetchRemoteExperts(url)
+    .then(remote => {
+      if (!remote) return;
+
+      // 检测是否有新专家（以 ID 是否出现过为准）
+      const cachedIds = new Set(cachedData.map(e => e.id));
+      const hasNewExperts = remote.experts.some(e => !cachedIds.has(e.id));
+      const hasMoreExperts = remote.experts.length !== cachedData.length;
+
+      setCache(remote.experts, remote.version);
+
+      if ((hasNewExperts || hasMoreExperts) && onRemoteUpdate) {
+        onRemoteUpdate(remote.experts);
+      }
+    })
+    .catch(() => {
+      // 后台检查失败不影响已返回的缓存数据
+    });
+
+  return cachedData;
 }
 
 /**
