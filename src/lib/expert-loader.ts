@@ -119,6 +119,7 @@ async function fetchRemoteExperts(url: string): Promise<{ experts: Expert[]; ver
         // 标记为远程专家，并添加默认值
         flatExperts.push({
           ...expert,
+          color: hexToTailwindGradient(expert.color), // 转换十六进制为 Tailwind 渐变类
           category, // 使用分类键作为 category
           isRemote: true,
           // 远程专家没有预加载的内容
@@ -218,6 +219,57 @@ export function getCacheVersion(): string | null {
  * - 新格式：专家对象自带 downloadUrl 字段（优先使用）
  * - 旧格式兜底：按 agentId 生成 URL
  */
+
+// ============================================================
+// 颜色格式转换（远程专家 color 为十六进制，需转为 Tailwind 渐变类）
+// ============================================================
+
+/**
+ * 将十六进制颜色转为最接近的 Tailwind 500 级渐变类
+ * 远程专家 color 字段为 "#10B981" 格式，需要转为 "from-green-500 to-emerald-500" 格式
+ */
+function hexToTailwindGradient(hex: string | undefined): string {
+  if (!hex || !hex.startsWith('#')) {
+    // 已经是 Tailwind 类格式，直接返回
+    return hex || 'from-gray-500 to-gray-600';
+  }
+
+  // 标准化十六进制格式（大写，6位）
+  const normalized = hex.toUpperCase();
+  
+  // 常见颜色映射表（匹配到最接近的 Tailwind 500 级）
+  const colorMap: Record<string, string> = {
+    '#10B981': 'from-green-500 to-emerald-500',
+    '#059669': 'from-green-600 to-emerald-600',
+    '#34D399': 'from-emerald-400 to-teal-400',
+    '#6EE7B7': 'from-emerald-300 to-teal-300',
+    '#A7F3D0': 'from-emerald-200 to-teal-200',
+    '#3B82F6': 'from-blue-500 to-cyan-500',
+    '#2563EB': 'from-blue-600 to-blue-500',
+    '#60A5FA': 'from-blue-400 to-sky-400',
+    '#93C5FD': 'from-blue-300 to-sky-300',
+    '#F97316': 'from-orange-500 to-amber-500',
+    '#EA580C': 'from-orange-600 to-orange-500',
+    '#FB923C': 'from-orange-400 to-amber-400',
+    '#FDBA74': 'from-orange-300 to-amber-300',
+    '#FF6B6B': 'from-pink-500 to-rose-500',
+    '#E11D48': 'from-pink-600 to-rose-600',
+    '#F87171': 'from-red-400 to-pink-400',
+    '#EAB308': 'from-yellow-500 to-orange-500',
+    '#CA8A04': 'from-yellow-600 to-yellow-500',
+    '#FACC15': 'from-yellow-400 to-amber-400',
+    '#8B5CF6': 'from-purple-500 to-violet-500',
+    '#7C3AED': 'from-purple-600 to-violet-600',
+    '#A78BFA': 'from-purple-400 to-violet-400',
+    '#C4B5FD': 'from-purple-300 to-violet-300',
+    '#EC4899': 'from-pink-500 to-fuchsia-500',
+    '#D946EF': 'from-fuchsia-500 to-purple-500',
+    '#F43F5E': 'from-rose-500 to-pink-500',
+    '#FB7185': 'from-rose-400 to-pink-400',
+  };
+
+  return colorMap[normalized] || 'from-gray-500 to-gray-600';
+}
 export function getAgentDownloadUrl(agentId: string, downloadUrl?: string): string {
   // 新格式：使用专家对象自带的 downloadUrl
   if (downloadUrl) return downloadUrl;
