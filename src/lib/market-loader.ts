@@ -9,7 +9,7 @@
 import type { Expert } from '@/types/expert';
 import MARKET_INDEX_DATA from '@/data/market-experts-index.json';
 
-const MARKET_INDEX_URL = 'https://raw.githubusercontent.com/guiyingyi2021/agency-agents-zh/dclaw-private/src/data/market-experts-index.json';
+const MARKET_INDEX_URL = 'https://raw.githubusercontent.com/guiyingyi2021/agency-agents-zh/main/src/data/market-experts-index.json';
 const CACHE_KEY = 'dclaw-market-cache';
 const CACHE_TTL = 30 * 60 * 1000; // 30 分钟
 
