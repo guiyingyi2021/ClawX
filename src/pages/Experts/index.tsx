@@ -161,6 +161,9 @@ export function ExpertCenter() {
   const loadMoreRef = useRef<HTMLDivElement>(null);
   // 防止回调重复触发的标记（ref 不触发重新渲染）
   const updateAppliedRef = useRef(false);
+  // 用 ref 跟踪最新 experts，避免 handleRemoteUpdate 闭包陷阱
+  const expertsRef = useRef<Expert[]>(experts);
+  expertsRef.current = experts;
 
   // 已安装的专家
   const installedExperts = useMemo(() => {
@@ -251,18 +254,22 @@ export function ExpertCenter() {
 
   // 远程有更新时的回调
   const handleRemoteUpdate = useCallback((newExperts: Expert[]) => {
-    // 防止重复触发（ref 变化不触发重新渲染）
     if (updateAppliedRef.current) return;
     updateAppliedRef.current = true;
 
-    // 计算新增专家数量（以当前显示的 experts 为基准）
-    const currentIds = new Set(experts.map(e => e.id));
+    // 通过 ref 读最新值，不闭包捕获，依赖数组可为空
+    const currentExperts = expertsRef.current;
+    const currentIds = new Set(currentExperts.map(e => e.id));
     const trulyNew = newExperts.filter(e => !currentIds.has(e.id));
 
     setPendingExperts(newExperts);
     setHasUpdates(true);
-    setNewExpertCount(trulyNew.length > 0 ? trulyNew.length : Math.abs(newExperts.length - experts.length));
-  }, [experts]);
+    setNewExpertCount(
+      trulyNew.length > 0
+        ? trulyNew.length
+        : Math.abs(newExperts.length - currentExperts.length)
+    );
+  }, []); // 空依赖，handleRemoteUpdate 引用稳定，防止 useEffect 无限循环
 
   // 应用挂起的更新
   const applyUpdates = useCallback(() => {
