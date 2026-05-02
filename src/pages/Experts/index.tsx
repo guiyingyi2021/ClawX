@@ -159,6 +159,8 @@ export function ExpertCenter() {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+  // 防止回调重复触发的标记（ref 不触发重新渲染）
+  const updateAppliedRef = useRef(false);
 
   // 已安装的专家
   const installedExperts = useMemo(() => {
@@ -249,11 +251,17 @@ export function ExpertCenter() {
 
   // 远程有更新时的回调
   const handleRemoteUpdate = useCallback((newExperts: Expert[]) => {
+    // 防止重复触发（ref 变化不触发重新渲染）
+    if (updateAppliedRef.current) return;
+    updateAppliedRef.current = true;
+
+    // 计算新增专家数量（以当前显示的 experts 为基准）
     const currentIds = new Set(experts.map(e => e.id));
-    const newCount = newExperts.filter(e => !currentIds.has(e.id)).length;
+    const trulyNew = newExperts.filter(e => !currentIds.has(e.id));
+
     setPendingExperts(newExperts);
     setHasUpdates(true);
-    setNewExpertCount(newCount > 0 ? newCount : newExperts.length - experts.length);
+    setNewExpertCount(trulyNew.length > 0 ? trulyNew.length : Math.abs(newExperts.length - experts.length));
   }, [experts]);
 
   // 应用挂起的更新
@@ -270,6 +278,7 @@ export function ExpertCenter() {
   const load = useCallback(async (forceRefresh?: boolean) => {
     if (forceRefresh) {
       // 手动刷新：阻塞式，直接应用结果
+      updateAppliedRef.current = false; // 重置，防止重复触发
       setLoadingExperts(true);
       try {
         const data = await refreshExperts(BUILT_IN_EXPERTS);
