@@ -118,7 +118,7 @@ function generateIndex() {
         : '';
 
       experts.push({
-        id: `remote-${id}`,
+        id: id,
         name: fm.name || toDisplayName(id),
         role: fm.role || '',
         emoji: fm.emoji || '🤖',
