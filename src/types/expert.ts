@@ -30,4 +30,6 @@ export interface Expert {
   hasIdentity?: boolean;
   /** 是否为远程专家 */
   isRemote?: boolean;
+  /** 是否为市场专家（agency-agents-zh） */
+  isMarket?: boolean;
 }

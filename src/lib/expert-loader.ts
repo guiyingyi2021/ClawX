@@ -233,7 +233,7 @@ export function getCacheVersion(): string | null {
  * 将十六进制颜色转为最接近的 Tailwind 500 级渐变类
  * 远程专家 color 字段为 "#10B981" 格式，需要转为 "from-green-500 to-emerald-500" 格式
  */
-function hexToTailwindGradient(hex: string | undefined): string {
+export function hexToTailwindGradient(hex: string | undefined): string {
   if (!hex || !hex.startsWith('#')) {
     // 已经是 Tailwind 类格式，直接返回
     return hex || 'from-gray-500 to-gray-600';

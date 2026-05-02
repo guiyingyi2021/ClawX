@@ -1,0 +1,30 @@
+name: Generate Market Index
+
+on:
+  schedule:
+    # 每天早上 8 点自动更新索引
+    - cron: '0 0 * * *'
+  workflow_dispatch:  # 也支持手动触发
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate index
+        run: node scripts/generate-market-index.js
+
+      - name: Commit & Push
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add src/data/market-experts-index.json
+          git diff --quiet && echo "No changes" || git commit -m "chore: 更新市场专家索引 $(date '+%Y-%m-%d')"
+          git push
