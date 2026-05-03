@@ -313,6 +313,2278 @@
       ]
     }
   ],
+  "技术工程": [
+    {
+      "id": "CloudQ",
+      "name": "CloudQ",
+      "role": "多云管理专家",
+      "emoji": "☁️",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "精通多云规划、运维、安全及成本优化，实现资源统一管控与高效协同",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "多云管理",
+          "emoji": "☁️"
+        },
+        {
+          "label": "云资源编排",
+          "emoji": "📋"
+        },
+        {
+          "label": "成本优化",
+          "emoji": "💰"
+        }
+      ]
+    },
+    {
+      "id": "一键达",
+      "name": "一键达",
+      "role": "DevOps自动化工程师",
+      "emoji": "🤖",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "将一切手动运维自动化，从CI/CD到基础设施即代码，部署一键搞定",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "DevOps自动化",
+          "emoji": "🤖"
+        },
+        {
+          "label": "基础设施",
+          "emoji": "🏗️"
+        },
+        {
+          "label": "流水线开发",
+          "emoji": "🔄"
+        }
+      ]
+    },
+    {
+      "id": "亚伦",
+      "name": "亚伦",
+      "role": "网络质量分析专家",
+      "emoji": "🌐",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "精通多维性能分析、异常定位、抓包诊断、问题定界，快速定位网络与服务异常根因",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "云拨测",
+          "emoji": "🌐"
+        },
+        {
+          "label": "网络分析",
+          "emoji": "📡"
+        },
+        {
+          "label": "运维诊断",
+          "emoji": "🔧"
+        }
+      ]
+    },
+    {
+      "id": "像素匠",
+      "name": "像素匠",
+      "role": "前端开发工程师",
+      "emoji": "🎨",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "精通现代Web技术和主流框架，以像素级精度构建响应式高性能Web应用",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "前端开发",
+          "emoji": "🎨"
+        },
+        {
+          "label": "页面交互",
+          "emoji": "🔄"
+        },
+        {
+          "label": "组件开发",
+          "emoji": "🧩"
+        }
+      ]
+    },
+    {
+      "id": "分支通",
+      "name": "分支通",
+      "role": "Git工作流专家",
+      "emoji": "🌿",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "精通Git高级工作流和分支策略，让团队协作像行云流水般顺畅",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "Git工作流",
+          "emoji": "🌿"
+        },
+        {
+          "label": "分支策略",
+          "emoji": "🔀"
+        },
+        {
+          "label": "代码管理",
+          "emoji": "📋"
+        }
+      ]
+    },
+    {
+      "id": "协议通",
+      "name": "协议通",
+      "role": "MCP构建专家",
+      "emoji": "🔗",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "精通Model Context Protocol设计实现",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "MCP构建",
+          "emoji": "🔗"
+        },
+        {
+          "label": "协议开发",
+          "emoji": "📡"
+        },
+        {
+          "label": "工具集成",
+          "emoji": "🔌"
+        }
+      ]
+    },
+    {
+      "id": "吴八哥",
+      "name": "吴八哥",
+      "role": "高级开发工程师",
+      "emoji": "💻",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "10年以上全栈经验，精通多种语言和框架，是团队的技术中坚",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "高级开发",
+          "emoji": "💻"
+        },
+        {
+          "label": "架构设计",
+          "emoji": "🏗️"
+        },
+        {
+          "label": "代码质量",
+          "emoji": "✅"
+        }
+      ]
+    },
+    {
+      "id": "固件通",
+      "name": "固件通",
+      "role": "嵌入式固件工程师",
+      "emoji": "🔧",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "精通微控制器编程，在资源受限的硬件上编写高效可靠的固件代码",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "嵌入式固件",
+          "emoji": "🔧"
+        },
+        {
+          "label": "RTOS开发",
+          "emoji": "📟"
+        },
+        {
+          "label": "物联网硬件",
+          "emoji": "📡"
+        }
+      ]
+    },
+    {
+      "id": "安迪",
+      "name": "安迪",
+      "role": "应用性能专家",
+      "emoji": "📊",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "精通腾讯云APM性能诊断与调优，快速定位应用瓶颈并给出优化方案",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "性能诊断",
+          "emoji": "📊"
+        },
+        {
+          "label": "调用链追踪",
+          "emoji": "🔍"
+        },
+        {
+          "label": "火焰图分析",
+          "emoji": "🔥"
+        }
+      ]
+    },
+    {
+      "id": "容器器",
+      "name": "容器器",
+      "role": "Dockerfile生成专家",
+      "emoji": "📦",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "Dockerfile自动生成专家，遵循容器化最佳实践",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "容器构建",
+          "emoji": "📦"
+        },
+        {
+          "label": "镜像优化",
+          "emoji": "🏎️"
+        },
+        {
+          "label": "部署配置",
+          "emoji": "⚙️"
+        }
+      ]
+    },
+    {
+      "id": "小程达",
+      "name": "小程达",
+      "role": "微信小程序开发者",
+      "emoji": "🚀",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "精通微信小程序开发框架和生态，打造流畅微信原生体验应用",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "小程序开发",
+          "emoji": "🚀"
+        },
+        {
+          "label": "微信生态",
+          "emoji": "💬"
+        },
+        {
+          "label": "WXML开发",
+          "emoji": "📝"
+        }
+      ]
+    },
+    {
+      "id": "掌中灵",
+      "name": "掌中灵",
+      "role": "移动应用开发工程师",
+      "emoji": "📱",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "精通iOS和Android原生及跨平台开发，打造流畅美观的移动应用",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "移动应用",
+          "emoji": "📱"
+        },
+        {
+          "label": "原生开发",
+          "emoji": "🍎"
+        },
+        {
+          "label": "跨平台开发",
+          "emoji": "🔄"
+        }
+      ]
+    },
+    {
+      "id": "架构通",
+      "name": "架构通",
+      "role": "软件架构师",
+      "emoji": "🏗️",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "站在全局高度设计可扩展高可用的软件架构，为技术团队指明方向",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "软件架构",
+          "emoji": "🏗️"
+        },
+        {
+          "label": "系统设计",
+          "emoji": "📐"
+        },
+        {
+          "label": "技术决策",
+          "emoji": "⚖️"
+        }
+      ]
+    },
+    {
+      "id": "深网网",
+      "name": "深网网",
+      "role": "AI工程师",
+      "emoji": "🤖",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "精通ML模型开发部署优化的全栈AI工程师，将AI从论文带到生产环境",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "AI工程",
+          "emoji": "🤖"
+        },
+        {
+          "label": "模型部署",
+          "emoji": "🚀"
+        },
+        {
+          "label": "ML流水线",
+          "emoji": "🔄"
+        }
+      ]
+    },
+    {
+      "id": "火眼眼",
+      "name": "火眼眼",
+      "role": "代码审查专家",
+      "emoji": "🔍",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "以鹰眼标准检查每行代码，在缺陷到达生产环境之前将其拦截",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "代码审查",
+          "emoji": "🔍"
+        },
+        {
+          "label": "质量把关",
+          "emoji": "✅"
+        },
+        {
+          "label": "最佳实践",
+          "emoji": "📋"
+        }
+      ]
+    },
+    {
+      "id": "猎威威",
+      "name": "猎威威",
+      "role": "威胁检测工程师",
+      "emoji": "🛡️",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "专精构建威胁检测系统，在攻击者造成损害前发现拦截威胁",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "威胁构建",
+          "emoji": "🛡️"
+        },
+        {
+          "label": "入侵分析",
+          "emoji": "🔍"
+        },
+        {
+          "label": "安全监控",
+          "emoji": "📡"
+        }
+      ]
+    },
+    {
+      "id": "盾甲甲",
+      "name": "盾甲甲",
+      "role": "安全工程师",
+      "emoji": "🔐",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "全方位保障系统安全，在黑客之前发现并修复安全漏洞",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "安全工程",
+          "emoji": "🔐"
+        },
+        {
+          "label": "漏洞修复",
+          "emoji": "🩹"
+        },
+        {
+          "label": "安全加固",
+          "emoji": "🛡️"
+        }
+      ]
+    },
+    {
+      "id": "磐石",
+      "name": "磐石",
+      "role": "后端架构师",
+      "emoji": "⚙️",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "深耕分布式系统和高并发架构，擅长将复杂业务转化为优雅技术方案",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "后端架构",
+          "emoji": "⚙️"
+        },
+        {
+          "label": "微服务",
+          "emoji": "🔧"
+        },
+        {
+          "label": "高可用设计",
+          "emoji": "🛡️"
+        }
+      ]
+    },
+    {
+      "id": "稳如山",
+      "name": "稳如山",
+      "role": "站点可靠性工程师",
+      "emoji": "🏔️",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "用软件工程方法论解决运维问题，确保99.99%可用性",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "站点可靠",
+          "emoji": "🏔️"
+        },
+        {
+          "label": "SLO管理",
+          "emoji": "📊"
+        },
+        {
+          "label": "运维自动化",
+          "emoji": "🤖"
+        }
+      ]
+    },
+    {
+      "id": "索引引",
+      "name": "索引引",
+      "role": "LSP索引工程师",
+      "emoji": "🔎",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "精通语言服务器协议和代码索引技术",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "语言服务",
+          "emoji": "🔎"
+        },
+        {
+          "label": "代码索引",
+          "emoji": "📖"
+        },
+        {
+          "label": "智能补全",
+          "emoji": "✨"
+        }
+      ]
+    },
+    {
+      "id": "终端通",
+      "name": "终端通",
+      "role": "终端集成专家",
+      "emoji": "💻",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "精通终端应用与空间计算环境的集成",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "终端集成",
+          "emoji": "💻"
+        },
+        {
+          "label": "CLI工具",
+          "emoji": "⌨️"
+        },
+        {
+          "label": "命令行开发",
+          "emoji": "🖥️"
+        }
+      ]
+    },
+    {
+      "id": "运维通",
+      "name": "运维通",
+      "role": "基础设施运维专家",
+      "emoji": "🖥️",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "确保IT基础设施的持续稳定运行，一切尽在掌控",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "基础运维",
+          "emoji": "🖥️"
+        },
+        {
+          "label": "系统监控",
+          "emoji": "📡"
+        },
+        {
+          "label": "故障排查",
+          "emoji": "🔧"
+        }
+      ]
+    },
+    {
+      "id": "速构构",
+      "name": "速构构",
+      "role": "现代Web开发专家",
+      "emoji": "⚡",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "现代Web应用开发专家，基于React+TypeScript+Vite+Tailwind CSS+shadcn/ui技术栈",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "浏览器自动化",
+          "emoji": "🌐"
+        },
+        {
+          "label": "Web测试",
+          "emoji": "🧪"
+        },
+        {
+          "label": "数据采集",
+          "emoji": "📊"
+        }
+      ]
+    },
+    {
+      "id": "链合约",
+      "name": "链合约",
+      "role": "Solidity智能合约工程师",
+      "emoji": "⛓️",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "精通Solidity和EVM生态，编写安全高效的智能合约",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "智能合约",
+          "emoji": "⛓️"
+        },
+        {
+          "label": "Solidity",
+          "emoji": "📜"
+        },
+        {
+          "label": "DeFi开发",
+          "emoji": "💰"
+        }
+      ]
+    },
+    {
+      "id": "闪造造",
+      "name": "闪造造",
+      "role": "快速原型工程师",
+      "emoji": "⚡",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "以极快速度将创意转化为可工作的原型，让团队快速验证想法",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "快速原型",
+          "emoji": "⚡"
+        },
+        {
+          "label": "MVP开发",
+          "emoji": "🚀"
+        },
+        {
+          "label": "概念验证",
+          "emoji": "🧪"
+        }
+      ]
+    }
+  ],
+  "游戏空间": [
+    {
+      "id": "乐体验",
+      "name": "乐体验",
+      "role": "Roblox体验设计师",
+      "emoji": "🎯",
+      "color": "#8B5CF6",
+      "category": "游戏空间",
+      "description": "精通Roblox平台UX和商业化设计",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "体验设计",
+          "emoji": "🎯"
+        },
+        {
+          "label": "交互玩法",
+          "emoji": "🕹️"
+        },
+        {
+          "label": "世界构建",
+          "emoji": "🌍"
+        }
+      ]
+    },
+    {
+      "id": "关卡卡",
+      "name": "关卡卡",
+      "role": "关卡设计师",
+      "emoji": "🗺️",
+      "color": "#8B5CF6",
+      "category": "游戏空间",
+      "description": "将每个关卡视为精心编排的体验，用空间讲述故事",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "关卡设计",
+          "emoji": "🗺️"
+        },
+        {
+          "label": "场景布局",
+          "emoji": "🏛️"
+        },
+        {
+          "label": "难度曲线",
+          "emoji": "📈"
+        }
+      ]
+    },
+    {
+      "id": "剧本本",
+      "name": "剧本本",
+      "role": "叙事设计师",
+      "emoji": "📖",
+      "color": "#8B5CF6",
+      "category": "游戏空间",
+      "description": "将叙事和游戏玩法无缝融合，让故事与互动不可分割",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "叙事设计",
+          "emoji": "📖"
+        },
+        {
+          "label": "剧情架构",
+          "emoji": "🎬"
+        },
+        {
+          "label": "角色塑造",
+          "emoji": "🎭"
+        }
+      ]
+    },
+    {
+      "id": "技美美",
+      "name": "技美美",
+      "role": "技术美术",
+      "emoji": "✨",
+      "color": "#8B5CF6",
+      "category": "游戏空间",
+      "description": "在美术愿景与引擎实现之间架起桥梁，精通着色器和VFX",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "技术美术",
+          "emoji": "✨"
+        },
+        {
+          "label": "美术管线",
+          "emoji": "🎨"
+        },
+        {
+          "label": "着色器编写",
+          "emoji": "💎"
+        }
+      ]
+    },
+    {
+      "id": "捏脸达",
+      "name": "捏脸达",
+      "role": "Roblox虚拟形象创作者",
+      "emoji": "🎭",
+      "color": "#8B5CF6",
+      "category": "游戏空间",
+      "description": "精通Roblox UGC和虚拟形象管线",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "虚拟形象",
+          "emoji": "🎭"
+        },
+        {
+          "label": "角色定制",
+          "emoji": "👗"
+        },
+        {
+          "label": "3D建模",
+          "emoji": "🖼️"
+        }
+      ]
+    },
+    {
+      "id": "插件达",
+      "name": "插件达",
+      "role": "Unity编辑器工具开发者",
+      "emoji": "🔧",
+      "color": "#8B5CF6",
+      "category": "游戏空间",
+      "description": "精通Unity自定义EditorWindow和管线自动化",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "脚本工程",
+          "emoji": "🔧"
+        },
+        {
+          "label": "自定义面板",
+          "emoji": "🖥️"
+        },
+        {
+          "label": "工作流优化",
+          "emoji": "⚡"
+        }
+      ]
+    },
+    {
+      "id": "渲染达",
+      "name": "渲染达",
+      "role": "Godot着色器开发者",
+      "emoji": "💎",
+      "color": "#8B5CF6",
+      "category": "游戏空间",
+      "description": "精通Godot着色语言和VisualShader",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "着色器开发",
+          "emoji": "💎"
+        },
+        {
+          "label": "视觉效果",
+          "emoji": "✨"
+        },
+        {
+          "label": "材质系统",
+          "emoji": "🎨"
+        }
+      ]
+    },
+    {
+      "id": "玩法师",
+      "name": "玩法师",
+      "role": "游戏设计师",
+      "emoji": "🎮",
+      "color": "#8B5CF6",
+      "category": "游戏空间",
+      "description": "精通游戏系统和机制设计，用循环杠杆和心理构建玩法",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "游戏设计",
+          "emoji": "🎮"
+        },
+        {
+          "label": "玩法策划",
+          "emoji": "🎲"
+        },
+        {
+          "label": "游戏系统",
+          "emoji": "⚙️"
+        }
+      ]
+    },
+    {
+      "id": "空间通",
+      "name": "空间通",
+      "role": "visionOS空间工程师",
+      "emoji": "👓",
+      "color": "#8B5CF6",
+      "category": "游戏空间",
+      "description": "精通visionOS平台开发，打造Apple Vision Pro空间应用",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "visionOS开发",
+          "emoji": "👓"
+        },
+        {
+          "label": "空间界面",
+          "emoji": "🌌"
+        },
+        {
+          "label": "SwiftUI",
+          "emoji": "🦅"
+        }
+      ]
+    },
+    {
+      "id": "联网达",
+      "name": "联网达",
+      "role": "Godot多人联机工程师",
+      "emoji": "🌐",
+      "color": "#8B5CF6",
+      "category": "游戏空间",
+      "description": "精通Godot 4 MultiplayerAPI和网络复制",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "Godot多人",
+          "emoji": "🌐"
+        },
+        {
+          "label": "网络同步",
+          "emoji": "🔄"
+        },
+        {
+          "label": "服务端开发",
+          "emoji": "🖥️"
+        }
+      ]
+    },
+    {
+      "id": "脚本通",
+      "name": "脚本通",
+      "role": "Roblox系统脚本工程师",
+      "emoji": "💻",
+      "color": "#8B5CF6",
+      "category": "游戏空间",
+      "description": "精通Luau和Roblox客户端-服务端安全模型",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "系统脚本",
+          "emoji": "💻"
+        },
+        {
+          "label": "Lua开发",
+          "emoji": "📜"
+        },
+        {
+          "label": "服务端安全",
+          "emoji": "🔒"
+        }
+      ]
+    },
+    {
+      "id": "节点通",
+      "name": "节点通",
+      "role": "Godot游戏脚本工程师",
+      "emoji": "🎮",
+      "color": "#8B5CF6",
+      "category": "游戏空间",
+      "description": "精通GDScript 2.0和Godot 4节点架构",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "脚本工程",
+          "emoji": "🎮"
+        },
+        {
+          "label": "游戏逻辑",
+          "emoji": "🧠"
+        },
+        {
+          "label": "GDScript",
+          "emoji": "📜"
+        }
+      ]
+    },
+    {
+      "id": "虚幻通",
+      "name": "虚幻通",
+      "role": "Unreal系统工程师",
+      "emoji": "⚡",
+      "color": "#8B5CF6",
+      "category": "游戏空间",
+      "description": "精通C++/Blueprint和Nanite/Lumen",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "UE系统工程",
+          "emoji": "⚡"
+        },
+        {
+          "label": "性能优化",
+          "emoji": "🚀"
+        },
+        {
+          "label": "混合架构",
+          "emoji": "🔀"
+        }
+      ]
+    },
+    {
+      "id": "解耦达",
+      "name": "解耦达",
+      "role": "Unity架构师",
+      "emoji": "🧩",
+      "color": "#8B5CF6",
+      "category": "游戏空间",
+      "description": "精通ScriptableObjects和解耦系统设计",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "Unity架构",
+          "emoji": "🧩"
+        },
+        {
+          "label": "模块化设计",
+          "emoji": "📦"
+        },
+        {
+          "label": "组件解耦",
+          "emoji": "🔌"
+        }
+      ]
+    },
+    {
+      "id": "造世界",
+      "name": "造世界",
+      "role": "Unreal世界构建师",
+      "emoji": "🌍",
+      "color": "#8B5CF6",
+      "category": "游戏空间",
+      "description": "精通UE5 World Partition和大世界流式加载",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "世界构建",
+          "emoji": "🌍"
+        },
+        {
+          "label": "大地图管理",
+          "emoji": "🗺️"
+        },
+        {
+          "label": "环境设计",
+          "emoji": "🌲"
+        }
+      ]
+    },
+    {
+      "id": "音效效",
+      "name": "音效效",
+      "role": "游戏音频工程师",
+      "emoji": "🔊",
+      "color": "#8B5CF6",
+      "category": "游戏空间",
+      "description": "精通FMOD/Wwise集成和空间音频，让游戏声音栩栩如生",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "游戏音频",
+          "emoji": "🔊"
+        },
+        {
+          "label": "音效设计",
+          "emoji": "🎵"
+        },
+        {
+          "label": "空间音频",
+          "emoji": "🌌"
+        }
+      ]
+    }
+  ],
+  "数据智能": [
+    {
+      "id": "布道道",
+      "name": "布道道",
+      "role": "开发者布道师",
+      "emoji": "📣",
+      "color": "#06B6D4",
+      "category": "数据智能",
+      "description": "构建发展开发者社区，推动产品在开发者群体中的采用",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "开发者布道",
+          "emoji": "📣"
+        },
+        {
+          "label": "技术社区",
+          "emoji": "👥"
+        },
+        {
+          "label": "技术内容",
+          "emoji": "✍️"
+        }
+      ]
+    },
+    {
+      "id": "拉数",
+      "name": "拉数",
+      "role": "销售数据提取代理",
+      "emoji": "📈",
+      "color": "#06B6D4",
+      "category": "数据智能",
+      "description": "从各类数据源中自动提取整理销售数据",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "销售数据",
+          "emoji": "📈"
+        },
+        {
+          "label": "数据提取",
+          "emoji": "🧩"
+        },
+        {
+          "label": "CRM分析",
+          "emoji": "🔍"
+        }
+      ]
+    },
+    {
+      "id": "探数",
+      "name": "探数",
+      "role": "数据探索专家",
+      "emoji": "🔍",
+      "color": "#06B6D4",
+      "category": "数据智能",
+      "description": "数据探索专家，支持SQL查询、数据探索、可视化、仪表板构建、数据验证和洞察生成",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "数据探索",
+          "emoji": "🔍"
+        },
+        {
+          "label": "数据清洗",
+          "emoji": "🧹"
+        },
+        {
+          "label": "特征工程",
+          "emoji": "🔧"
+        }
+      ]
+    },
+    {
+      "id": "数妙妙",
+      "name": "数妙妙",
+      "role": "数据分析报告师",
+      "emoji": "📊",
+      "color": "#06B6D4",
+      "category": "数据智能",
+      "description": "将复杂数据转化为清晰可执行的业务报告，让数据驱动决策",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "数据分析",
+          "emoji": "📊"
+        },
+        {
+          "label": "数据可视化",
+          "emoji": "📈"
+        },
+        {
+          "label": "KPI报告",
+          "emoji": "🎯"
+        }
+      ]
+    },
+    {
+      "id": "析数数",
+      "name": "析数数",
+      "role": "数据分析专家",
+      "emoji": "📊",
+      "color": "#06B6D4",
+      "category": "数据智能",
+      "description": "数据分析专家，支持Excel电子表格的创建、编辑、分析、公式计算、格式化和数据可视化",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "数据分析",
+          "emoji": "📊"
+        },
+        {
+          "label": "统计建模",
+          "emoji": "📈"
+        },
+        {
+          "label": "业务洞察",
+          "emoji": "💡"
+        }
+      ]
+    },
+    {
+      "id": "模检检",
+      "name": "模检检",
+      "role": "模型质量保障专家",
+      "emoji": "✅",
+      "color": "#06B6D4",
+      "category": "数据智能",
+      "description": "系统化评估保障AI模型质量，确保输出准确公平安全",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "模型质检",
+          "emoji": "✅"
+        },
+        {
+          "label": "AI评估",
+          "emoji": "📏"
+        },
+        {
+          "label": "模型监控",
+          "emoji": "📡"
+        }
+      ]
+    },
+    {
+      "id": "深研研",
+      "name": "深研研",
+      "role": "深度研究专家",
+      "emoji": "🔬",
+      "color": "#06B6D4",
+      "category": "数据智能",
+      "description": "综合性深度研究专家，支持多源信息检索、事实验证、知识发现和结构化报告生成",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "深度调研",
+          "emoji": "🔬"
+        },
+        {
+          "label": "行业分析",
+          "emoji": "📊"
+        },
+        {
+          "label": "学术报告",
+          "emoji": "📄"
+        }
+      ]
+    },
+    {
+      "id": "管道通",
+      "name": "管道通",
+      "role": "数据工程师",
+      "emoji": "🔧",
+      "color": "#06B6D4",
+      "category": "数据智能",
+      "description": "构建高效可靠的数据管道和ETL流程，让数据从源头到洞察畅通无阻",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "数据工程",
+          "emoji": "🔧"
+        },
+        {
+          "label": "ETL架构",
+          "emoji": "🔄"
+        },
+        {
+          "label": "数据管道",
+          "emoji": "🛤️"
+        }
+      ]
+    },
+    {
+      "id": "索引灵",
+      "name": "索引灵",
+      "role": "数据库优化专家",
+      "emoji": "🗃️",
+      "color": "#06B6D4",
+      "category": "数据智能",
+      "description": "专精数据库性能调优和查询优化，让慢查询变快让瓶颈消失",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "数据库优化",
+          "emoji": "🗃️"
+        },
+        {
+          "label": "SQL调优",
+          "emoji": "🔍"
+        },
+        {
+          "label": "索引策略",
+          "emoji": "📑"
+        }
+      ]
+    },
+    {
+      "id": "聚数散",
+      "name": "聚数散",
+      "role": "数据整合代理",
+      "emoji": "🔗",
+      "color": "#06B6D4",
+      "category": "数据智能",
+      "description": "将分散数据清洗整合统一，构建企业统一数据视图",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "数据集成",
+          "emoji": "🔗"
+        },
+        {
+          "label": "API对接",
+          "emoji": "🌐"
+        },
+        {
+          "label": "数据同步",
+          "emoji": "🔄"
+        }
+      ]
+    },
+    {
+      "id": "自进化",
+      "name": "自进化",
+      "role": "自优化架构师",
+      "emoji": "🧬",
+      "color": "#06B6D4",
+      "category": "数据智能",
+      "description": "专精于设计能自主优化和进化的智能系统架构，让系统越用越聪明",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "自动优化",
+          "emoji": "🧬"
+        },
+        {
+          "label": "系统调优",
+          "emoji": "⚙️"
+        },
+        {
+          "label": "智能运维",
+          "emoji": "🤖"
+        }
+      ]
+    },
+    {
+      "id": "表巧琳",
+      "name": "表巧琳",
+      "role": "数据建表专家",
+      "emoji": "📋",
+      "color": "#06B6D4",
+      "category": "数据智能",
+      "description": "将群聊接龙一键转为结构化表格，一句话生成可分享的信息收集表",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "接龙转表格",
+          "emoji": "📋"
+        },
+        {
+          "label": "信息收集",
+          "emoji": "📨"
+        },
+        {
+          "label": "智能表格",
+          "emoji": "📊"
+        }
+      ]
+    },
+    {
+      "id": "识图图",
+      "name": "识图图",
+      "role": "身份图谱运营师",
+      "emoji": "🔐",
+      "color": "#06B6D4",
+      "category": "数据智能",
+      "description": "构建维护用户身份图谱系统，实现跨平台身份识别",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "身份图谱",
+          "emoji": "🔐"
+        },
+        {
+          "label": "实体解析",
+          "emoji": "🎯"
+        },
+        {
+          "label": "数据关联",
+          "emoji": "🔗"
+        }
+      ]
+    },
+    {
+      "id": "财数数",
+      "name": "财数数",
+      "role": "金融数据检索专家",
+      "emoji": "💹",
+      "color": "#06B6D4",
+      "category": "数据智能",
+      "description": "通过自然语言查询209个金融数据API，涵盖股票、指数、期货、债券、基金和宏观经济等15大类",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "金融数据",
+          "emoji": "💹"
+        },
+        {
+          "label": "行情查询",
+          "emoji": "📈"
+        },
+        {
+          "label": "API检索",
+          "emoji": "🔌"
+        }
+      ]
+    },
+    {
+      "id": "风向标",
+      "name": "风向标",
+      "role": "行业趋势专家",
+      "emoji": "🔭",
+      "color": "#06B6D4",
+      "category": "数据智能",
+      "description": "持续追踪行业和技术趋势，为产品战略提供前瞻性洞察",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "趋势研究",
+          "emoji": "🔭"
+        },
+        {
+          "label": "市场情报",
+          "emoji": "📊"
+        },
+        {
+          "label": "机会识别",
+          "emoji": "🎯"
+        }
+      ]
+    }
+  ],
+  "营销增长": [
+    {
+      "id": "出海海",
+      "name": "出海海",
+      "role": "跨境电商专家",
+      "emoji": "🌍",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "精通亚马逊Shopify等国际电商平台，助力品牌出海全球",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "跨境电商",
+          "emoji": "🌍"
+        },
+        {
+          "label": "海外仓配",
+          "emoji": "📦"
+        },
+        {
+          "label": "国际合规",
+          "emoji": "📋"
+        }
+      ]
+    },
+    {
+      "id": "卖得好",
+      "name": "卖得好",
+      "role": "中国电商运营专家",
+      "emoji": "🛒",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "精通天猫京东拼多多等多平台运营，从选品到爆款一站式操盘",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "电商运营",
+          "emoji": "🛒"
+        },
+        {
+          "label": "店铺管理",
+          "emoji": "🏪"
+        },
+        {
+          "label": "大促策划",
+          "emoji": "🎉"
+        }
+      ]
+    },
+    {
+      "id": "司玉琦",
+      "name": "司玉琦",
+      "role": "私域营销专家",
+      "emoji": "🔥",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "深谙私域运营增长，盘活现有数据资源、洞察营销机会、实现业绩增长",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "私域运营",
+          "emoji": "🔥"
+        },
+        {
+          "label": "营销自动化",
+          "emoji": "⚙️"
+        },
+        {
+          "label": "会员体系",
+          "emoji": "🎫"
+        }
+      ]
+    },
+    {
+      "id": "搜霸霸",
+      "name": "搜霸霸",
+      "role": "SEO专家",
+      "emoji": "🔎",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "精通Google搜索算法和技术SEO，让网站在搜索结果中稳居前列",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "SEO优化",
+          "emoji": "🔎"
+        },
+        {
+          "label": "关键词策略",
+          "emoji": "🔑"
+        },
+        {
+          "label": "技术SEO",
+          "emoji": "⚙️"
+        }
+      ]
+    },
+    {
+      "id": "播旺旺",
+      "name": "播旺旺",
+      "role": "直播电商教练",
+      "emoji": "🎬",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "精通直播带货全链路运营，从话术到投流帮助实现GMV突破",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "直播带货",
+          "emoji": "🎬"
+        },
+        {
+          "label": "话术设计",
+          "emoji": "🎤"
+        },
+        {
+          "label": "主播培训",
+          "emoji": "📚"
+        }
+      ]
+    },
+    {
+      "id": "查账账",
+      "name": "查账账",
+      "role": "付费媒体审计师",
+      "emoji": "📋",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "深度审计广告投放数据和预算分配，找出被浪费的广告费",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "投放审计",
+          "emoji": "📋"
+        },
+        {
+          "label": "费用核查",
+          "emoji": "💸"
+        },
+        {
+          "label": "效率审计",
+          "emoji": "🔍"
+        }
+      ]
+    },
+    {
+      "id": "榜上上",
+      "name": "榜上上",
+      "role": "应用商店优化专家",
+      "emoji": "📈",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "精通App Store和Google Play搜索排名算法，让应用脱颖而出",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "ASO优化",
+          "emoji": "📈"
+        },
+        {
+          "label": "应用市场",
+          "emoji": "🏪"
+        },
+        {
+          "label": "下载转化",
+          "emoji": "📥"
+        }
+      ]
+    },
+    {
+      "id": "点睛睛",
+      "name": "点睛睛",
+      "role": "广告创意策略师",
+      "emoji": "✨",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "精通广告创意设计和效果预判，创作高转化广告素材",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "广告创意",
+          "emoji": "✨"
+        },
+        {
+          "label": "素材优化",
+          "emoji": "🎨"
+        },
+        {
+          "label": "A/B测试",
+          "emoji": "🧪"
+        }
+      ]
+    },
+    {
+      "id": "留客客",
+      "name": "留客客",
+      "role": "私域运营专家",
+      "emoji": "👥",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "精通微信私域流量池搭建运营，将公域流量沉淀为私域资产",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "私域运营",
+          "emoji": "👥"
+        },
+        {
+          "label": "社群管理",
+          "emoji": "💬"
+        },
+        {
+          "label": "用户裂变",
+          "emoji": "🔄"
+        }
+      ]
+    },
+    {
+      "id": "盾卫卫",
+      "name": "盾卫卫",
+      "role": "品牌策略师",
+      "emoji": "🛡️",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "15年品牌战略经验，守护品牌一致性的终极捍卫者",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "品牌策略",
+          "emoji": "🛡️"
+        },
+        {
+          "label": "品牌一致性",
+          "emoji": "🎯"
+        },
+        {
+          "label": "视觉识别",
+          "emoji": "👁️"
+        }
+      ]
+    },
+    {
+      "id": "竞高高",
+      "name": "竞高高",
+      "role": "PPC竞价广告策略师",
+      "emoji": "💰",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "精通Google Ads和百度竞价，以最低点击成本获取高质量流量",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "竞价策略",
+          "emoji": "💰"
+        },
+        {
+          "label": "出价优化",
+          "emoji": "⚡"
+        },
+        {
+          "label": "投放ROI",
+          "emoji": "📈"
+        }
+      ]
+    },
+    {
+      "id": "策动动",
+      "name": "策动动",
+      "role": "营销活动策划专家",
+      "emoji": "🎪",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "策划、创建和优化全渠道营销活动，包括内容策略、社交媒体、邮件营销和广告投放",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "营销战役",
+          "emoji": "🎪"
+        },
+        {
+          "label": "活动执行",
+          "emoji": "🚀"
+        },
+        {
+          "label": "效果评估",
+          "emoji": "📈"
+        }
+      ]
+    },
+    {
+      "id": "精投投",
+      "name": "精投投",
+      "role": "社交广告策略师",
+      "emoji": "🎯",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "精通社交平台广告投放，以精准定向实现最优获客成本",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "社媒广告",
+          "emoji": "🎯"
+        },
+        {
+          "label": "投放策略",
+          "emoji": "📊"
+        },
+        {
+          "label": "受众分析",
+          "emoji": "👥"
+        }
+      ]
+    },
+    {
+      "id": "红迪迪",
+      "name": "红迪迪",
+      "role": "Reddit社区建设者",
+      "emoji": "🗣️",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "深谙Reddit社区文化，在全球最大论坛上建立真实社区影响力",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "Reddit社区",
+          "emoji": "🗣️"
+        },
+        {
+          "label": "社区运营",
+          "emoji": "👥"
+        },
+        {
+          "label": "话题引导",
+          "emoji": "🎯"
+        }
+      ]
+    },
+    {
+      "id": "翻页页",
+      "name": "翻页页",
+      "role": "轮播内容增长专家",
+      "emoji": "📱",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "专精设计高互动率轮播图内容，驱动社交平台用户参与和增长",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "轮播内容",
+          "emoji": "📱"
+        },
+        {
+          "label": "社媒增长",
+          "emoji": "📈"
+        },
+        {
+          "label": "爆款图文",
+          "emoji": "🔥"
+        }
+      ]
+    },
+    {
+      "id": "裂变变",
+      "name": "裂变变",
+      "role": "增长黑客",
+      "emoji": "🚀",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "用数据驱动的实验方法论找到未开发的增长渠道，实现指数级增长",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "增长黑客",
+          "emoji": "🚀"
+        },
+        {
+          "label": "裂变实验",
+          "emoji": "🧪"
+        },
+        {
+          "label": "转化优化",
+          "emoji": "📈"
+        }
+      ]
+    },
+    {
+      "id": "追踪踪",
+      "name": "追踪踪",
+      "role": "广告追踪技术专家",
+      "emoji": "🔭",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "精通广告追踪代码和转化归因技术，确保投放效果可追踪",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "广告追踪",
+          "emoji": "🔭"
+        },
+        {
+          "label": "归因建模",
+          "emoji": "📊"
+        },
+        {
+          "label": "标签管理",
+          "emoji": "🏷️"
+        }
+      ]
+    },
+    {
+      "id": "领英达",
+      "name": "领英达",
+      "role": "LinkedIn内容创作者",
+      "emoji": "💼",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "精通LinkedIn专业社交平台内容策略，帮助建立思想领袖地位",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "职场内容",
+          "emoji": "💼"
+        },
+        {
+          "label": "领英创作",
+          "emoji": "✍️"
+        },
+        {
+          "label": "个人品牌",
+          "emoji": "🎯"
+        }
+      ]
+    }
+  ],
+  "内容创作": [
+    {
+      "id": "剪神神",
+      "name": "剪神神",
+      "role": "短视频剪辑教练",
+      "emoji": "🎬",
+      "color": "#EC4899",
+      "category": "内容创作",
+      "description": "精通短视频剪辑技巧和节奏把控，让每条视频具有专业冲击力",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "短视频剪辑",
+          "emoji": "🎬"
+        },
+        {
+          "label": "后期制作",
+          "emoji": "🎞️"
+        },
+        {
+          "label": "剪辑教学",
+          "emoji": "📚"
+        }
+      ]
+    },
+    {
+      "id": "号运运",
+      "name": "号运运",
+      "role": "微信公众号运营专家",
+      "emoji": "📝",
+      "color": "#EC4899",
+      "category": "内容创作",
+      "description": "精通公众号内容策略和粉丝增长，打造10万+品牌自媒体矩阵",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "公众号运营",
+          "emoji": "📝"
+        },
+        {
+          "label": "图文排版",
+          "emoji": "🎨"
+        },
+        {
+          "label": "粉丝运营",
+          "emoji": "👥"
+        }
+      ]
+    },
+    {
+      "id": "声浪浪",
+      "name": "声浪浪",
+      "role": "播客策略师",
+      "emoji": "🎙️",
+      "color": "#EC4899",
+      "category": "内容创作",
+      "description": "精通播客内容策划和增长策略，通过音频建立深度用户连接",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "播客策划",
+          "emoji": "🎙️"
+        },
+        {
+          "label": "音频内容",
+          "emoji": "🔊"
+        },
+        {
+          "label": "听众增长",
+          "emoji": "📈"
+        }
+      ]
+    },
+    {
+      "id": "弹幕幕",
+      "name": "弹幕幕",
+      "role": "B站内容策略师",
+      "emoji": "🎮",
+      "color": "#EC4899",
+      "category": "内容创作",
+      "description": "精通B站平台生态和年轻用户偏好，打造高播放量视频策略",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "B站策略",
+          "emoji": "🎮"
+        },
+        {
+          "label": "UP主运营",
+          "emoji": "📹"
+        },
+        {
+          "label": "弹幕文化",
+          "emoji": "💬"
+        }
+      ]
+    },
+    {
+      "id": "拓刻刻",
+      "name": "拓刻刻",
+      "role": "TikTok策略师",
+      "emoji": "🌍",
+      "color": "#EC4899",
+      "category": "内容创作",
+      "description": "精通TikTok算法和海外短视频生态，帮助品牌在全球平台爆发",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "TikTok策略",
+          "emoji": "🌍"
+        },
+        {
+          "label": "海外短视频",
+          "emoji": "📱"
+        },
+        {
+          "label": "全球营销",
+          "emoji": "🌏"
+        }
+      ]
+    },
+    {
+      "id": "推文文",
+      "name": "推文文",
+      "role": "Twitter运营专家",
+      "emoji": "🐦",
+      "color": "#EC4899",
+      "category": "内容创作",
+      "description": "精通Twitter/X平台互动策略和话题运营，让品牌占据全球对话",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "推特运营",
+          "emoji": "🐦"
+        },
+        {
+          "label": "实时互动",
+          "emoji": "⚡"
+        },
+        {
+          "label": "话题营销",
+          "emoji": "💬"
+        }
+      ]
+    },
+    {
+      "id": "文爆爆",
+      "name": "文爆爆",
+      "role": "内容创作专家",
+      "emoji": "✍️",
+      "color": "#EC4899",
+      "category": "内容创作",
+      "description": "擅长创作引人入胜的多平台内容，让品牌故事触达目标受众",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "内容策略",
+          "emoji": "✍️"
+        },
+        {
+          "label": "多平台创作",
+          "emoji": "🎯"
+        },
+        {
+          "label": "品牌故事",
+          "emoji": "📖"
+        }
+      ]
+    },
+    {
+      "id": "斗音音",
+      "name": "斗音音",
+      "role": "抖音策略师",
+      "emoji": "🎵",
+      "color": "#EC4899",
+      "category": "内容创作",
+      "description": "精通抖音算法和内容生态，打造短视频爆款并实现商业化变现",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "抖音运营",
+          "emoji": "🎵"
+        },
+        {
+          "label": "短视频策略",
+          "emoji": "📱"
+        },
+        {
+          "label": "流量变现",
+          "emoji": "💰"
+        }
+      ]
+    },
+    {
+      "id": "晒图图",
+      "name": "晒图图",
+      "role": "Instagram运营专家",
+      "emoji": "📸",
+      "color": "#EC4899",
+      "category": "内容创作",
+      "description": "精通Instagram视觉美学和内容策略，打造令人向往的品牌形象",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "图片社媒",
+          "emoji": "📸"
+        },
+        {
+          "label": "内容策略",
+          "emoji": "✍️"
+        },
+        {
+          "label": "品牌视觉",
+          "emoji": "🎨"
+        }
+      ]
+    },
+    {
+      "id": "热搜搜",
+      "name": "热搜搜",
+      "role": "微博策略师",
+      "emoji": "🔥",
+      "color": "#EC4899",
+      "category": "内容创作",
+      "description": "精通微博话题营销和舆论传播规律，让品牌在热搜持续出圈",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "微博策略",
+          "emoji": "🔥"
+        },
+        {
+          "label": "话题运营",
+          "emoji": "💬"
+        },
+        {
+          "label": "超级社区",
+          "emoji": "👥"
+        }
+      ]
+    },
+    {
+      "id": "种草草",
+      "name": "种草草",
+      "role": "小红书运营专家",
+      "emoji": "🌱",
+      "color": "#EC4899",
+      "category": "内容创作",
+      "description": "深谙小红书种草生态和推荐机制，打造高互动率种草内容",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "小红书运营",
+          "emoji": "🌱"
+        },
+        {
+          "label": "种草营销",
+          "emoji": "🔥"
+        },
+        {
+          "label": "笔记创作",
+          "emoji": "✍️"
+        }
+      ]
+    },
+    {
+      "id": "答有道",
+      "name": "答有道",
+      "role": "知乎策略师",
+      "emoji": "💡",
+      "color": "#EC4899",
+      "category": "内容创作",
+      "description": "精通知乎推荐机制和知识营销策略，通过高质量回答建立权威",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "知乎策略",
+          "emoji": "💡"
+        },
+        {
+          "label": "知识领导力",
+          "emoji": "🎓"
+        },
+        {
+          "label": "专业问答",
+          "emoji": "💬"
+        }
+      ]
+    },
+    {
+      "id": "著书书",
+      "name": "著书书",
+      "role": "图书联合创作者",
+      "emoji": "📚",
+      "color": "#EC4899",
+      "category": "内容创作",
+      "description": "与作者深度协作，帮助规划书籍结构和内容，达到出版级品质",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "图书共创",
+          "emoji": "📚"
+        },
+        {
+          "label": "章节规划",
+          "emoji": "📑"
+        },
+        {
+          "label": "出版写作",
+          "emoji": "✍️"
+        }
+      ]
+    }
+  ],
   "销售商务": [
     {
       "id": "单必成",
@@ -563,6 +2835,964 @@
         {
           "label": "赢率提升",
           "emoji": "📈"
+        }
+      ]
+    }
+  ],
+  "项目质量": [
+    {
+      "id": "传令令",
+      "name": "传令令",
+      "role": "内部沟通专家",
+      "emoji": "📢",
+      "color": "#8B5CF6",
+      "category": "项目质量",
+      "description": "内部沟通模板专家：状态报告、领导汇报、公司简报、FAQ、事故报告和项目更新",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "状态报告",
+          "emoji": "📊"
+        },
+        {
+          "label": "领导汇报",
+          "emoji": "👔"
+        },
+        {
+          "label": "事故报告",
+          "emoji": "🚨"
+        },
+        {
+          "label": "项目更新",
+          "emoji": "🔄"
+        },
+        {
+          "label": "FAQ设计",
+          "emoji": "❓"
+        }
+      ]
+    },
+    {
+      "id": "关德豪",
+      "name": "关德豪",
+      "role": "高级项目经理",
+      "emoji": "🏆",
+      "color": "#8B5CF6",
+      "category": "项目质量",
+      "description": "10年以上项目管理经验，精通瀑布和敏捷，是复杂项目定海神针",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "瀑布管理",
+          "emoji": "📋"
+        },
+        {
+          "label": "敏捷管理",
+          "emoji": "🔄"
+        },
+        {
+          "label": "风险管控",
+          "emoji": "⚠️"
+        },
+        {
+          "label": "干系人管理",
+          "emoji": "🤝"
+        },
+        {
+          "label": "里程碑管理",
+          "emoji": "🗓️"
+        }
+      ]
+    },
+    {
+      "id": "制片达",
+      "name": "制片达",
+      "role": "工作室制片人",
+      "emoji": "🎬",
+      "color": "#8B5CF6",
+      "category": "项目质量",
+      "description": "统筹项目从立项到交付的全过程，平衡创意预算和时间",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "项目排期",
+          "emoji": "📅"
+        },
+        {
+          "label": "预算控制",
+          "emoji": "💰"
+        },
+        {
+          "label": "质量把控",
+          "emoji": "⭐"
+        },
+        {
+          "label": "创意协调",
+          "emoji": "🎨"
+        },
+        {
+          "label": "交付管理",
+          "emoji": "📦"
+        }
+      ]
+    },
+    {
+      "id": "实验通",
+      "name": "实验通",
+      "role": "实验追踪管理者",
+      "emoji": "🧪",
+      "color": "#8B5CF6",
+      "category": "项目质量",
+      "description": "系统化管理实验全生命周期，确保每个实验有假设执行有结论",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "实验设计",
+          "emoji": "📐"
+        },
+        {
+          "label": "效果度量",
+          "emoji": "📏"
+        },
+        {
+          "label": "统计分析",
+          "emoji": "📊"
+        },
+        {
+          "label": "结论判定",
+          "emoji": "✅"
+        },
+        {
+          "label": "知识沉淀",
+          "emoji": "📚"
+        }
+      ]
+    },
+    {
+      "id": "无碍碍",
+      "name": "无碍碍",
+      "role": "无障碍审计师",
+      "emoji": "♿",
+      "color": "#8B5CF6",
+      "category": "项目质量",
+      "description": "按WCAG标准审计界面可访问性，确保每个用户都能使用产品",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "WCAG审计",
+          "emoji": "📋"
+        },
+        {
+          "label": "屏幕阅读",
+          "emoji": "👁️"
+        },
+        {
+          "label": "键盘导航",
+          "emoji": "⌨️"
+        },
+        {
+          "label": "色彩对比",
+          "emoji": "🎨"
+        },
+        {
+          "label": "ARIA标签",
+          "emoji": "🏷️"
+        }
+      ]
+    },
+    {
+      "id": "析测测",
+      "name": "析测测",
+      "role": "测试结果分析师",
+      "emoji": "🔬",
+      "color": "#8B5CF6",
+      "category": "项目质量",
+      "description": "像侦探解读证据一样分析测试结果，发现隐藏的质量问题",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "缺陷分析",
+          "emoji": "🐛"
+        },
+        {
+          "label": "趋势分析",
+          "emoji": "📈"
+        },
+        {
+          "label": "质量度量",
+          "emoji": "📏"
+        },
+        {
+          "label": "测试报告",
+          "emoji": "📊"
+        },
+        {
+          "label": "根因分析",
+          "emoji": "🎯"
+        }
+      ]
+    },
+    {
+      "id": "牧羊羊",
+      "name": "牧羊羊",
+      "role": "项目牧羊人",
+      "emoji": "🐑",
+      "color": "#8B5CF6",
+      "category": "项目质量",
+      "description": "温和但坚定地引导项目按计划推进，确保里程碑准时交付",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "进度追踪",
+          "emoji": "📍"
+        },
+        {
+          "label": "交付保障",
+          "emoji": "✅"
+        },
+        {
+          "label": "阻塞清理",
+          "emoji": "🧹"
+        },
+        {
+          "label": "沟通协调",
+          "emoji": "💬"
+        },
+        {
+          "label": "节奏把控",
+          "emoji": "🎵"
+        }
+      ]
+    },
+    {
+      "id": "理文文",
+      "name": "理文文",
+      "role": "文档处理专家",
+      "emoji": "📄",
+      "color": "#8B5CF6",
+      "category": "项目质量",
+      "description": "文档处理套件：Excel电子表格、Word文档、PowerPoint演示文稿和PDF文件的创建、编辑与转换",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "Excel处理",
+          "emoji": "📊"
+        },
+        {
+          "label": "Word排版",
+          "emoji": "📝"
+        },
+        {
+          "label": "PPT制作",
+          "emoji": "🎨"
+        },
+        {
+          "label": "PDF转换",
+          "emoji": "🔄"
+        },
+        {
+          "label": "批量处理",
+          "emoji": "⚡"
+        }
+      ]
+    },
+    {
+      "id": "端测测",
+      "name": "端测测",
+      "role": "Web应用测试专家",
+      "emoji": "🧭",
+      "color": "#8B5CF6",
+      "category": "项目质量",
+      "description": "Web应用测试助手，引导用户完成Web应用的启动、配置和测试流程",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "功能测试",
+          "emoji": "✅"
+        },
+        {
+          "label": "接口测试",
+          "emoji": "🔗"
+        },
+        {
+          "label": "自动化脚本",
+          "emoji": "🤖"
+        },
+        {
+          "label": "测试报告",
+          "emoji": "📋"
+        },
+        {
+          "label": "回归测试",
+          "emoji": "🔄"
+        }
+      ]
+    },
+    {
+      "id": "简明明",
+      "name": "简明明",
+      "role": "战略报告顾问",
+      "emoji": "📑",
+      "color": "#8B5CF6",
+      "category": "项目质量",
+      "description": "将冗长报告浓缩为高管可快速消化的精华摘要",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "信息提炼",
+          "emoji": "💎"
+        },
+        {
+          "label": "执行摘要",
+          "emoji": "📝"
+        },
+        {
+          "label": "决策简报",
+          "emoji": "🎯"
+        },
+        {
+          "label": "可视化呈现",
+          "emoji": "📊"
+        },
+        {
+          "label": "逻辑重构",
+          "emoji": "🏗️"
+        }
+      ]
+    },
+    {
+      "id": "统筹筹",
+      "name": "统筹筹",
+      "role": "工作室运营管理者",
+      "emoji": "🏢",
+      "color": "#8B5CF6",
+      "category": "项目质量",
+      "description": "全面管理工作室日常运营，从资源调配到流程优化",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "资源调配",
+          "emoji": "🎯"
+        },
+        {
+          "label": "流程优化",
+          "emoji": "🔧"
+        },
+        {
+          "label": "运营监控",
+          "emoji": "📊"
+        },
+        {
+          "label": "团队协调",
+          "emoji": "🤝"
+        },
+        {
+          "label": "效率提升",
+          "emoji": "⚡"
+        }
+      ]
+    },
+    {
+      "id": "送报报",
+      "name": "送报报",
+      "role": "报告分发代理",
+      "emoji": "📨",
+      "color": "#8B5CF6",
+      "category": "项目质量",
+      "description": "自动化管理报告生成和分发流程",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "自动生成",
+          "emoji": "🤖"
+        },
+        {
+          "label": "格式转换",
+          "emoji": "🔄"
+        },
+        {
+          "label": "分发管理",
+          "emoji": "📬"
+        },
+        {
+          "label": "定时触发",
+          "emoji": "⏰"
+        },
+        {
+          "label": "归档管理",
+          "emoji": "🗄️"
+        }
+      ]
+    },
+    {
+      "id": "选品品",
+      "name": "选品品",
+      "role": "工具评估专家",
+      "emoji": "🔍",
+      "color": "#8B5CF6",
+      "category": "项目质量",
+      "description": "系统化评估推荐最适合团队的工具，避免浪费时间在错误工具上",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "需求分析",
+          "emoji": "🎯"
+        },
+        {
+          "label": "对比评估",
+          "emoji": "⚖️"
+        },
+        {
+          "label": "选型报告",
+          "emoji": "📝"
+        },
+        {
+          "label": "试用验证",
+          "emoji": "🧪"
+        },
+        {
+          "label": "迁移规划",
+          "emoji": "🚀"
+        }
+      ]
+    }
+  ],
+  "法务安全": [
+    {
+      "id": "信链链",
+      "name": "信链链",
+      "role": "智能体身份信任专家",
+      "emoji": "🤖",
+      "color": "#EF4444",
+      "category": "法务安全",
+      "description": "构建AI智能体间的身份认证和信任机制",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "身份认证",
+          "emoji": "🪪"
+        },
+        {
+          "label": "信任验证",
+          "emoji": "✅"
+        },
+        {
+          "label": "多智能体安全",
+          "emoji": "🔐"
+        },
+        {
+          "label": "授权管理",
+          "emoji": "🎯"
+        },
+        {
+          "label": "审计追溯",
+          "emoji": "📋"
+        }
+      ]
+    },
+    {
+      "id": "医合合",
+      "name": "医合合",
+      "role": "医疗营销合规专家",
+      "emoji": "🏥",
+      "color": "#EF4444",
+      "category": "法务安全",
+      "description": "确保医疗营销内容符合法规要求，守护信息准确性",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "医疗广告法",
+          "emoji": "📢"
+        },
+        {
+          "label": "内容审核",
+          "emoji": "✅"
+        },
+        {
+          "label": "适应症合规",
+          "emoji": "💊"
+        },
+        {
+          "label": "监管对接",
+          "emoji": "🤝"
+        },
+        {
+          "label": "培训赋能",
+          "emoji": "🎓"
+        }
+      ]
+    },
+    {
+      "id": "合规矩",
+      "name": "合规矩",
+      "role": "合规审计师",
+      "emoji": "📊",
+      "color": "#EF4444",
+      "category": "法务安全",
+      "description": "全面审计企业运营合规性，确保符合行业标准",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "标准认证",
+          "emoji": "🏅"
+        },
+        {
+          "label": "审计报告",
+          "emoji": "📝"
+        },
+        {
+          "label": "内控评估",
+          "emoji": "🔍"
+        },
+        {
+          "label": "整改建议",
+          "emoji": "🛠️"
+        },
+        {
+          "label": "持续监控",
+          "emoji": "👁️"
+        }
+      ]
+    },
+    {
+      "id": "守规规",
+      "name": "守规规",
+      "role": "法律合规审查员",
+      "emoji": "⚖️",
+      "color": "#EF4444",
+      "category": "法务安全",
+      "description": "确保业务运营和产品功能符合法律法规要求，防范合规风险",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "合规审核",
+          "emoji": "📋"
+        },
+        {
+          "label": "法规检查",
+          "emoji": "🔍"
+        },
+        {
+          "label": "风险审查",
+          "emoji": "⚠️"
+        },
+        {
+          "label": "隐私合规",
+          "emoji": "🔒"
+        },
+        {
+          "label": "合同审查",
+          "emoji": "📝"
+        }
+      ]
+    },
+    {
+      "id": "链审审",
+      "name": "链审审",
+      "role": "区块链安全审计师",
+      "emoji": "⛓️",
+      "color": "#EF4444",
+      "category": "法务安全",
+      "description": "专精区块链智能合约和DeFi协议安全审计",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "智能合约审计",
+          "emoji": "📜"
+        },
+        {
+          "label": "漏洞检测",
+          "emoji": "🐛"
+        },
+        {
+          "label": "链上安全",
+          "emoji": "🔗"
+        },
+        {
+          "label": "代币审计",
+          "emoji": "🪙"
+        },
+        {
+          "label": "威胁建模",
+          "emoji": "🎯"
+        }
+      ]
+    },
+    {
+      "id": "零知知",
+      "name": "零知知",
+      "role": "零知识证明管理员",
+      "emoji": "🔐",
+      "color": "#EF4444",
+      "category": "法务安全",
+      "description": "精通零知识证明技术的应用和管理",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "ZK-SNARKs",
+          "emoji": "🔬"
+        },
+        {
+          "label": "ZK-STARKs",
+          "emoji": "⭐"
+        },
+        {
+          "label": "隐私计算",
+          "emoji": "🛡️"
+        },
+        {
+          "label": "电路设计",
+          "emoji": "⚡"
+        },
+        {
+          "label": "证明验证",
+          "emoji": "✅"
+        }
+      ]
+    }
+  ],
+  "行业顾问": [
+    {
+      "id": "AndonQ",
+      "name": "AndonQ",
+      "role": "腾讯云技术支持专家",
+      "emoji": "🔧",
+      "color": "#3B82F6",
+      "category": "行业顾问",
+      "description": "精通腾讯云全线产品，提供产品咨询、故障排查、服务报告等多维度服务",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "产品咨询",
+          "emoji": "❓"
+        },
+        {
+          "label": "故障排查",
+          "emoji": "🔍"
+        },
+        {
+          "label": "架构设计",
+          "emoji": "🏗️"
+        },
+        {
+          "label": "成本优化",
+          "emoji": "💡"
+        },
+        {
+          "label": "服务报告",
+          "emoji": "📊"
+        }
+      ]
+    },
+    {
+      "id": "MigraQ",
+      "name": "MigraQ",
+      "role": "腾讯云迁移服务专家",
+      "emoji": "🚀",
+      "color": "#3B82F6",
+      "category": "行业顾问",
+      "description": "腾讯云迁移平台全流程专家，支持跨云资源扫描、选型推荐、TCO成本分析与迁移方案规划",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "资源扫描",
+          "emoji": "🔍"
+        },
+        {
+          "label": "选型推荐",
+          "emoji": "🎯"
+        },
+        {
+          "label": "TCO分析",
+          "emoji": "💰"
+        },
+        {
+          "label": "迁移规划",
+          "emoji": "📋"
+        },
+        {
+          "label": "迁移验证",
+          "emoji": "✅"
+        }
+      ]
+    },
+    {
+      "id": "幻灯灯",
+      "name": "幻灯灯",
+      "role": "PPT制作专家",
+      "emoji": "📽️",
+      "color": "#3B82F6",
+      "category": "行业顾问",
+      "description": "智能PPT生成助手，一键将想法转化为精美演示文稿",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "演示设计",
+          "emoji": "🎬"
+        },
+        {
+          "label": "幻灯片排版",
+          "emoji": "📐"
+        },
+        {
+          "label": "图表可视化",
+          "emoji": "📊"
+        },
+        {
+          "label": "动画设计",
+          "emoji": "✨"
+        },
+        {
+          "label": "模板定制",
+          "emoji": "🎯"
+        }
+      ]
+    },
+    {
+      "id": "管全叙",
+      "name": "管全叙",
+      "role": "文档管家",
+      "emoji": "📚",
+      "color": "#3B82F6",
+      "category": "行业顾问",
+      "description": "一站式管理金山文档全生命周期：新建各类在线文档、按关键词快速搜索定位、AI按主题自动分类整理",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "新建文档",
+          "emoji": "✨"
+        },
+        {
+          "label": "文档搜索",
+          "emoji": "🔍"
+        },
+        {
+          "label": "AI分类",
+          "emoji": "🤖"
+        },
+        {
+          "label": "整理归档",
+          "emoji": "🗂️"
+        },
+        {
+          "label": "协作管理",
+          "emoji": "🤝"
+        }
+      ]
+    },
+    {
+      "id": "腾讯云刊例价查询助手",
+      "name": "腾讯云刊例价查询助手",
+      "role": "腾讯云刊例价查询助手",
+      "emoji": "☁️",
+      "color": "#3B82F6",
+      "category": "行业顾问",
+      "description": "专为腾讯云销售团队打造的刊例价查询助手，支持上传Excel配置清单批量查价",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "刊例价查询",
+          "emoji": "💰"
+        },
+        {
+          "label": "批量询价",
+          "emoji": "📋"
+        },
+        {
+          "label": "配置解析",
+          "emoji": "🔧"
+        },
+        {
+          "label": "优惠方案",
+          "emoji": "🎯"
+        },
+        {
+          "label": "报价单生成",
+          "emoji": "📄"
+        }
+      ]
+    },
+    {
+      "id": "藏知远",
+      "name": "藏知远",
+      "role": "知识收藏专家",
+      "emoji": "💎",
+      "color": "#3B82F6",
+      "category": "行业顾问",
+      "description": "把网页、消息、笔记等碎片内容沉淀为结构化知识资产",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "网页剪藏",
+          "emoji": "✂️"
+        },
+        {
+          "label": "知识整理",
+          "emoji": "🗂️"
+        },
+        {
+          "label": "笔记归纳",
+          "emoji": "📝"
+        },
+        {
+          "label": "标签管理",
+          "emoji": "🏷️"
+        },
+        {
+          "label": "知识图谱",
+          "emoji": "🕸️"
+        }
+      ]
+    },
+    {
+      "id": "补婷婷",
+      "name": "补婷婷",
+      "role": "PPT创作专家",
+      "emoji": "🎨",
+      "color": "#3B82F6",
+      "category": "行业顾问",
+      "description": "一句话出PPT、AI自动设计大纲并生成完整PPT",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "一键生成",
+          "emoji": "⚡"
+        },
+        {
+          "label": "大纲设计",
+          "emoji": "🗺️"
+        },
+        {
+          "label": "视觉设计",
+          "emoji": "🎭"
+        },
+        {
+          "label": "内容填充",
+          "emoji": "📝"
+        },
+        {
+          "label": "格式导出",
+          "emoji": "📤"
+        }
+      ]
+    },
+    {
+      "id": "裴德夫",
+      "name": "裴德夫",
+      "role": "PDF处理专家",
+      "emoji": "📄",
+      "color": "#3B82F6",
+      "category": "行业顾问",
+      "description": "PDF文档处理一站式：按页码拆分或提取指定页合成新PDF、将金山云文档一键导出为PDF",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "PDF拆分",
+          "emoji": "✂️"
+        },
+        {
+          "label": "PDF合并",
+          "emoji": "📑"
+        },
+        {
+          "label": "页面提取",
+          "emoji": "🎯"
+        },
+        {
+          "label": "格式转换",
+          "emoji": "🔄"
+        },
+        {
+          "label": "文字提取",
+          "emoji": "✍️"
+        }
+      ]
+    },
+    {
+      "id": "路小鲜",
+      "name": "路小鲜",
+      "role": "美团生活助手",
+      "emoji": "🗺️",
+      "color": "#3B82F6",
+      "category": "行业顾问",
+      "description": "生活服务管家，一站式搞定行程规划、景点/酒店/天气/预算与美团红包领取",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "行程规划",
+          "emoji": "🗓️"
+        },
+        {
+          "label": "美食推荐",
+          "emoji": "🍜"
+        },
+        {
+          "label": "酒店预订",
+          "emoji": "🏨"
+        },
+        {
+          "label": "优惠领取",
+          "emoji": "🎟️"
+        },
+        {
+          "label": "预算管理",
+          "emoji": "💰"
         }
       ]
     }
