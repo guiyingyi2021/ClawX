@@ -39,8 +39,17 @@ function getCache(): CacheData | null {
   try {
     const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
-    return JSON.parse(raw) as CacheData;
+    const parsed = JSON.parse(raw) as CacheData;
+    // 清除旧缓存：如果任何专家的 name 包含英文字母（说明是旧版英文名），丢弃缓存
+    const hasOldNaming = parsed.data.some(e => /[a-zA-Z]/.test(e.name));
+    if (hasOldNaming) {
+      console.log('[expert-loader] 检测到旧版英文名缓存，已自动清除');
+      localStorage.removeItem(CACHE_KEY);
+      return null;
+    }
+    return parsed;
   } catch {
+    localStorage.removeItem(CACHE_KEY);
     return null;
   }
 }
@@ -110,13 +119,19 @@ async function fetchRemoteExperts(url: string): Promise<{ experts: Expert[]; ver
       if (!Array.isArray(experts)) continue;
       for (const expert of experts) {
         // 标记为远程专家，并添加默认值
+        const basePath = `agents/${category}/${expert.id}`;
+        const soulUrl = expert.hasSoul
+          ? `${GITHUB_RAW_BASE}/${basePath}/SOUL.md`
+          : undefined;
         flatExperts.push({
           ...expert,
           color: hexToTailwindGradient(expert.color), // 转换十六进制为 Tailwind 渐变类
           category, // 使用分类键作为 category
           isRemote: true,
-          // 远程专家没有预加载的内容
-          specialties: [],
+          soulUrl, // SOUL.md 下载地址
+          downloadUrl: soulUrl || `${GITHUB_RAW_BASE}/${basePath}/package.tar.gz`,
+          // 保留远程数据中的 specialties，如果没有则默认为空数组
+          specialties: expert.specialties || [],
           soulContent: expert.hasSoul ? undefined : '',
           identityContent: expert.hasIdentity ? undefined : '',
           userName: '用户',
@@ -144,8 +159,8 @@ export function getRemoteUrl(): string {
 
 /**
  * 加载专家配置（混合模式）
- * 策略：立即返回缓存/内置数据，后台异步检查远程更新
- * @param onRemoteUpdate - 远程有更新时的回调（传入新专家列表）
+ * 策略：立即返回内置+缓存合并数据，后台异步检查远程更新
+ * @param onRemoteUpdate - 远程有更新时的回调（传入合并后的完整列表）
  */
 export async function loadExperts(
   builtInExperts: Expert[],
@@ -154,31 +169,42 @@ export async function loadExperts(
 ): Promise<Expert[]> {
   const url = remoteUrl ?? DEFAULT_REMOTE_URL;
 
-  // 1. 立即返回缓存或内置数据（不等待远程）
+  // 1. 立即返回：内置专家 + 缓存（无论缓存是否存在，始终包含内置）
   const cache = getCache();
-  const cachedData = cache?.data ?? builtInExperts;
+  const builtInIds = new Set(builtInExperts.map(e => e.id));
+  const immediateData = cache?.data
+    ? [...builtInExperts, ...cache.data.filter(e => !builtInIds.has(e.id))]
+    : builtInExperts;
 
   // 2. 后台异步检查远程是否有更新
   fetchRemoteExperts(url)
     .then(remote => {
       if (!remote) return;
 
-      // 检测是否有新专家（以 ID 是否出现过为准）
-      const cachedIds = new Set(cachedData.map(e => e.id));
-      const hasNewExperts = remote.experts.some(e => !cachedIds.has(e.id));
-      const hasMoreExperts = remote.experts.length !== cachedData.length;
+      // 基于内置 + 缓存判断是否有新专家
+      const existingIds = new Set(immediateData.map(e => e.id));
+      const hasNewExperts = remote.experts.some(e => !existingIds.has(e.id));
+      const hasMoreExperts = remote.experts.length !== immediateData.length ||
+        remote.experts.some(e => !existingIds.has(e.id));
 
-      setCache(remote.experts, remote.version);
+      if (!hasNewExperts && !hasMoreExperts) return;
 
-      if ((hasNewExperts || hasMoreExperts) && onRemoteUpdate) {
-        onRemoteUpdate(remote.experts);
+      // 合并：内置优先，远程补充内置没有的
+      const merged = [
+        ...builtInExperts,
+        ...remote.experts.filter(e => !builtInIds.has(e.id)),
+      ];
+      setCache(merged, remote.version);
+
+      if (onRemoteUpdate) {
+        onRemoteUpdate(merged);
       }
     })
     .catch(() => {
-      // 后台检查失败不影响已返回的缓存数据
+      // 后台检查失败不影响已返回的本地数据
     });
 
-  return cachedData;
+  return immediateData;
 }
 
 /**
