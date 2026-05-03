@@ -22,6 +22,11 @@
  *   emoji: ✍️
  *   color: "#FF6B6B"
  *   summary: 专业的内容创作助手，擅长文案写作和创意发散。
+ *   specialties:           <- 【必填】技能标签数组
+ *     - label: 小红书种草   <- 标签名称
+ *       emoji: 📕           <- 标签图标
+ *     - label: 抖音短视频
+ *       emoji: 🎬
  *   ---
  */
 
@@ -45,19 +50,91 @@ const CATEGORIES = [
 ];
 
 /**
- * 解析 SOUL.md 的 YAML frontmatter
+ * parseFrontmatter - 解析 SOUL.md 的 YAML frontmatter
+ * 支持简单字段和 specialties 嵌套数组
  */
 function parseFrontmatter(content) {
   const match = content.match(/^---\n([\s\S]*?)\n---/);
   if (!match) return {};
   const fm = {};
-  for (const line of match[1].split('\n')) {
+  const lines = match[1].split('\n');
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+    // 检查是否是数组项（以 "  - " 开头）
+    if (line.match(/^\s+-\s+/)) {
+      // 在 specialties 数组中
+      if (fm.specialties && Array.isArray(fm.specialties)) {
+        const item = {};
+        // 解析数组项的属性
+        while (i < lines.length && lines[i].match(/^\s+-\s+/)) {
+          const itemMatch = lines[i].match(/^\s+-\s+(\w+):\s*(.*)$/);
+          if (itemMatch) {
+            item[itemMatch[1]] = itemMatch[2].replace(/^["']|["']$/g, '');
+          }
+          i++;
+          // 继续解析子属性（缩进的 key: value）
+          while (i < lines.length && lines[i].match(/^\s+\w+:\s*.+$/)) {
+            const subMatch = lines[i].match(/^\s+(\w+):\s*(.*)$/);
+            if (subMatch) {
+              item[subMatch[1]] = subMatch[2].replace(/^["']|["']$/g, '');
+            }
+            i++;
+          }
+        }
+        if (Object.keys(item).length > 0) {
+          fm.specialties.push(item);
+        }
+        continue;
+      }
+    }
+
+    // 检查是否是 specialties 数组开始
+    const specMatch = line.match(/^(\s*)specialties:\s*$/);
+    if (specMatch) {
+      fm.specialties = [];
+      i++;
+      // 继续解析数组项
+      while (i < lines.length) {
+        const itemLine = lines[i];
+        // 检查是否是新的顶级字段（减少缩进）
+        if (itemLine.match(/^[^\s]/) || itemLine.match(/^\w+:/)) {
+          if (fm.specialties.length > 0) break;
+        }
+        if (itemLine.match(/^\s+-\s+\w+:/)) {
+          const item = {};
+          const itemHeaderMatch = itemLine.match(/^\s+-\s+(\w+):\s*(.*)$/);
+          if (itemHeaderMatch) {
+            item[itemHeaderMatch[1]] = itemHeaderMatch[2].replace(/^["']|["']$/g, '');
+          }
+          i++;
+          // 解析对象属性
+          while (i < lines.length && lines[i].match(/^\s+\w+:\s*.+$/)) {
+            const propMatch = lines[i].match(/^\s+(\w+):\s*(.*)$/);
+            if (propMatch) {
+              item[propMatch[1]] = propMatch[2].replace(/^["']|["']$/g, '');
+            }
+            i++;
+          }
+          if (Object.keys(item).length > 0) {
+            fm.specialties.push(item);
+          }
+        } else {
+          i++;
+        }
+      }
+      continue;
+    }
+
+    // 普通 key: value
     const idx = line.indexOf(':');
-    if (idx === -1) continue;
+    if (idx === -1) { i++; continue; }
     const key = line.slice(0, idx).trim();
     const val = line.slice(idx + 1).trim();
     // 去掉首尾引号
     fm[key] = val.replace(/^["']|["']$/g, '');
+    i++;
   }
   return fm;
 }
@@ -128,6 +205,10 @@ function generateIndex() {
         downloadUrl,
         hasIdentity: hasIdentity,
         hasSoul: !!soulContent,
+        // 新增：specialties 标签（如果有的话）
+        ...(fm.specialties && Array.isArray(fm.specialties) && fm.specialties.length > 0
+          ? { specialties: fm.specialties }
+          : {}),
       });
     }
 

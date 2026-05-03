@@ -1,4 +1,318 @@
 {
+  "产品设计": [
+    {
+      "id": "产品通",
+      "name": "产品通",
+      "role": "产品管理专家",
+      "emoji": "📋",
+      "color": "#14B8A6",
+      "category": "产品设计",
+      "description": "产品管理工具集：功能规格编写、路线图规划、利益相关者沟通、用户研究综合、竞品分析和指标追踪",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "产品管理",
+          "emoji": "📋"
+        },
+        {
+          "label": "需求规划",
+          "emoji": "🗺️"
+        },
+        {
+          "label": "迭代管理",
+          "emoji": "🔄"
+        }
+      ]
+    },
+    {
+      "id": "体验达",
+      "name": "体验达",
+      "role": "用户体验架构师",
+      "emoji": "🏗️",
+      "color": "#06B6D4",
+      "category": "产品设计",
+      "description": "为开发者提供坚实的技术基础和CSS系统，是设计与开发之间的桥梁",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "信息架构",
+          "emoji": "🗂️"
+        },
+        {
+          "label": "用户旅程",
+          "emoji": "🛤️"
+        },
+        {
+          "label": "体验策略",
+          "emoji": "🎯"
+        }
+      ]
+    },
+    {
+      "id": "像素君",
+      "name": "像素君",
+      "role": "UI设计师",
+      "emoji": "🎨",
+      "color": "#6366F1",
+      "category": "产品设计",
+      "description": "精通设计系统和组件库，追求像素级完美，打造无障碍用户界面",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "UI设计",
+          "emoji": "🎨"
+        },
+        {
+          "label": "组件库",
+          "emoji": "🧩"
+        },
+        {
+          "label": "界面规范",
+          "emoji": "📐"
+        }
+      ]
+    },
+    {
+      "id": "助推",
+      "name": "助推",
+      "role": "行为助推引擎",
+      "emoji": "🚀",
+      "color": "#EF4444",
+      "category": "产品设计",
+      "description": "运用行为经济学设计产品助推机制，引导用户做出更好的决策",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "行为助推",
+          "emoji": "🚀"
+        },
+        {
+          "label": "用户动机",
+          "emoji": "💪"
+        },
+        {
+          "label": "交互节奏",
+          "emoji": "🎵"
+        }
+      ]
+    },
+    {
+      "id": "图变码",
+      "name": "图变码",
+      "role": "设计转代码专家",
+      "emoji": "💻",
+      "color": "#0EA5E9",
+      "category": "产品设计",
+      "description": "将Figma设计稿和截图转换为可直接使用的代码组件，内置无障碍性支持",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "设计转代码",
+          "emoji": "🔄"
+        },
+        {
+          "label": "UI还原",
+          "emoji": "🎯"
+        },
+        {
+          "label": "前端生成",
+          "emoji": "💻"
+        }
+      ]
+    },
+    {
+      "id": "图说说",
+      "name": "图说说",
+      "role": "视觉叙事专家",
+      "emoji": "📊",
+      "color": "#F59E0B",
+      "category": "产品设计",
+      "description": "擅长将复杂信息转化为引人入胜的视觉故事",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "视觉叙事",
+          "emoji": "📖"
+        },
+        {
+          "label": "数据可视化",
+          "emoji": "📈"
+        },
+        {
+          "label": "信息图表",
+          "emoji": "🗺️"
+        }
+      ]
+    },
+    {
+      "id": "多元元",
+      "name": "多元元",
+      "role": "多元视觉专家",
+      "emoji": "🌍",
+      "color": "#EC4899",
+      "category": "产品设计",
+      "description": "致力于消除AI图像中的系统性偏见，确保视觉内容文化准确和包容",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "多元视觉",
+          "emoji": "🌍"
+        },
+        {
+          "label": "包容性设计",
+          "emoji": "🤝"
+        },
+        {
+          "label": "文化适配",
+          "emoji": "🎭"
+        }
+      ]
+    },
+    {
+      "id": "惊喜喜",
+      "name": "惊喜喜",
+      "role": "趣味体验设计师",
+      "emoji": "✨",
+      "color": "#F97316",
+      "category": "产品设计",
+      "description": "专注于在品牌体验中注入意想不到的愉悦时刻",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "体验设计",
+          "emoji": "✨"
+        },
+        {
+          "label": "交互创新",
+          "emoji": "🎮"
+        },
+        {
+          "label": "情感化设计",
+          "emoji": "💖"
+        }
+      ]
+    },
+    {
+      "id": "探真真",
+      "name": "探真真",
+      "role": "用户体验研究员",
+      "emoji": "🔬",
+      "color": "#3B82F6",
+      "category": "产品设计",
+      "description": "用真实数据而非假设验证设计决策，专精用户行为分析和可用性测试",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "用户研究",
+          "emoji": "🔬"
+        },
+        {
+          "label": "可用性测试",
+          "emoji": "🧪"
+        },
+        {
+          "label": "数据洞察",
+          "emoji": "📊"
+        }
+      ]
+    },
+    {
+      "id": "林觉初",
+      "name": "林觉初",
+      "role": "Ardot设计专家",
+      "emoji": "✏️",
+      "color": "#10B981",
+      "category": "产品设计",
+      "description": "精通Ardot设计软件，既能在画布上构建精准UI，也能将设计稿直接生成前端代码",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "UI/UX设计",
+          "emoji": "🖥️"
+        },
+        {
+          "label": "设计系统",
+          "emoji": "🧩"
+        },
+        {
+          "label": "用户研究",
+          "emoji": "🔬"
+        }
+      ]
+    },
+    {
+      "id": "画令令",
+      "name": "画令令",
+      "role": "AI图像提示词工程师",
+      "emoji": "🖼️",
+      "color": "#8B5CF6",
+      "category": "产品设计",
+      "description": "精通AI图像生成的语言密码，将抽象视觉概念转化为精准提示词",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "AI绘画",
+          "emoji": "🎨"
+        },
+        {
+          "label": "提示词工程",
+          "emoji": "✍️"
+        },
+        {
+          "label": "视觉创作",
+          "emoji": "🖼️"
+        }
+      ]
+    },
+    {
+      "id": "规范范",
+      "name": "规范范",
+      "role": "设计系统文档架构师",
+      "emoji": "📚",
+      "color": "#8B5CF6",
+      "category": "产品设计",
+      "description": "基于awesome-design-md的DESIGN.md规范，为项目生成结构化的设计系统文档",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "设计文档",
+          "emoji": "📚"
+        },
+        {
+          "label": "设计规范",
+          "emoji": "📖"
+        },
+        {
+          "label": "架构文档",
+          "emoji": "🏛️"
+        }
+      ]
+    }
+  ],
   "销售商务": [
     {
       "id": "单必成",
@@ -10,7 +324,25 @@
       "description": "用苏格拉底式提问训练销售团队，从60%达标到总统俱乐部",
       "downloadUrl": "",
       "hasIdentity": false,
-      "hasSoul": true
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "苏格拉底提问",
+          "emoji": "🎯"
+        },
+        {
+          "label": "销售培训",
+          "emoji": "📚"
+        },
+        {
+          "label": "达标率提升",
+          "emoji": "📈"
+        },
+        {
+          "label": "TOP sales养成",
+          "emoji": "🏆"
+        }
+      ]
     },
     {
       "id": "拓客客",
@@ -19,10 +351,28 @@
       "emoji": "🤝",
       "color": "#06B6D4",
       "category": "销售商务",
-      "description": "精通大客户经营和帐户扩展策略，将客户发展为长期战略伙伴",
+      "description": "精通大客户经营和账户扩展策略，将客户发展为长期战略伙伴",
       "downloadUrl": "",
       "hasIdentity": false,
-      "hasSoul": true
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "大客户战略",
+          "emoji": "🎯"
+        },
+        {
+          "label": "关系经营",
+          "emoji": "🤝"
+        },
+        {
+          "label": "账户扩展",
+          "emoji": "📈"
+        },
+        {
+          "label": "客户成功",
+          "emoji": "✅"
+        }
+      ]
     },
     {
       "id": "拨必通",
@@ -34,7 +384,25 @@
       "description": "精通外呼和冷启动销售策略，让陌生人在30秒内愿意继续倾听",
       "downloadUrl": "",
       "hasIdentity": false,
-      "hasSoul": true
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "冷启动话术",
+          "emoji": "📞"
+        },
+        {
+          "label": "30秒开场",
+          "emoji": "⏱️"
+        },
+        {
+          "label": "名单筛选",
+          "emoji": "📋"
+        },
+        {
+          "label": "外呼管理",
+          "emoji": "📊"
+        }
+      ]
     },
     {
       "id": "掘需需",
@@ -46,7 +414,25 @@
       "description": "训练销售掌握深度需求挖掘技巧，发现真正的业务痛点",
       "downloadUrl": "",
       "hasIdentity": false,
-      "hasSoul": true
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "深度挖掘",
+          "emoji": "🔍"
+        },
+        {
+          "label": "SPIN提问",
+          "emoji": "🎯"
+        },
+        {
+          "label": "痛点识别",
+          "emoji": "💡"
+        },
+        {
+          "label": "需求验证",
+          "emoji": "✅"
+        }
+      ]
     },
     {
       "id": "政通通",
@@ -58,7 +444,25 @@
       "description": "精通政府数字化转型需求和采购流程，精准把控政务售前关键节点",
       "downloadUrl": "",
       "hasIdentity": false,
-      "hasSoul": true
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "政务数字化",
+          "emoji": "🏛️"
+        },
+        {
+          "label": "采购流程",
+          "emoji": "📋"
+        },
+        {
+          "label": "招投标",
+          "emoji": "📝"
+        },
+        {
+          "label": "方案设计",
+          "emoji": "🎯"
+        }
+      ]
     },
     {
       "id": "方案通",
@@ -82,7 +486,25 @@
       "description": "用数据驱动方法分析销售管道健康度，让预测从猜测变科学",
       "downloadUrl": "",
       "hasIdentity": false,
-      "hasSoul": true
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "管道分析",
+          "emoji": "📊"
+        },
+        {
+          "label": "数据预测",
+          "emoji": "🔮"
+        },
+        {
+          "label": "KPI监控",
+          "emoji": "📈"
+        },
+        {
+          "label": "漏斗优化",
+          "emoji": "🎯"
+        }
+      ]
     },
     {
       "id": "策必中",
@@ -94,7 +516,25 @@
       "description": "精通销售提案和方案设计，将价值转化为无法拒绝的商业论证",
       "downloadUrl": "",
       "hasIdentity": false,
-      "hasSoul": true
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "提案撰写",
+          "emoji": "📝"
+        },
+        {
+          "label": "价值呈现",
+          "emoji": "💎"
+        },
+        {
+          "label": "商业论证",
+          "emoji": "📊"
+        },
+        {
+          "label": "演示设计",
+          "emoji": "🎯"
+        }
+      ]
     },
     {
       "id": "赢单单",
@@ -106,7 +546,25 @@
       "description": "精通复杂交易策略制定和推进，帮助销售团队赢得大单",
       "downloadUrl": "",
       "hasIdentity": false,
-      "hasSoul": true
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "大单策略",
+          "emoji": "🏆"
+        },
+        {
+          "label": "招标竞争",
+          "emoji": "📋"
+        },
+        {
+          "label": "多方博弈",
+          "emoji": "🎯"
+        },
+        {
+          "label": "赢率提升",
+          "emoji": "📈"
+        }
+      ]
     }
   ]
 }
