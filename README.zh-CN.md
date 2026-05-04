@@ -460,5 +460,5 @@ Dclaw 基于 [MIT 许可证](LICENSE) 发布。你可以自由地使用、修改
 ---
 
 <p align="center">
-  <sub>由 ValueCell 团队用 ❤️ 打造</sub>
+  <sub>基于由 ValueCell 团队的CLawX 底座开发  大云中联 所有</sub>
 </p>
