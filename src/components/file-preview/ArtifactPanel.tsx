@@ -2,26 +2,28 @@
  * Right-side artifact panel — the WorkBuddy-style split-pane sidebar
  * shown next to the Chat conversation.  Hosts three top-level tabs:
  *
- *   - 变更 (changes): side-by-side diff for the focused file only (no
+ *   - Changes: side-by-side diff for the focused file only (no
  *     in-panel file list — open a file from the run’s file cards below
- *     the graph, or “查看文件变更” picks the latest change).
- *   - 预览 (preview): rendered preview of whichever file is currently
+ *     the graph, or “View file changes” picks the latest change).
+ *   - Preview: rendered preview of whichever file is currently
  *     focused (Markdown → rendered, code → syntax-highlighted).  Shares
  *     `focusedFile` with the changes tab so switching tabs keeps
  *     context.
- *   - 工作空间 (browser): read-only workspace tree + file preview,
+ *   - Workspace (browser): read-only workspace tree + file preview,
  *     scoped to the current agent's `agent.workspace`.
  *
  * Open/close + tab + focused-file state lives in the
  * `useArtifactPanel` zustand store so any part of the page (file cards,
- * toolbar buttons, "查看文件变更 →" links) can drive it.
+ * toolbar buttons, "View file changes →" links) can drive it.
  */
 import { useLayoutEffect, useMemo } from 'react';
-import { Eye, FileEdit, FolderTree, X } from 'lucide-react';
+import { Eye, FileEdit, FolderOpen, FolderTree, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import type { GeneratedFile } from '@/lib/generated-files';
+import { supportsRichDocumentPreview, type GeneratedFile } from '@/lib/generated-files';
+import { invokeIpc } from '@/lib/api-client';
 import type { AgentSummary } from '@/types/agent';
 import { useArtifactPanel } from '@/stores/artifact-panel';
 import type { FilePreviewTarget } from './types';
@@ -34,7 +36,7 @@ export interface ArtifactPanelProps {
   files: GeneratedFile[];
   /** Currently selected agent (drives the workspace tab). */
   agent: AgentSummary | null;
-  /** Used to mark "本轮新增" badges on the workspace tree. */
+  /** Used to mark "Added this run" badges on the workspace tree. */
   runStartedAt?: number | null;
   /** Bumping this number triggers a workspace tree reload. */
   refreshSignal?: number;
@@ -43,32 +45,54 @@ export interface ArtifactPanelProps {
 export function ArtifactPanel({ files, agent, runStartedAt, refreshSignal }: ArtifactPanelProps) {
   const { t } = useTranslation('chat');
   const tab = useArtifactPanel((s) => s.tab);
-  const visibleTab = !WORKSPACE_BROWSER_ENABLED && tab === 'browser' ? 'changes' : tab;
   const setTab = useArtifactPanel((s) => s.setTab);
   const focusedFile = useArtifactPanel((s) => s.focusedFile);
   const setFocusedFile = useArtifactPanel((s) => s.setFocusedFile);
   const close = useArtifactPanel((s) => s.close);
+  const richFocusedFile = !!focusedFile && supportsRichDocumentPreview(focusedFile.ext);
+  const requestedTab = !WORKSPACE_BROWSER_ENABLED && tab === 'browser' ? 'changes' : tab;
+  const visibleTab = richFocusedFile && requestedTab === 'changes' ? 'preview' : requestedTab;
+
+  const handleRevealFocusedFile = () => {
+    if (!focusedFile) return;
+    invokeIpc('shell:showItemInFolder', focusedFile.filePath).catch(() => {
+      toast.error(t('filePreview.errors.openInFinderFailed', 'Could not reveal in file manager'));
+    });
+  };
 
   return (
-    <div className="flex h-full min-h-0 flex-col bg-background">
+    <div data-testid="artifact-panel" className="flex h-full min-h-0 flex-col bg-background">
       <div className="flex shrink-0 items-center justify-between gap-2 border-b border-black/5 px-3 py-2 dark:border-white/10">
         <div className="flex min-w-0 items-center gap-1">
+          {richFocusedFile ? (
+            <PanelTabButton
+              testId="artifact-panel-action-open-folder"
+              icon={<FolderOpen className="h-3.5 w-3.5" />}
+              label={t('generatedFiles.openFolder', 'Open folder')}
+              active={false}
+              onClick={handleRevealFocusedFile}
+            />
+          ) : (
+            <PanelTabButton
+              testId="artifact-panel-tab-changes"
+              icon={<FileEdit className="h-3.5 w-3.5" />}
+              label={t('artifactPanel.tabs.changes', 'Changes')}
+              active={visibleTab === 'changes'}
+              onClick={() => setTab('changes')}
+            />
+          )}
           <PanelTabButton
-            icon={<FileEdit className="h-3.5 w-3.5" />}
-            label={t('artifactPanel.tabs.changes', '变更')}
-            active={visibleTab === 'changes'}
-            onClick={() => setTab('changes')}
-          />
-          <PanelTabButton
+            testId="artifact-panel-tab-preview"
             icon={<Eye className="h-3.5 w-3.5" />}
-            label={t('artifactPanel.tabs.preview', '预览')}
+            label={t('artifactPanel.tabs.preview', 'Preview')}
             active={visibleTab === 'preview'}
             onClick={() => setTab('preview')}
           />
           {WORKSPACE_BROWSER_ENABLED && (
             <PanelTabButton
+              testId="artifact-panel-tab-browser"
               icon={<FolderTree className="h-3.5 w-3.5" />}
-              label={t('artifactPanel.tabs.browser', '工作空间')}
+              label={t('artifactPanel.tabs.browser', 'Workspace')}
               active={visibleTab === 'browser'}
               onClick={() => setTab('browser')}
             />
@@ -80,7 +104,7 @@ export function ArtifactPanel({ files, agent, runStartedAt, refreshSignal }: Art
           size="icon"
           className="h-7 w-7 shrink-0"
           onClick={close}
-          aria-label={t('filePreview.actions.close', '关闭')}
+          aria-label={t('filePreview.actions.close', 'Close')}
         >
           <X className="h-4 w-4 pointer-events-none" />
         </Button>
@@ -109,15 +133,17 @@ export function ArtifactPanel({ files, agent, runStartedAt, refreshSignal }: Art
 }
 
 interface PanelTabButtonProps {
+  testId?: string;
   icon: React.ReactNode;
   label: string;
   active: boolean;
   onClick: () => void;
 }
 
-function PanelTabButton({ icon, label, active, onClick }: PanelTabButtonProps) {
+function PanelTabButton({ testId, icon, label, active, onClick }: PanelTabButtonProps) {
   return (
     <button
+      data-testid={testId}
       type="button"
       onClick={onClick}
       className={cn(
@@ -140,6 +166,7 @@ function generatedFileToTarget(file: GeneratedFile): FilePreviewTarget {
     ext: file.ext,
     mimeType: file.mimeType,
     contentType: file.contentType,
+    size: file.size,
     action: file.action,
     fullContent: file.fullContent,
     baseline: file.baseline,
@@ -155,7 +182,7 @@ interface ChangesTabProps {
 
 /**
  * Full-width diff for the focused file.  Which file is focused comes from
- * the run’s file cards or “查看文件变更 →” (auto-first); switching workspace
+ * the run’s file cards or “View file changes →” (auto-first); switching workspace
  * tabs does not bring back a sidebar list.
  */
 function ChangesTab({ files, focusedFile, onFocus }: ChangesTabProps) {
@@ -171,21 +198,20 @@ function ChangesTab({ files, focusedFile, onFocus }: ChangesTabProps) {
     return Array.from(map.values()).sort((a, b) => b.lastSeenIndex - a.lastSeenIndex);
   }, [files]);
 
-  // Auto-select the first file when entering this tab without one in
-  // focus (or when the focused file disappears, e.g. session reset).
+  // Auto-select the first generated file only when entering this tab without
+  // any focus. Files opened from chat cards (for example `SKILL.md`) may not
+  // be present in `files`; keep that focus instead of jumping to an unrelated
+  // generated file.
   useLayoutEffect(() => {
+    if (focusedFile) return;
     if (uniqueFiles.length === 0) return;
-    const stillExists =
-      focusedFile && uniqueFiles.some((f) => f.filePath === focusedFile.filePath);
-    if (!stillExists) {
-      onFocus(generatedFileToTarget(uniqueFiles[0]));
-    }
+    onFocus(generatedFileToTarget(uniqueFiles[0]));
   }, [focusedFile, uniqueFiles, onFocus]);
 
-  if (uniqueFiles.length === 0) {
+  if (!focusedFile && uniqueFiles.length === 0) {
     return (
       <div className="flex h-full items-center justify-center px-6 text-center text-sm text-muted-foreground">
-        {t('artifactPanel.changes.empty', '本会话尚无文件变更')}
+        {t('artifactPanel.changes.empty', 'No file changes in this session yet')}
       </div>
     );
   }
@@ -196,7 +222,7 @@ function ChangesTab({ files, focusedFile, onFocus }: ChangesTabProps) {
     </div>
   ) : (
     <div className="flex h-full items-center justify-center px-6 text-center text-sm text-muted-foreground">
-      {t('artifactPanel.changes.selectFileHint', '请点击对话中的文件卡片，或「查看文件变更」')}
+      {t('artifactPanel.changes.selectFileHint', 'Click a file card in the conversation, or choose “View file changes”')}
     </div>
   );
 }
@@ -211,12 +237,12 @@ function PreviewTab({ focusedFile }: PreviewTabProps) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-2 px-6 text-center">
         <p className="text-sm font-medium text-foreground">
-          {t('artifactPanel.preview.emptyTitle', '尚未选择文件')}
+          {t('artifactPanel.preview.emptyTitle', 'No file selected')}
         </p>
         <p className="max-w-md text-xs text-muted-foreground">
           {t(
             'artifactPanel.preview.emptyHint',
-            '请先点击对话里的文件卡片打开侧栏并选中文件。',
+            'Click a file card in the conversation to open the sidebar and select a file first.',
           )}
         </p>
       </div>

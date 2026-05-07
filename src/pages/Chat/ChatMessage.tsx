@@ -13,7 +13,7 @@ import rehypeKatex from 'rehype-katex';
 import { createPortal } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { invokeIpc } from '@/lib/api-client';
+import { invokeIpc, statFile } from '@/lib/api-client';
 import type { RawMessage, AttachedFileMeta } from '@/stores/chat';
 import { extractText, extractImages, extractToolUse, formatTimestamp } from './message-utils';
 
@@ -48,6 +48,116 @@ interface ChatMessageProps {
 }
 
 interface ExtractedImage { url?: string; data?: string; mimeType: string; }
+
+const DIRECTORY_MIME_TYPE = 'application/x-directory';
+
+function isChatPreviewDocument(file: AttachedFileMeta): boolean {
+  const name = file.fileName.toLowerCase();
+  const mime = file.mimeType.toLowerCase();
+  return (
+    mime === 'application/pdf'
+    || mime === 'application/vnd.ms-excel'
+    || mime === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    || name.endsWith('.pdf')
+    || name.endsWith('.xls')
+    || name.endsWith('.xlsx')
+  );
+}
+
+function isDirectoryAttachment(file: AttachedFileMeta): boolean {
+  return file.mimeType === DIRECTORY_MIME_TYPE;
+}
+
+function isSkillFileAttachment(file: AttachedFileMeta): boolean {
+  const path = file.filePath ?? '';
+  return /(?:^|[\\/])\.openclaw[\\/]skills[\\/][^\\/]+[\\/].+\.[A-Za-z0-9]+$/i.test(path);
+}
+
+function validationKindForAttachment(file: AttachedFileMeta): 'file' | 'dir' | null {
+  if (!file.filePath) return null;
+  // User-selected uploads and already enriched attachments are trusted enough
+  // for immediate display. Regex-derived message refs start at size 0/null and
+  // are validated through main-process stat before becoming clickable cards.
+  if (file.source !== 'message-ref' && file.source !== 'tool-result') return null;
+  if (file.fileSize > 0 || file.preview) return null;
+  return isDirectoryAttachment(file) ? 'dir' : 'file';
+}
+
+function previewMimeFromPath(filePath: string): string | null {
+  const lower = filePath.toLowerCase();
+  if (lower.endsWith('.md') || lower.endsWith('.markdown')) return 'text/markdown';
+  if (lower.endsWith('.pdf')) return 'application/pdf';
+  if (lower.endsWith('.xls')) return 'application/vnd.ms-excel';
+  if (lower.endsWith('.xlsx')) return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+  return null;
+}
+
+function fileNameFromPath(filePath: string): string {
+  return filePath.split(/[\\/]/).pop() || 'file';
+}
+
+function trimPathTerminators(filePath: string): string {
+  return filePath.replace(/[，。；;,.!?]+$/u, '');
+}
+
+function extractPreviewDocumentPaths(text: string): AttachedFileMeta[] {
+  if (!text) return [];
+  const refs: AttachedFileMeta[] = [];
+  const seen = new Set<string>();
+  const pushRef = (filePath: string, mimeType: string) => {
+    const normalizedPath = trimPathTerminators(filePath);
+    if (!normalizedPath || seen.has(normalizedPath)) return;
+    seen.add(normalizedPath);
+    refs.push({
+      fileName: fileNameFromPath(normalizedPath),
+      mimeType,
+      fileSize: 0,
+      preview: null,
+      filePath: normalizedPath,
+      source: 'message-ref',
+    });
+  };
+  // Deliberately narrow this render-layer fallback to user-facing artifacts:
+  // PDF / spreadsheet previews and OpenClaw skill directories. The store-level
+  // extractor still handles broad file categories; this keeps visible outputs
+  // clickable even before history enrichment runs.
+  const exts = 'pdf|xlsx?|PDF|XLSX?';
+  const taggedRegex = new RegExp(`(?:^|[\\s(\\[{>])(?:MEDIA|media):((?:\\/|~\\/)[^\\s\\n"'()\\[\\],<>]*?\\.(?:${exts}))`, 'g');
+  const unixRegex = new RegExp('(?<![\\w./:])((?:\\/|~\\/)[^\\s\\n"\'`()\\[\\],<>]*?\\.(?:' + exts + '))', 'g');
+  const skillPathBoundary = '(?=$|\\s|[\\x5b\\x5d"\'`(),<>，。；;,.!?])';
+  const skillPathPart = '[^\\\\/\\s\\n"\'`()\\x5b\\x5d,<>]+';
+  const skillPathTail = '[^\\s\\n"\'`()\\x5b\\x5d,<>]*?';
+  const skillDirRegex = new RegExp(
+    `(?<![\\w./:])((?:~[\\\\/]\\.openclaw[\\\\/]skills[\\\\/]${skillPathPart})|(?:(?:\\/|[A-Za-z]:\\\\)${skillPathTail}[\\\\/]\\.openclaw[\\\\/]skills[\\\\/]${skillPathPart}))${skillPathBoundary}`,
+    'gi',
+  );
+  const skillMarkdownRegex = new RegExp(
+    `(?<![\\w./:])((?:~[\\\\/]\\.openclaw[\\\\/]skills[\\\\/]${skillPathTail}\\.md)|(?:(?:\\/|[A-Za-z]:\\\\)${skillPathTail}[\\\\/]\\.openclaw[\\\\/]skills[\\\\/]${skillPathTail}\\.md))${skillPathBoundary}`,
+    'gi',
+  );
+
+  let workingText = text;
+  let taggedMatch: RegExpExecArray | null;
+  while ((taggedMatch = taggedRegex.exec(text)) !== null) {
+    const filePath = taggedMatch[1];
+    const mimeType = previewMimeFromPath(filePath);
+    if (mimeType) pushRef(filePath, mimeType);
+    const start = taggedMatch.index;
+    const end = start + taggedMatch[0].length;
+    workingText = workingText.slice(0, start) + ' '.repeat(end - start) + workingText.slice(end);
+  }
+
+  for (const regex of [unixRegex, skillMarkdownRegex, skillDirRegex]) {
+    let match: RegExpExecArray | null;
+    while ((match = regex.exec(workingText)) !== null) {
+      const filePath = match[1];
+      const mimeType = regex === skillDirRegex ? DIRECTORY_MIME_TYPE : previewMimeFromPath(filePath);
+      if (mimeType) pushRef(filePath, mimeType);
+    }
+  }
+
+  return refs;
+}
 
 /**
  * Normalize LaTeX delimiters so `remark-math` can detect them.
@@ -109,14 +219,81 @@ export const ChatMessage = memo(function ChatMessage({
   const images = extractImages(message);
   const tools = extractToolUse(message);
   const visibleTools = suppressToolCards ? [] : tools;
+  const [validatedPaths, setValidatedPaths] = useState<Record<string, boolean>>({});
   const rawAttachedFiles = message._attachedFiles || [];
-  const filteredProcessAttachments = rawAttachedFiles.filter((file) => file.source !== 'tool-result' && file.source !== 'message-ref');
+  const textPreviewFiles = isUser ? [] : extractPreviewDocumentPaths(text);
+  const rawAttachedPaths = new Set(rawAttachedFiles.map((file) => file.filePath).filter(Boolean));
+  const derivedAttachedFiles = [
+    ...rawAttachedFiles,
+    ...textPreviewFiles.filter((file) => !file.filePath || !rawAttachedPaths.has(file.filePath)),
+  ];
+  const validationTargets = derivedAttachedFiles
+    .map((file) => {
+      const kind = validationKindForAttachment(file);
+      return kind && file.filePath ? { filePath: file.filePath, kind } : null;
+    })
+    .filter((target): target is { filePath: string; kind: 'file' | 'dir' } => !!target);
+  const validationKey = validationTargets
+    .map((target) => `${target.kind}:${target.filePath}`)
+    .sort()
+    .join('\n');
+  useEffect(() => {
+    if (!validationKey) return;
+    const pendingTargets = validationTargets.filter((target) => validatedPaths[target.filePath] === undefined);
+    if (pendingTargets.length === 0) return;
+
+    let cancelled = false;
+    void Promise.all(
+      pendingTargets.map(async (target) => {
+        try {
+          const stat = await statFile(target.filePath);
+          return {
+            filePath: target.filePath,
+            exists: !!stat.ok && (target.kind === 'dir' ? !!stat.isDir : !!stat.isFile),
+          };
+        } catch {
+          return { filePath: target.filePath, exists: false };
+        }
+      }),
+    ).then((results) => {
+      if (cancelled) return;
+      setValidatedPaths((current) => {
+        const next = { ...current };
+        for (const result of results) next[result.filePath] = result.exists;
+        return next;
+      });
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [validationKey, validationTargets, validatedPaths]);
+  const existingDerivedAttachedFiles = derivedAttachedFiles.filter((file) => {
+    const kind = validationKindForAttachment(file);
+    if (!kind || !file.filePath) return true;
+    return validatedPaths[file.filePath] === true;
+  });
+  const filteredProcessAttachments = derivedAttachedFiles.filter((file) => {
+    if (file.source !== 'tool-result' && file.source !== 'message-ref') return true;
+    // Runtime-produced user-facing artifacts (images, PDFs, spreadsheets,
+    // skill directories, ...) must remain visible in the reply bubble even
+    // when generic process attachments are folded into the execution graph.
+    // The graph card itself does not render `_attachedFiles`, so dropping
+    // images here would leave the user with no way to see them at all.
+    if (file.mimeType.startsWith('image/')) return true;
+    return isChatPreviewDocument(file) || isDirectoryAttachment(file) || isSkillFileAttachment(file);
+  });
   // When a message is attachment-only, keep those attachments visible even if
   // process attachments are generally suppressed for this run segment —
   // otherwise the reply disappears entirely.
+  const processVisibleAttachments = filteredProcessAttachments.filter((file) => {
+    const kind = validationKindForAttachment(file);
+    if (!kind || !file.filePath) return true;
+    return validatedPaths[file.filePath] === true;
+  });
   const attachedFiles = suppressProcessAttachments && (hasText || images.length > 0 || visibleTools.length > 0)
-    ? filteredProcessAttachments
-    : rawAttachedFiles;
+    ? processVisibleAttachments
+    : existingDerivedAttachedFiles;
   const [lightboxImg, setLightboxImg] = useState<{ src: string; fileName: string; filePath?: string; base64?: string; mimeType?: string } | null>(null);
 
   // Never render tool result messages in chat UI
@@ -455,6 +632,7 @@ function formatFileSize(bytes: number): string {
 }
 
 function FileIcon({ mimeType, className }: { mimeType: string; className?: string }) {
+  if (mimeType === DIRECTORY_MIME_TYPE) return <FolderOpen className={className} />;
   if (mimeType.startsWith('video/')) return <Film className={className} />;
   if (mimeType.startsWith('audio/')) return <Music className={className} />;
   if (mimeType.startsWith('text/') || mimeType === 'application/json' || mimeType === 'application/xml') return <FileText className={className} />;
@@ -486,7 +664,7 @@ function FileCard({ file, onOpen }: { file: AttachedFileMeta; onOpen?: (file: At
       <div className="min-w-0 overflow-hidden">
         <p className="text-xs font-medium truncate">{file.fileName}</p>
         <p className="text-2xs text-muted-foreground">
-          {file.fileSize > 0 ? formatFileSize(file.fileSize) : 'File'}
+          {file.mimeType === DIRECTORY_MIME_TYPE ? '文件夹' : file.fileSize > 0 ? formatFileSize(file.fileSize) : 'File'}
         </p>
       </div>
     </div>

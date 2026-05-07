@@ -1,0 +1,190 @@
+{
+  "数据智能": [
+    {
+      "id": "phoebe",
+      "name": "Phoebe",
+      "role": "数据分析师",
+      "emoji": "📊",
+      "color": "#3B82F6",
+      "category": "数据智能",
+      "description": "专长将枯燥的数据转化为可执行、可落地、可汇报的业务洞察",
+      "downloadUrl": "",
+      "hasIdentity": true,
+      "hasSoul": true
+    }
+  ],
+  "营销增长": [
+    {
+      "id": "ben",
+      "name": "Ben",
+      "role": "品牌策略师",
+      "emoji": "🌟",
+      "color": "#EAB308",
+      "category": "营销增长",
+      "description": "15年品牌战略经验，帮助企业从产品思维升级到品牌思维，建立品牌资产",
+      "downloadUrl": "",
+      "hasIdentity": true,
+      "hasSoul": true
+    },
+    {
+      "id": "jude",
+      "name": "Jude",
+      "role": "电商运营专家",
+      "emoji": "🛒",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "深耕天猫、京东、拼多多运营8年，擅长从选品到爆款打造的全链路运营",
+      "downloadUrl": "",
+      "hasIdentity": true,
+      "hasSoul": true
+    }
+  ],
+  "内容创作": [
+    {
+      "id": "kai",
+      "name": "Kai",
+      "role": "内容创作专家",
+      "emoji": "✍️",
+      "color": "#FF6B6B",
+      "category": "内容创作",
+      "description": "10年内容创作经验，深度研究小红书、抖音、公众号等平台的算法和内容生态",
+      "downloadUrl": "",
+      "hasIdentity": true,
+      "hasSoul": true
+    },
+    {
+      "id": "maya",
+      "name": "Maya",
+      "role": "抖音策略师",
+      "emoji": "🎵",
+      "color": "#8B5CF6",
+      "category": "内容创作",
+      "description": "短视频内容策略专家，精通抖音算法逻辑，擅长从0到1打造账号矩阵",
+      "downloadUrl": "",
+      "hasIdentity": true,
+      "hasSoul": true
+    }
+  ],
+  "销售商务": [
+    {
+      "id": "ulla",
+      "name": "Ulla",
+      "role": "销售教练",
+      "emoji": "💼",
+      "color": "#10B981",
+      "category": "销售商务",
+      "description": "顶级销售教练，融合多个国际销售体系，帮助销售团队从普通到卓越",
+      "downloadUrl": "",
+      "hasIdentity": true,
+      "hasSoul": true
+    },
+    {
+      "id": "单必成",
+      "name": "单必成",
+      "role": "销售教练",
+      "emoji": "💼",
+      "color": "#10B981",
+      "category": "销售商务",
+      "description": "用苏格拉底式提问训练销售团队，从60%达标到总统俱乐部",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true
+    },
+    {
+      "id": "拓客客",
+      "name": "拓客客",
+      "role": "大客户策略师",
+      "emoji": "🤝",
+      "color": "#06B6D4",
+      "category": "销售商务",
+      "description": "精通大客户经营和账户扩展策略，将客户发展为长期战略伙伴",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true
+    },
+    {
+      "id": "拨必通",
+      "name": "拨必通",
+      "role": "外呼策略师",
+      "emoji": "📞",
+      "color": "#84CC16",
+      "category": "销售商务",
+      "description": "精通外呼和冷启动销售策略，让陌生人在30秒内愿意继续倾听",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true
+    },
+    {
+      "id": "掘需需",
+      "name": "掘需需",
+      "role": "需求发现教练",
+      "emoji": "🔍",
+      "color": "#EF4444",
+      "category": "销售商务",
+      "description": "训练销售掌握深度需求挖掘技巧，发现真正的业务痛点",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true
+    },
+    {
+      "id": "政通通",
+      "name": "政通通",
+      "role": "政府数字化售前顾问",
+      "emoji": "🏛️",
+      "color": "#6366F1",
+      "category": "销售商务",
+      "description": "精通政府数字化转型需求和采购流程，精准把控政务售前关键节点",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true
+    },
+    {
+      "id": "方案通",
+      "name": "方案通",
+      "role": "售前技术顾问",
+      "emoji": "🔧",
+      "color": "#8B5CF6",
+      "category": "销售商务",
+      "description": "架起技术与商业的桥梁，帮助客户理解解决方案的价值",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true
+    },
+    {
+      "id": "漏斗通",
+      "name": "漏斗通",
+      "role": "销售管道分析师",
+      "emoji": "📊",
+      "color": "#EC4899",
+      "category": "销售商务",
+      "description": "用数据驱动方法分析销售管道健康度，让预测从猜测变科学",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true
+    },
+    {
+      "id": "策必中",
+      "name": "策必中",
+      "role": "方案策划师",
+      "emoji": "📋",
+      "color": "#3B82F6",
+      "category": "销售商务",
+      "description": "精通销售提案和方案设计，将价值转化为无法拒绝的商业论证",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true
+    },
+    {
+      "id": "赢单单",
+      "name": "赢单单",
+      "role": "交易策略师",
+      "emoji": "🏆",
+      "color": "#F59E0B",
+      "category": "销售商务",
+      "description": "精通复杂交易策略制定和推进，帮助销售团队赢得大单",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true
+    }
+  ]
+}

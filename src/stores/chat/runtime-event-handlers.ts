@@ -119,8 +119,13 @@ export function handleRuntimeEventState(
                 ? getToolCallFilePath(currentStreamForPath, normalizedFinalMessage.toolCallId)
                 : undefined;
 
-              // Mirror enrichWithToolResultFiles: collect images + file refs for next assistant msg
+              // Mirror `enrichWithToolResultFiles`: collect non-image
+              // artifacts for the next assistant message. Image content
+              // blocks (vision data) and image-typed raw paths in the
+              // tool's stdout are intermediate process noise — see the
+              // comment in `helpers.ts::enrichWithToolResultFiles`.
               const toolFiles: AttachedFileMeta[] = extractImagesAsAttachedFiles(normalizedFinalMessage.content)
+                .filter((file) => !file.mimeType.startsWith('image/'))
                 .map((file) => (file.source ? file : { ...file, source: 'tool-result' }));
               if (matchedPath) {
                 for (const f of toolFiles) {
@@ -136,7 +141,9 @@ export function handleRuntimeEventState(
                 const mediaRefPaths = new Set(mediaRefs.map(r => r.filePath));
                 for (const ref of mediaRefs) toolFiles.push(makeAttachedFile(ref, 'tool-result'));
                 for (const ref of extractRawFilePaths(text)) {
-                  if (!mediaRefPaths.has(ref.filePath)) toolFiles.push(makeAttachedFile(ref, 'tool-result'));
+                  if (mediaRefPaths.has(ref.filePath)) continue;
+                  if (ref.mimeType.startsWith('image/')) continue;
+                  toolFiles.push(makeAttachedFile(ref, 'tool-result'));
                 }
               }
               set((s) => {
@@ -167,16 +174,45 @@ export function handleRuntimeEventState(
               const nextTools = updates.length > 0 ? upsertToolStatuses(s.streamingTools, updates) : s.streamingTools;
               const streamingTools = hasOutput ? [] : nextTools;
 
-              // Attach any images collected from preceding tool results
+              // Attach any files collected from preceding tool results,
+              // plus file paths mentioned directly in the final assistant
+              // text (e.g. `/Users/.../1000行示例.xlsx`). The latter is
+              // what turns a plain path in the bubble into a clickable card
+              // immediately, before the quiet history reload finishes.
               const pendingImgs = s.pendingToolImages;
+              const ownText = getMessageText(normalizedFinalMessage.content);
+              const ownMediaRefs = ownText ? extractMediaRefs(ownText) : [];
+              const ownMediaPaths = new Set(ownMediaRefs.map(r => r.filePath));
+              const ownFiles = ownText
+                ? [
+                  ...ownMediaRefs.map(ref => makeAttachedFile(ref, 'message-ref')),
+                  ...extractRawFilePaths(ownText)
+                    .filter(ref => !ownMediaPaths.has(ref.filePath))
+                    .map(ref => makeAttachedFile(ref, 'message-ref')),
+                ]
+                : [];
+              const attachedFiles = [...pendingImgs];
+              const attachedPaths = new Set(attachedFiles.map(file => file.filePath).filter(Boolean));
+              for (const file of ownFiles) {
+                if (file.filePath && attachedPaths.has(file.filePath)) continue;
+                if (file.filePath) attachedPaths.add(file.filePath);
+                attachedFiles.push(file);
+              }
               const msgWithImages: RawMessage = pendingImgs.length > 0
                 ? {
                   ...normalizedFinalMessage,
                   role: (normalizedFinalMessage.role || 'assistant') as RawMessage['role'],
                   id: msgId,
-                  _attachedFiles: [...(normalizedFinalMessage._attachedFiles || []), ...pendingImgs],
+                  _attachedFiles: [...(normalizedFinalMessage._attachedFiles || []), ...attachedFiles],
                 }
-                : { ...normalizedFinalMessage, role: (normalizedFinalMessage.role || 'assistant') as RawMessage['role'], id: msgId };
+                : attachedFiles.length > 0
+                  ? {
+                    ...normalizedFinalMessage,
+                    role: (normalizedFinalMessage.role || 'assistant') as RawMessage['role'],
+                    id: msgId,
+                    _attachedFiles: [...(normalizedFinalMessage._attachedFiles || []), ...attachedFiles],
+                  }
+                  : { ...normalizedFinalMessage, role: (normalizedFinalMessage.role || 'assistant') as RawMessage['role'], id: msgId };
               const clearPendingImages = { pendingToolImages: [] as AttachedFileMeta[] };
 
               // Check if message already exists (prevent duplicates)

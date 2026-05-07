@@ -9,6 +9,7 @@ import { GatewayManager } from '../gateway/manager';
 import { registerIpcHandlers } from './ipc-handlers';
 import { createTray } from './tray';
 import { createMenu } from './menu';
+import { registerZoomShortcuts } from './zoom-shortcuts';
 
 import { appUpdater, registerUpdateHandlers } from './updater';
 import { logger } from '../utils/logger';
@@ -186,6 +187,8 @@ function createWindow(): BrowserWindow {
     frame: isMac || !useCustomTitleBar,
     show: false,
   });
+
+  registerZoomShortcuts(win);
 
   // Handle external links — only allow safe protocols to prevent arbitrary
   // command execution via shell.openExternal() (e.g. file://, ms-msdt:, etc.)
@@ -426,6 +429,14 @@ async function initialize(): Promise<void> {
 
   gatewayManager.on('notification', (notification) => {
     hostEventBus.emit('gateway:notification', notification);
+  });
+
+  gatewayManager.on('gateway:health', (data) => {
+    hostEventBus.emit('gateway:health', data);
+  });
+
+  gatewayManager.on('gateway:presence', (data) => {
+    hostEventBus.emit('gateway:presence', data);
   });
 
   gatewayManager.on('chat:message', (data) => {

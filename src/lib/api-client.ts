@@ -894,9 +894,11 @@ function validateGatewayRpcParams(method: string, params: unknown): void {
   if (!params || typeof params !== 'object' || Array.isArray(params)) {
     throw new Error('gateway:rpc config.patch requires object params');
   }
+  const raw = (params as Record<string, unknown>).raw;
+  if (typeof raw === 'string' && raw.trim()) return;
   const patch = (params as Record<string, unknown>).patch;
   if (!patch || typeof patch !== 'object' || Array.isArray(patch)) {
-    throw new Error('gateway:rpc config.patch requires object patch');
+    throw new Error('gateway:rpc config.patch requires raw string or object patch');
   }
 }
 
@@ -1093,6 +1095,20 @@ export interface ReadTextFileResult {
   error?: FilePreviewError;
 }
 
+export interface ReadBinaryFileResult {
+  ok: boolean;
+  data?: Uint8Array;
+  mimeType?: string;
+  size?: number;
+  readOnly?: boolean;
+  error?: FilePreviewError;
+}
+
+export interface ReadBinaryFileOptions {
+  /** Optional override for the per-call ceiling (capped by the main-process limit). */
+  maxBytes?: number;
+}
+
 export interface WriteTextFileResult {
   ok: boolean;
   error?: FilePreviewError;
@@ -1146,6 +1162,12 @@ export interface ListTreeResult {
 
 export const readTextFile = (path: string): Promise<ReadTextFileResult> =>
   invokeIpc<ReadTextFileResult>('file:readText', path);
+
+export const readBinaryFile = (
+  path: string,
+  opts?: ReadBinaryFileOptions,
+): Promise<ReadBinaryFileResult> =>
+  invokeIpc<ReadBinaryFileResult>('file:readBinary', path, opts);
 
 export const writeTextFile = (path: string, content: string): Promise<WriteTextFileResult> =>
   invokeIpc<WriteTextFileResult>('file:writeText', path, content);

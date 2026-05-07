@@ -28,20 +28,13 @@ import { useSettingsStore } from '@/stores/settings';
 import { useChatStore } from '@/stores/chat';
 import { useGatewayStore } from '@/stores/gateway';
 import { useAgentsStore } from '@/stores/agents';
+import { getSessionActivityMs, getSessionBucket, type SessionBucketKey } from './session-buckets';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { hostApiFetch } from '@/lib/host-api';
 import { useTranslation } from 'react-i18next';
 import logoSvg from '@/assets/logo.svg';
-
-type SessionBucketKey =
-  | 'today'
-  | 'yesterday'
-  | 'withinWeek'
-  | 'withinTwoWeeks'
-  | 'withinMonth'
-  | 'older';
 
 interface NavItemProps {
   to: string;
@@ -89,23 +82,6 @@ function NavItem({ to, icon, label, badge, collapsed, onClick, testId }: NavItem
       )}
     </NavLink>
   );
-}
-
-function getSessionBucket(activityMs: number, nowMs: number): SessionBucketKey {
-  if (!activityMs || activityMs <= 0) return 'older';
-
-  const now = new Date(nowMs);
-  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-  const startOfYesterday = startOfToday - 24 * 60 * 60 * 1000;
-
-  if (activityMs >= startOfToday) return 'today';
-  if (activityMs >= startOfYesterday) return 'yesterday';
-
-  const daysAgo = (startOfToday - activityMs) / (24 * 60 * 60 * 1000);
-  if (daysAgo <= 7) return 'withinWeek';
-  if (daysAgo <= 14) return 'withinTwoWeeks';
-  if (daysAgo <= 30) return 'withinMonth';
-  return 'older';
 }
 
 const INITIAL_NOW_MS = Date.now();
@@ -212,10 +188,13 @@ export function Sidebar() {
     (typeof sessionBuckets)[number]
   >;
 
-  for (const session of [...sessions].sort((a, b) =>
-    (sessionLastActivity[b.key] ?? 0) - (sessionLastActivity[a.key] ?? 0)
-  )) {
-    const bucketKey = getSessionBucket(sessionLastActivity[session.key] ?? 0, nowMs);
+  for (const { session, activityMs } of sessions
+    .map((session) => ({
+      session,
+      activityMs: getSessionActivityMs(session, sessionLastActivity),
+    }))
+    .sort((a, b) => b.activityMs - a.activityMs)) {
+    const bucketKey = getSessionBucket(activityMs, nowMs);
     sessionBucketMap[bucketKey].sessions.push(session);
   }
 
@@ -230,7 +209,9 @@ export function Sidebar() {
     { to: '/channels', icon: <Network className="h-[18px] w-[18px]" strokeWidth={2} />, label: t('sidebar.channels'), testId: 'sidebar-nav-channels' },
     { to: '/skills', icon: <Puzzle className="h-[18px] w-[18px]" strokeWidth={2} />, label: t('sidebar.skills'), testId: 'sidebar-nav-skills' },
     { to: '/cron', icon: <Clock className="h-[18px] w-[18px]" strokeWidth={2} />, label: t('sidebar.cronTasks'), testId: 'sidebar-nav-cron' },
-    { to: '/dreams', icon: <Moon className="h-[18px] w-[18px]" strokeWidth={2} />, label: t('common:sidebar.openClawDreams'), testId: 'sidebar-nav-dreams' },
+    ...(devModeUnlocked
+      ? [{ to: '/dreams', icon: <Moon className="h-[18px] w-[18px]" strokeWidth={2} />, label: t('common:sidebar.openClawDreams'), testId: 'sidebar-nav-dreams' }]
+      : []),
   ];
 
   const navItems = [
@@ -310,7 +291,7 @@ export function Sidebar() {
         <div className="mt-4 flex-1 overflow-y-auto overflow-x-hidden px-2 pb-2 space-y-0.5">
           {sessionBuckets.map((bucket) => (
             bucket.sessions.length > 0 ? (
-              <div key={bucket.key} className="pt-2">
+              <div key={bucket.key} data-testid={`session-bucket-${bucket.key}`} className="pt-2">
                 <div className="px-2.5 pb-1 text-tiny font-medium text-muted-foreground/60 tracking-tight">
                   {bucket.label}
                 </div>
