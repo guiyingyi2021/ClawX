@@ -341,6 +341,58 @@
       ]
     },
     {
+      "id": "Metal工程师",
+      "name": "Metal工程师",
+      "role": "macOS空间Metal工程师",
+      "emoji": "🍎",
+      "color": "#3B82F6",
+      "category": "技术工程",
+      "description": "精通Apple Metal图形API与macOS空间计算开发，打造高性能图形渲染与空间体验",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "Metal渲染",
+          "emoji": "🎨"
+        },
+        {
+          "label": "macOS空间计算",
+          "emoji": "🥽"
+        },
+        {
+          "label": "GPU编程",
+          "emoji": "⚡"
+        }
+      ]
+    },
+    {
+      "id": "UE架构师",
+      "name": "UE架构师",
+      "role": "Unreal多人架构师",
+      "emoji": "🎮",
+      "color": "#8B5CF6",
+      "category": "技术工程",
+      "description": "精通Unreal Engine多人游戏架构，擅长Actor复制与服务器权威设计",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "UE多人架构",
+          "emoji": "🎮"
+        },
+        {
+          "label": "Actor复制",
+          "emoji": "🔄"
+        },
+        {
+          "label": "服务器权威",
+          "emoji": "🖥️"
+        }
+      ]
+    },
+    {
       "id": "一键达",
       "name": "一键达",
       "role": "DevOps自动化工程师",
@@ -961,58 +1013,6 @@
         {
           "label": "概念验证",
           "emoji": "🧪"
-        }
-      ]
-    },
-    {
-      "id": "UE架构师",
-      "name": "UE架构师",
-      "role": "Unreal多人架构师",
-      "emoji": "🎮",
-      "color": "#8B5CF6",
-      "category": "技术工程",
-      "description": "精通Unreal Engine多人游戏架构，擅长Actor复制与服务器权威设计",
-      "downloadUrl": "",
-      "hasIdentity": false,
-      "hasSoul": true,
-      "specialties": [
-        {
-          "label": "UE多人架构",
-          "emoji": "🎮"
-        },
-        {
-          "label": "Actor复制",
-          "emoji": "🔄"
-        },
-        {
-          "label": "服务器权威",
-          "emoji": "🖥️"
-        }
-      ]
-    },
-    {
-      "id": "Metal工程师",
-      "name": "Metal工程师",
-      "role": "macOS空间Metal工程师",
-      "emoji": "🍎",
-      "color": "#3B82F6",
-      "category": "技术工程",
-      "description": "精通Apple Metal图形API与macOS空间计算开发，打造高性能图形渲染与空间体验",
-      "downloadUrl": "",
-      "hasIdentity": false,
-      "hasSoul": true,
-      "specialties": [
-        {
-          "label": "Metal渲染",
-          "emoji": "🎨"
-        },
-        {
-          "label": "macOS空间计算",
-          "emoji": "👓"
-        },
-        {
-          "label": "GPU编程",
-          "emoji": "⚡"
         }
       ]
     }
@@ -1907,6 +1907,32 @@
       ]
     },
     {
+      "id": "快手策",
+      "name": "快手策",
+      "role": "快手策略师",
+      "emoji": "🎬",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "深谙快手下沉市场特性和老铁文化，打造接地气的内容策略",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "快手运营",
+          "emoji": "🎬"
+        },
+        {
+          "label": "短视频策略",
+          "emoji": "📹"
+        },
+        {
+          "label": "直播变现",
+          "emoji": "💰"
+        }
+      ]
+    },
+    {
       "id": "搜霸霸",
       "name": "搜霸霸",
       "role": "SEO专家",
@@ -2085,6 +2111,32 @@
         {
           "label": "视觉识别",
           "emoji": "👁️"
+        }
+      ]
+    },
+    {
+      "id": "社媒策",
+      "name": "社媒策",
+      "role": "社交媒体策略师",
+      "emoji": "📱",
+      "color": "#EC4899",
+      "category": "营销增长",
+      "description": "统筹多平台社交媒体策略，让品牌在每个平台发出最强音",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "社媒策略",
+          "emoji": "📱"
+        },
+        {
+          "label": "跨平台运营",
+          "emoji": "🌐"
+        },
+        {
+          "label": "内容规划",
+          "emoji": "📅"
         }
       ]
     },
@@ -2293,58 +2345,6 @@
         {
           "label": "个人品牌",
           "emoji": "🎯"
-        }
-      ]
-    },
-    {
-      "id": "社媒策",
-      "name": "社媒策",
-      "role": "社交媒体策略师",
-      "emoji": "📱",
-      "color": "#EC4899",
-      "category": "营销增长",
-      "description": "统筹多平台社交媒体策略，让品牌在每个平台发出最强音",
-      "downloadUrl": "",
-      "hasIdentity": false,
-      "hasSoul": true,
-      "specialties": [
-        {
-          "label": "社媒策略",
-          "emoji": "📱"
-        },
-        {
-          "label": "跨平台运营",
-          "emoji": "🌐"
-        },
-        {
-          "label": "内容规划",
-          "emoji": "📅"
-        }
-      ]
-    },
-    {
-      "id": "快手策",
-      "name": "快手策",
-      "role": "快手策略师",
-      "emoji": "🎬",
-      "color": "#F97316",
-      "category": "营销增长",
-      "description": "深谙快手下沉市场特性和老铁文化，打造接地气的内容策略",
-      "downloadUrl": "",
-      "hasIdentity": false,
-      "hasSoul": true,
-      "specialties": [
-        {
-          "label": "快手运营",
-          "emoji": "🎬"
-        },
-        {
-          "label": "短视频策略",
-          "emoji": "📹"
-        },
-        {
-          "label": "直播变现",
-          "emoji": "💰"
         }
       ]
     }
@@ -2747,6 +2747,32 @@
       ]
     },
     {
+      "id": "外呼策",
+      "name": "外呼策",
+      "role": "外呼策略师",
+      "emoji": "📞",
+      "color": "#10B981",
+      "category": "销售商务",
+      "description": "精通外呼和冷启动销售策略，让陌生人在30秒内愿意继续倾听",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "外呼策略",
+          "emoji": "📞"
+        },
+        {
+          "label": "冷启动",
+          "emoji": "❄️"
+        },
+        {
+          "label": "线索开发",
+          "emoji": "🎯"
+        }
+      ]
+    },
+    {
       "id": "拓客客",
       "name": "拓客客",
       "role": "大客户策略师",
@@ -2967,32 +2993,6 @@
           "emoji": "📈"
         }
       ]
-    },
-    {
-      "id": "外呼策",
-      "name": "外呼策",
-      "role": "外呼策略师",
-      "emoji": "📞",
-      "color": "#10B981",
-      "category": "销售商务",
-      "description": "精通外呼和冷启动销售策略，让陌生人在30秒内愿意继续倾听",
-      "downloadUrl": "",
-      "hasIdentity": false,
-      "hasSoul": true,
-      "specialties": [
-        {
-          "label": "外呼策略",
-          "emoji": "📞"
-        },
-        {
-          "label": "冷启动",
-          "emoji": "❄️"
-        },
-        {
-          "label": "线索开发",
-          "emoji": "🎯"
-        }
-      ]
     }
   ],
   "项目质量": [
@@ -3099,6 +3099,32 @@
       ]
     },
     {
+      "id": "取证证",
+      "name": "取证证",
+      "role": "证据收集员",
+      "emoji": "📸",
+      "color": "#EF4444",
+      "category": "项目质量",
+      "description": "不放过任何没有截图证据的问题，用视觉证据确保缺陷无处遁形",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "证据收集",
+          "emoji": "📸"
+        },
+        {
+          "label": "截图取证",
+          "emoji": "🖼️"
+        },
+        {
+          "label": "缺陷定位",
+          "emoji": "🔍"
+        }
+      ]
+    },
+    {
       "id": "实验通",
       "name": "实验通",
       "role": "实验追踪管理者",
@@ -3129,6 +3155,32 @@
         {
           "label": "知识沉淀",
           "emoji": "📚"
+        }
+      ]
+    },
+    {
+      "id": "文档生",
+      "name": "文档生",
+      "role": "文档生成专家",
+      "emoji": "📄",
+      "color": "#3B82F6",
+      "category": "项目质量",
+      "description": "自动化生成各类业务文档，大幅提升文档创建效率",
+      "downloadUrl": "",
+      "hasIdentity": false,
+      "hasSoul": true,
+      "specialties": [
+        {
+          "label": "文档生成",
+          "emoji": "📄"
+        },
+        {
+          "label": "模板定制",
+          "emoji": "📋"
+        },
+        {
+          "label": "批量输出",
+          "emoji": "🖨️"
         }
       ]
     },
@@ -3435,58 +3487,6 @@
         {
           "label": "迁移规划",
           "emoji": "🚀"
-        }
-      ]
-    },
-    {
-      "id": "取证证",
-      "name": "取证证",
-      "role": "证据收集员",
-      "emoji": "📸",
-      "color": "#EF4444",
-      "category": "项目质量",
-      "description": "不放过任何没有截图证据的问题，用视觉证据确保缺陷无处遁形",
-      "downloadUrl": "",
-      "hasIdentity": false,
-      "hasSoul": true,
-      "specialties": [
-        {
-          "label": "证据收集",
-          "emoji": "📸"
-        },
-        {
-          "label": "截图取证",
-          "emoji": "🖼️"
-        },
-        {
-          "label": "缺陷定位",
-          "emoji": "🔍"
-        }
-      ]
-    },
-    {
-      "id": "文档生",
-      "name": "文档生",
-      "role": "文档生成专家",
-      "emoji": "📄",
-      "color": "#3B82F6",
-      "category": "项目质量",
-      "description": "自动化生成各类业务文档，大幅提升文档创建效率",
-      "downloadUrl": "",
-      "hasIdentity": false,
-      "hasSoul": true,
-      "specialties": [
-        {
-          "label": "文档生成",
-          "emoji": "📄"
-        },
-        {
-          "label": "模板定制",
-          "emoji": "📋"
-        },
-        {
-          "label": "批量输出",
-          "emoji": "🖨️"
         }
       ]
     }
@@ -4001,34 +4001,6 @@
         {
           "label": "预算管理",
           "emoji": "💰"
-        }
-      ]
-    }
-  ],
-  "运营人力": [
-    {
-      "id": "知识宝",
-      "name": "知识宝",
-      "role": "知识管理专家",
-      "emoji": "🧠",
-      "color": "#06B6D4",
-      "category": "运营人力",
-      "description": "基于LLM的知识库构建与管理专家，帮助用户打造持久化的个人知识系统",
-      "downloadUrl": "",
-      "hasIdentity": false,
-      "hasSoul": true,
-      "specialties": [
-        {
-          "label": "LLM知识库",
-          "emoji": "🧠"
-        },
-        {
-          "label": "模型文档",
-          "emoji": "📚"
-        },
-        {
-          "label": "技术百科",
-          "emoji": "🔍"
         }
       ]
     }

@@ -1742,6 +1742,23 @@ export const useChatStore = create<ChatState>((set, get) => ({
     }));
   },
 
+  // ── New session for a specific agent ──
+  // Creates a fresh conversation thread for the given agent.
+  // Unlike switchSession, this creates a brand-new session rather than reusing an existing one.
+
+  newSessionForAgent: (agent: { mainSessionKey: string }) => {
+    const prefix = getCanonicalPrefixFromSessionKey(agent.mainSessionKey);
+    if (!prefix) {
+      console.warn('[newSessionForAgent] Could not derive prefix from mainSessionKey:', agent.mainSessionKey);
+      return;
+    }
+    const newKey = `${prefix}:session-${Date.now()}`;
+    clearHistoryPoll();
+    clearBaselines();
+    set((s) => buildSessionSwitchPatch(s, newKey));
+    get().loadHistory();
+  },
+
   // ── Cleanup empty session on navigate away ──
 
   cleanupEmptySession: () => {

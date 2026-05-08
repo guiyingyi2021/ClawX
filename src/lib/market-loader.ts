@@ -25,21 +25,21 @@ export const MARKET_FIXED_CATEGORIES = [
   '游戏空间',
   '数据智能',
   '内容创作',
-  '金融投资运营人力',
+  '金融投资',
+  '运营人力',
   '项目质量',
   '法务安全',
   '行业顾问',
 ] as const;
 
-export type MarketCategory = typeof MARKET_FIXED_CATEGORIES[number] | '更多' | '其他' | '全部' | '我的专家';
+export type MarketCategory = typeof MARKET_FIXED_CATEGORIES[number] | '更多' | '其他' | '全部';
 
-// 用于展示的完整分类列表（固定分类 + 更多 + 其他 + 全部 + 我的专家）
+// 用于展示的完整分类列表（固定分类 + 更多 + 其他 + 全部）
 export const MARKET_ALL_CATEGORIES = [
   '全部',
   ...MARKET_FIXED_CATEGORIES,
   '更多',
   '其他',
-  '我的专家',
 ] as const;
 
 // ============================================================
@@ -107,6 +107,10 @@ function transformMarketExperts(): Expert[] {
   const flat: Expert[] = (MARKET_INDEX_DATA as any)._flat || [];
   return flat.map((e: any) => ({
     ...e,
+    // 市场专家的 id 用 remoteId 前面加 market- 前缀
+    id: `market-${e.remoteId}`,
+    // 映射 soulUrl → downloadUrl，供召唤时下载 SOUL.md
+    downloadUrl: e.soulUrl || e.downloadUrl,
     color: hexToTailwindGradient(e.color),
     isMarket: true, // 标记为市场专家
     specialties: [], // 市场专家没有预定义 specialties
@@ -177,6 +181,8 @@ async function fetchRemoteIndex(): Promise<Expert[] | null> {
     const flat: any[] = json._flat || [];
     return flat.map((e: any) => ({
       ...e,
+      id: `market-${e.remoteId}`,
+      downloadUrl: e.soulUrl || e.downloadUrl,
       color: hexToTailwindGradient(e.color),
       isMarket: true,
       specialties: [],
@@ -189,38 +195,83 @@ async function fetchRemoteIndex(): Promise<Expert[] | null> {
   }
 }
 
+let lastDownloadError = '';
+
+export function getLastDownloadError(): string {
+  return lastDownloadError;
+}
+
 /**
  * 下载单个专家的 SOUL.md 内容
+ * 策略：优先用 GitHub Contents API（国内更稳定），失败再试 raw
  */
 export async function downloadSoulContent(downloadUrl: string): Promise<string | null> {
-  try {
-    // 尝试 raw.githubusercontent.com（国内可能不通）
-    const res = await fetch(downloadUrl, { cache: 'no-cache' });
-    if (res.ok) return res.text();
+  lastDownloadError = '';
+  // 提取仓库内路径（去掉域名和 owner/repo/branch/ 前缀）
+  const path = downloadUrl
+    .replace('https://raw.githubusercontent.com/', '')
+    .replace(/^[^/]+\/[^/]+\/[^/]+\//, '');
 
-    // 回退：尝试 GitHub API 获取 base64 内容
-    const path = downloadUrl
-      .replace('https://raw.githubusercontent.com/', '')
-      .replace(/^[^/]+\/[^/]+\/[^/]+\//, ''); // 去掉 owner/repo/branch/
-    return downloadViaGitHubAPI(path);
-  } catch {
-    // 最后回退到 GitHub API
-    const path = downloadUrl
-      .replace('https://raw.githubusercontent.com/', '')
-      .replace(/^[^/]+\/[^/]+\/[^/]+\//, '');
-    return downloadViaGitHubAPI(path);
+  // 优先尝试 GitHub Contents API（国内访问更稳定）
+  console.log(`[downloadSoulContent] 尝试 GitHub API: ${path}`);
+  let apiResult = await downloadViaGitHubAPI(path, downloadUrl);
+  if (apiResult) {
+    console.log(`[downloadSoulContent] GitHub API 成功，内容长度: ${apiResult.length}`);
+    return apiResult;
   }
+
+  // 回退：尝试 raw.githubusercontent.com
+  console.log(`[downloadSoulContent] API 失败，尝试 raw: ${downloadUrl}`);
+  try {
+    const res = await fetch(downloadUrl, { cache: 'no-cache' });
+    console.log(`[downloadSoulContent] raw → ${res.status}`);
+    if (res.ok) {
+      const text = await res.text();
+      console.log(`[downloadSoulContent] raw 成功，内容长度: ${text.length}`);
+      return text;
+    }
+    lastDownloadError = `raw 返回 HTTP ${res.status}`;
+  } catch (err: any) {
+    lastDownloadError = `网络异常: ${err?.message || err}`;
+    console.error(`[downloadSoulContent] raw 异常:`, err);
+  }
+
+  console.error(`[downloadSoulContent] 所有方式都失败: ${path}，原因: ${lastDownloadError}`);
+  return null;
 }
 
 /**
  * 通过 GitHub API 下载文件（base64 解码）
+ * 自动从原始 URL 中解析 owner/repo，不硬编码
  */
-async function downloadViaGitHubAPI(filePath: string): Promise<string | null> {
+async function downloadViaGitHubAPI(
+  filePath: string,
+  sourceUrl?: string
+): Promise<string | null> {
+  // 从 sourceUrl 解析 owner/repo/ref，兜底用 agency-agents-zh + main
+  let owner = 'guiyingyi2021';
+  let repo = 'agency-agents-zh';
+  let ref = 'main';
+  if (sourceUrl) {
+    // raw.githubusercontent.com 格式：/{owner}/{repo}/{ref}/{path}
+    const m = sourceUrl.match(/raw\.githubusercontent\.com\/([^/]+)\/([^/]+)\/([^/]+)\//);
+    if (m) {
+      owner = m[1];
+      repo = m[2];
+      ref = m[3];
+    } else {
+      // api.github.com 格式：/repos/{owner}/{repo}/...
+      const m2 = sourceUrl.match(/github\.com\/([^/]+)\/([^/]+)/);
+      if (m2) { owner = m2[1]; repo = m2[2]; }
+    }
+  }
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}?ref=${encodeURIComponent(ref)}`;
+  console.log(`[downloadViaGitHubAPI] ${apiUrl}`);
   try {
-    const res = await fetch(
-      `https://api.github.com/repos/guiyingyi2021/agency-agents-zh/contents/${filePath}`,
-      { headers: { 'Accept': 'application/vnd.github.v3+json' } }
-    );
+    const res = await fetch(apiUrl, {
+      headers: { 'Accept': 'application/vnd.github.v3+json' },
+    });
+    console.log(`[downloadViaGitHubAPI] → ${res.status}`);
     if (!res.ok) return null;
     const json = await res.json();
     if (json.content) {

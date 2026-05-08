@@ -79,7 +79,7 @@ const DOMAIN_DESCRIPTIONS: Record<string, string> = {
 /**
  * 从回答生成完整的配置对象
  */
-export function generateConfig(answers: OnboardingAnswers, agentName: string = 'AI助手'): GeneratedConfig {
+export function generateConfig(answers: OnboardingAnswers, agentName: string = 'Dclaw 助手'): GeneratedConfig {
   const getAnswer = (key: string): string | string[] => {
     const answer = answers[key];
     if (!answer) return '';
@@ -93,7 +93,7 @@ export function generateConfig(answers: OnboardingAnswers, agentName: string = '
     roleAnswer === 'assistant' ? '私人助手' :
     roleAnswer === 'partner' ? '工作搭档' :
     roleAnswer === 'consultant' ? '顾问专家' :
-    roleAnswer === 'tutor' ? '学习导师' : 'AI助手'
+    roleAnswer === 'tutor' ? '学习导师' : 'Dclaw 助手'
   );
 
   const tone = getAnswer('tone') as string || 'casual';

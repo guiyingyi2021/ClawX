@@ -131,6 +131,18 @@ function normalizeAgentName(name: string): string {
 }
 
 function slugifyAgentId(name: string): string {
+  // 如果包含非ASCII字符（中文等），保留原始格式，只做基本清理
+  if (/[^\x00-\x7F]/.test(name)) {
+    // 中文或其他非ASCII字符：只移除空格和特殊符号，保留原样
+    return name
+      .normalize('NFKD')
+      .replace(/\s+/g, '-')   // 空格替换为连字符
+      .replace(/[<>:"/\\|?*]/g, '')  // 移除Windows非法字符
+      .replace(/-+/g, '-')    // 合并多个连字符
+      .replace(/^-|-$/g, ''); // 移除首尾连字符
+  }
+
+  // 纯ASCII字符：使用原有逻辑
   const normalized = name
     .normalize('NFKD')
     .replace(/[^\w\s-]/g, '')
@@ -576,7 +588,7 @@ export async function resolveAgentIdFromChannel(channel: string, accountId?: str
 
 export async function createAgent(
   name: string,
-  options?: { inheritWorkspace?: boolean },
+  options?: { inheritWorkspace?: boolean; agentId?: string },
 ): Promise<AgentsSnapshot> {
   return withConfigLock(async () => {
     const config = await readOpenClawConfig() as AgentConfigDocument;
@@ -584,11 +596,15 @@ export async function createAgent(
     const normalizedName = normalizeAgentName(name);
     const existingIds = new Set(entries.map((entry) => entry.id));
     const diskIds = await listExistingAgentIdsOnDisk();
-    let nextId = slugifyAgentId(normalizedName);
+
+    // 如果调用方指定了 agentId，优先使用；否则从 name 生成
+    let nextId = options?.agentId
+      ? slugifyAgentId(options.agentId)
+      : slugifyAgentId(normalizedName);
     let suffix = 2;
 
     while (existingIds.has(nextId) || diskIds.has(nextId)) {
-      nextId = `${slugifyAgentId(normalizedName)}-${suffix}`;
+      nextId = `${options?.agentId ? slugifyAgentId(options.agentId) : slugifyAgentId(normalizedName)}-${suffix}`;
       suffix += 1;
     }
 

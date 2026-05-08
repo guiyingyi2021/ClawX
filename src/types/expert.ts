@@ -32,4 +32,6 @@ export interface Expert {
   isRemote?: boolean;
   /** 是否为市场专家（agency-agents-zh） */
   isMarket?: boolean;
+  /** SOUL.md 远程地址（用于召唤前下载配置） */
+  soulUrl?: string;
 }

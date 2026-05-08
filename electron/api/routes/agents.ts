@@ -259,23 +259,25 @@ export async function handleAgentRoutes(
         expertId: string;
         expertName: string;
         soulContent: string;
+        agentsContent?: string;
         identityContent: string;
       }>(req);
 
       console.log('[Expert summon] Starting:', body.expertId, body.expertName);
 
-      // 1. Create the agent
-      const snapshot = await createAgent(body.expertName, { inheritWorkspace: false });
-      console.log('[Expert summon] Agent created, snapshot agents:', snapshot.agents.map(a => a.id));
+      // 1. Create the agent (优先使用 expertId 作为 agent.id，支持中文 ID)
+      const snapshot = await createAgent(body.expertName, { inheritWorkspace: false, agentId: body.expertId });
 
       // 2. Get the actual workspace path from the created agent
-      // createAgent returns the actual agent ID, which may have a suffix if duplicate
-      const createdAgent = snapshot.agents.find(a => a.name === body.expertName || a.id === body.expertId);
+      // 策略：优先匹配 expertId（中文ID保留），其次匹配 name，最后取最后一个（最新创建）
+      const createdAgent = snapshot.agents.find(a => a.id === body.expertId)
+        || snapshot.agents.find(a => a.name === body.expertName)
+        || snapshot.agents[snapshot.agents.length - 1]; // 取最后一个（最新创建的）
       if (!createdAgent) {
         console.error('[Expert summon] Agent not found in snapshot. Available:', snapshot.agents.map(a => ({id: a.id, name: a.name})));
         throw new Error(`Agent not found in snapshot. Available: ${snapshot.agents.map(a => a.id).join(', ')}`);
       }
-      console.log('[Expert summon] Found agent:', createdAgent.id);
+      console.log('[Expert summon] Found agent:', createdAgent.id, '(expected:', body.expertId, ')');
       
       const openclawDir = join(homedir(), '.openclaw');
       const workspaceDir = resolve(openclawDir, `workspace-${createdAgent.id}`);
@@ -284,6 +286,9 @@ export async function handleAgentRoutes(
       // 3. Write expert configuration files
       await writeFile(join(workspaceDir, 'SOUL.md'), body.soulContent, 'utf-8');
       await writeFile(join(workspaceDir, 'IDENTITY.md'), body.identityContent, 'utf-8');
+      if (body.agentsContent) {
+        await writeFile(join(workspaceDir, 'AGENTS.md'), body.agentsContent, 'utf-8');
+      }
       console.log('[Expert summon] Config files written');
 
       // 4. Remove BOOTSTRAP.md if it exists

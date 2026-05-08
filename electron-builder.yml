@@ -1,6 +1,6 @@
-appId: com.dclaw.app
+appId: app.clawx.desktop
 productName: Dclaw
-copyright: Copyright © 2026 Dclaw Team
+copyright: Copyright © 2026 Dclaw
 compression: maximum
 artifactName: ${productName}-${version}-${os}-${arch}.${ext}
 

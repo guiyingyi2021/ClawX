@@ -8,6 +8,7 @@
 import type { Expert } from '@/types/expert';
 
 const CACHE_KEY = 'dclaw-experts-cache';
+const CACHE_TTL = 30 * 60 * 1000; // 30 分钟，与专家中心缓存策略一致
 
 // ============================================================
 // 远程配置 URL 配置
@@ -40,6 +41,11 @@ function getCache(): CacheData | null {
     const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as CacheData;
+    // TTL 检查：超过 30 分钟视为过期，但依然可用（后台异步刷新）
+    const isExpired = Date.now() - parsed.timestamp > CACHE_TTL;
+    if (isExpired) {
+      console.log('[expert-loader] 缓存已过期，后台异步刷新');
+    }
     // 清除旧缓存：如果任何专家的 name 包含英文字母（说明是旧版英文名），丢弃缓存
     const hasOldNaming = parsed.data.some(e => /[a-zA-Z]/.test(e.name));
     if (hasOldNaming) {
@@ -159,7 +165,11 @@ export function getRemoteUrl(): string {
 
 /**
  * 加载专家配置（混合模式）
- * 策略：立即返回内置+缓存合并数据，后台异步检查远程更新
+ * 策略：立即返回缓存/内置数据，后台异步检查远程更新
+ * 与 loadMarketExperts 缓存策略完全一致：
+ * - 缓存命中（未过期）：立即返回，不触发远程请求
+ * - 缓存命中（已过期）：立即返回，后台异步刷新
+ * - 缓存未命中：返回内置，后台异步拉取
  * @param onRemoteUpdate - 远程有更新时的回调（传入合并后的完整列表）
  */
 export async function loadExperts(
@@ -176,33 +186,47 @@ export async function loadExperts(
     ? [...builtInExperts, ...cache.data.filter(e => !builtInIds.has(e.id))]
     : builtInExperts;
 
-  // 2. 后台异步检查远程是否有更新
-  fetchRemoteExperts(url)
-    .then(remote => {
-      if (!remote) return;
+  // 2. 判断是否需要后台拉取
+  //    - 缓存未命中：必须拉取
+  //    - 缓存已过期：后台拉取
+  //    - 缓存未过期且存在：不拉取（直接返回缓存）
+  const needsFetch = !cache || (Date.now() - cache.timestamp > CACHE_TTL);
 
-      // 基于内置 + 缓存判断是否有新专家
-      const existingIds = new Set(immediateData.map(e => e.id));
-      const hasNewExperts = remote.experts.some(e => !existingIds.has(e.id));
-      const hasMoreExperts = remote.experts.length !== immediateData.length ||
-        remote.experts.some(e => !existingIds.has(e.id));
+  // 3. 后台异步检查远程是否有更新
+  if (needsFetch) {
+    fetchRemoteExperts(url)
+      .then(remote => {
+        if (!remote) return;
 
-      if (!hasNewExperts && !hasMoreExperts) return;
+        // 基于内置 + 缓存判断是否有新专家
+        const existingIds = new Set(immediateData.map(e => e.id));
+        const hasNewExperts = remote.experts.some(e => !existingIds.has(e.id));
+        const hasMoreExperts = remote.experts.length !== immediateData.length ||
+          remote.experts.some(e => !existingIds.has(e.id));
 
-      // 合并：内置优先，远程补充内置没有的
-      const merged = [
-        ...builtInExperts,
-        ...remote.experts.filter(e => !builtInIds.has(e.id)),
-      ];
-      setCache(merged, remote.version);
+        if (!hasNewExperts && !hasMoreExperts) {
+          // 无变化但缓存已过期 → 仅更新时间戳
+          if (cache) {
+            setCache(immediateData, remote.version);
+          }
+          return;
+        }
 
-      if (onRemoteUpdate) {
-        onRemoteUpdate(merged);
-      }
-    })
-    .catch(() => {
-      // 后台检查失败不影响已返回的本地数据
-    });
+        // 合并：内置优先，远程补充内置没有的
+        const merged = [
+          ...builtInExperts,
+          ...remote.experts.filter(e => !builtInIds.has(e.id)),
+        ];
+        setCache(merged, remote.version);
+
+        if (onRemoteUpdate) {
+          onRemoteUpdate(merged);
+        }
+      })
+      .catch(() => {
+        // 后台检查失败不影响已返回的本地数据
+      });
+  }
 
   return immediateData;
 }

@@ -73,7 +73,7 @@ export function InChatOnboarding({ onComplete }: InChatOnboardingProps) {
       const isLast = idx >= filtered.length - 1;
       if (isLast) {
         // 最后一题：通过 onComplete 通知父组件，由父组件的 completeOnboarding 统一调用 generateConfig
-        const name = (currentAnswers['greeting']?.value as string) || 'AI助手';
+        const name = (currentAnswers['greeting']?.value as string) || 'Dclaw 助手';
         const user = (currentAnswers['userName']?.value as string) || '你';
         onComplete(name, user);
       } else {

@@ -51,7 +51,7 @@ export function AgentOnboarding({ isOpen, onClose, onComplete }: AgentOnboarding
     const agentNameAnswer = useOnboardingStore.getState().answers['agentName']?.value;
     const agentName = typeof agentNameAnswer === 'string' && agentNameAnswer.trim()
       ? agentNameAnswer.trim()
-      : 'AI助手';
+      : 'Dclaw 助手';
     const userNameAnswer = useOnboardingStore.getState().answers['userName']?.value;
     const userName = typeof userNameAnswer === 'string' && userNameAnswer.trim()
       ? userNameAnswer.trim()

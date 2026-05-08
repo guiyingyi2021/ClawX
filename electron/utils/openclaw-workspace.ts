@@ -11,8 +11,8 @@ import { homedir } from 'os';
 import { logger } from './logger';
 import { getResourcesDir } from './paths';
 
-const CLAWX_BEGIN = '<!-- clawx:begin -->';
-const CLAWX_END = '<!-- clawx:end -->';
+const DCLAW_BEGIN = '<!-- dclaw:begin -->';
+const DCLAW_END = '<!-- dclaw:end -->';
 
 // ── Helpers ──────────────────────────────────────────────────────
 
@@ -34,11 +34,11 @@ function isCurrentOpenClawPath(p: string): boolean {
  * Otherwise appends it at the end.
  */
 export function mergeDclawSection(existing: string, section: string): string {
-  const wrapped = `${CLAWX_BEGIN}\n${section.trim()}\n${CLAWX_END}`;
-  const beginIdx = existing.indexOf(CLAWX_BEGIN);
-  const endIdx = existing.indexOf(CLAWX_END);
+  const wrapped = `${DCLAW_BEGIN}\n${section.trim()}\n${DCLAW_END}`;
+  const beginIdx = existing.indexOf(DCLAW_BEGIN);
+  const endIdx = existing.indexOf(DCLAW_END);
   if (beginIdx !== -1 && endIdx !== -1) {
-    return existing.slice(0, beginIdx) + wrapped + existing.slice(endIdx + CLAWX_END.length);
+    return existing.slice(0, beginIdx) + wrapped + existing.slice(endIdx + DCLAW_END.length);
   }
   return existing.trimEnd() + '\n\n' + wrapped + '\n';
 }
@@ -196,12 +196,12 @@ export async function repairDclawOnlyBootstrapFiles(): Promise<void> {
       } catch {
         continue;
       }
-      const beginIdx = content.indexOf(CLAWX_BEGIN);
-      const endIdx = content.indexOf(CLAWX_END);
+      const beginIdx = content.indexOf(DCLAW_BEGIN);
+      const endIdx = content.indexOf(DCLAW_END);
       if (beginIdx === -1 || endIdx === -1) continue;
 
       const before = content.slice(0, beginIdx).trim();
-      const after = content.slice(endIdx + CLAWX_END.length).trim();
+      const after = content.slice(endIdx + DCLAW_END.length).trim();
       if (before === '' && after === '') {
         try {
           await unlink(filePath);
@@ -284,7 +284,7 @@ async function mergeDclawContextOnce(options: EnsureDclawContextOptions = {}): P
 
   let files: string[];
   try {
-    files = (await readdir(contextDir)).filter((f) => f.endsWith('.clawx.md'));
+    files = (await readdir(contextDir)).filter((f) => f.endsWith('.dclaw.md'));
   } catch {
     return { missing: 0, retryableMissing: 0 };
   }
@@ -308,7 +308,7 @@ async function mergeDclawContextOnce(options: EnsureDclawContextOptions = {}): P
     }
 
     for (const file of files) {
-      const targetName = file.replace('.clawx.md', '.md');
+      const targetName = file.replace('.dclaw.md', '.md');
       const targetPath = join(workspaceDir, targetName);
 
       if (!(await fileExists(targetPath))) {
