@@ -5,6 +5,7 @@ import type { ClawHubInstallParams, ClawHubSearchParams, ClawHubUninstallParams 
 import type { SkillShopInstallParams } from '../../gateway/skillshop';
 import type { HostApiContext } from '../context';
 import { parseJsonBody, sendJson } from '../route-utils';
+import { getSkillHubService } from '../../gateway/skillhub-service';
 
 export async function handleSkillRoutes(
   req: IncomingMessage,
@@ -199,6 +200,71 @@ export async function handleSkillRoutes(
       sendJson(res, 200, { success: true });
     } catch (error) {
       sendJson(res, 500, { success: false, error: String(error) });
+    }
+    return true;
+  }
+
+  // ==================== SkillHub Routes ====================
+  
+  if (url.pathname === '/api/skillhub/search' && req.method === 'POST') {
+    try {
+      const body = await parseJsonBody<{ query: string; limit?: number }>(req);
+      const skillHubService = getSkillHubService();
+      const results = await skillHubService.search(body.query, body.limit || 20);
+      sendJson(res, 200, { success: true, results });
+    } catch (error) {
+      sendJson(res, 500, { success: false, error: error instanceof Error ? error.message : String(error) });
+    }
+    return true;
+  }
+
+  if (url.pathname === '/api/skillhub/install' && req.method === 'POST') {
+    try {
+      const body = await parseJsonBody<{ slug: string; skillsDir?: string }>(req);
+      const skillHubService = getSkillHubService();
+      const result = await skillHubService.install(body.slug, body.skillsDir);
+      sendJson(res, 200, { success: true, result });
+    } catch (error) {
+      sendJson(res, 500, { success: false, error: error instanceof Error ? error.message : String(error) });
+    }
+    return true;
+  }
+
+  if (url.pathname === '/api/skillhub/ensure-for-expert' && req.method === 'POST') {
+    try {
+      const body = await parseJsonBody<{
+        requiredSkills: Array<{ slug: string; required: boolean; reason: string }>;
+        skillsDir?: string;
+      }>(req);
+      const skillHubService = getSkillHubService();
+      const result = await skillHubService.ensureSkills(body.requiredSkills, body.skillsDir);
+      sendJson(res, 200, { success: true, result });
+    } catch (error) {
+      sendJson(res, 500, { success: false, error: error instanceof Error ? error.message : String(error) });
+    }
+    return true;
+  }
+
+  if (url.pathname === '/api/skillhub/check-installed' && req.method === 'POST') {
+    try {
+      const body = await parseJsonBody<{ slugs: string[] }>(req);
+      const skillHubService = getSkillHubService();
+      const results = await skillHubService.batchCheckInstalled(body.slugs);
+      sendJson(res, 200, { success: true, results });
+    } catch (error) {
+      sendJson(res, 500, { success: false, error: error instanceof Error ? error.message : String(error) });
+    }
+    return true;
+  }
+
+  if (url.pathname === '/api/skillhub/manual-install-guide' && req.method === 'POST') {
+    try {
+      const body = await parseJsonBody<{ slug: string }>(req);
+      const skillHubService = getSkillHubService();
+      const instructions = skillHubService.getManualInstallInstructions(body.slug);
+      sendJson(res, 200, { success: true, instructions });
+    } catch (error) {
+      sendJson(res, 500, { success: false, error: error instanceof Error ? error.message : String(error) });
     }
     return true;
   }

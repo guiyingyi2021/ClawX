@@ -1,9 +1,19 @@
 /**
  * 专家中心类型定义
  */
+
 export interface ExpertSpecialty {
   label: string;
   emoji: string;
+}
+
+/**
+ * 专家所需技能定义
+ */
+export interface RequiredSkill {
+  slug: string;        // 技能标识（如 "xlsx", "pdf"）
+  required: boolean;   // 是否必须
+  reason: string;      // 为什么需要这个技能
 }
 
 export interface Expert {
@@ -16,6 +26,8 @@ export interface Expert {
   color: string; // 主题色，用于卡片渐变
   /** 专长标签（内置专家有，远程专家可选） */
   specialties?: ExpertSpecialty[];
+  /** 专家召唤时需要的技能列表 */
+  requiredSkills?: RequiredSkill[];
   /** 专家的 SOUL.md 核心人格内容（内置专家有，远程专家按需下载） */
   soulContent?: string;
   /** 专家的 IDENTITY.md 身份内容（内置专家有，远程专家按需下载） */

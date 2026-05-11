@@ -146,6 +146,18 @@ export const EXPERTS: Expert[] = [
 - **专长**: Excel高级分析 | Python数据处理 | 商业报告撰写 | 数据可视化
 - **用户称呼**: 分析师
 `,
+    requiredSkills: [
+      {
+        slug: 'xlsx',
+        required: true,
+        reason: '处理Excel数据文件',
+      },
+      {
+        slug: 'pdf',
+        required: false,
+        reason: '导出PDF报告（可选）',
+      },
+    ],
   },
   {
     id: '阿赢哥',

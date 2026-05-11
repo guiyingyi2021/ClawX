@@ -446,6 +446,46 @@ export function ExpertCenter() {
   const handleSummon = useCallback(async (expert: Expert) => {
     setLoading(true);
     setLoadingId(expert.id);
+
+    // ── 检查并安装专家所需技能 ──
+    if (expert.requiredSkills && expert.requiredSkills.length > 0) {
+      toast.loading(`正在为 ${expert.name} 准备所需技能...`);
+      
+      try {
+        const result = await hostApiFetch<{
+          success: boolean;
+          result: { results: Array<{ slug: string; status: string; message?: string }>; allSuccess: boolean };
+        }>('/api/skillhub/ensure-for-expert', {
+          method: 'POST',
+          body: JSON.stringify({ requiredSkills: expert.requiredSkills }),
+        });
+
+        // 处理安装结果
+        if (result.success && result.result) {
+          const { results, allSuccess } = result.result;
+          const failed = results.filter(r => r.status === 'failed');
+          
+          if (allSuccess) {
+            toast.success(`已安装技能：${results.map(r => r.slug).join(', ')}`);
+          } else if (failed.length > 0) {
+            // 获取手动安装指引
+            try {
+              const guide = await hostApiFetch<{ instructions: string }>('/api/skillhub/manual-install-guide', {
+                method: 'POST',
+                body: JSON.stringify({ slug: failed[0].slug }),
+              });
+              toast.error(`部分技能安装失败：${failed.map(f => f.slug).join(', ')}。可以手动安装：${guide.instructions}`);
+            } catch {
+              toast.error(`部分技能安装失败：${failed.map(f => f.slug).join(', ')}`);
+            }
+          }
+        }
+      } catch (error: any) {
+        console.warn(`[handleSummon] 技能准备失败（继续召唤）:`, error);
+        // 不因技能安装失败而中断召唤
+      }
+    }
+
     try {
       // 市场专家 or 远程专家：下载 SOUL.md → 拆分 → API 路径
       if ((expert.isMarket || expert.isRemote) && (expert.downloadUrl || expert.soulUrl)) {
