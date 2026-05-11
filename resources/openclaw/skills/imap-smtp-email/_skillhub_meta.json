@@ -1,0 +1,9 @@
+{
+  "name": "IMAP/SMTP邮件",
+  "slug": "imap-smtp-email",
+  "version": "0.0.13",
+  "installedAt": 1778458611314,
+  "source": "marketplace",
+  "iconSource": "imap-smtp-email",
+  "preinstalledTemplate": true
+}
