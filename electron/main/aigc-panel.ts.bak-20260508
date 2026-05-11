@@ -9,7 +9,7 @@
 
 import { BrowserView, BrowserWindow, ipcMain } from 'electron';
 
-const AIGC_URL = 'https://aigc.dayunzhonglian.com/hthotpc/100005';
+const AIGC_URL = 'https://aigc.dayunzhonglian.com/hthotpc/100000';
 
 let aigcView: BrowserView | null = null;
 let mainWindowRef: BrowserWindow | null = null;

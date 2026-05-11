@@ -6,10 +6,8 @@
  * 备用源：aigc.dayunzhonglian.com（已注释，需要时启用）
  */
 import type { Expert } from '@/types/expert';
-import EXPERTS_INDEX from '@/data/experts-index.json';
 
 const CACHE_KEY = 'dclaw-experts-cache';
-const CACHE_TTL = 30 * 60 * 1000; // 30 分钟，与专家中心缓存策略一致
 
 // ============================================================
 // 远程配置 URL 配置
@@ -42,11 +40,6 @@ function getCache(): CacheData | null {
     const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as CacheData;
-    // TTL 检查：超过 30 分钟视为过期，但依然可用（后台异步刷新）
-    const isExpired = Date.now() - parsed.timestamp > CACHE_TTL;
-    if (isExpired) {
-      console.log('[expert-loader] 缓存已过期，后台异步刷新');
-    }
     // 清除旧缓存：如果任何专家的 name 包含英文字母（说明是旧版英文名），丢弃缓存
     const hasOldNaming = parsed.data.some(e => /[a-zA-Z]/.test(e.name));
     if (hasOldNaming) {
@@ -166,8 +159,7 @@ export function getRemoteUrl(): string {
 
 /**
  * 加载专家配置（混合模式）
- * 策略：立即返回内置专家 + 本地索引数据，后台异步检查远程更新
- * 与 market-loader.ts 策略完全一致：本地索引兜底，不依赖网络
+ * 策略：立即返回内置+缓存合并数据，后台异步检查远程更新
  * @param onRemoteUpdate - 远程有更新时的回调（传入合并后的完整列表）
  */
 export async function loadExperts(
@@ -177,32 +169,27 @@ export async function loadExperts(
 ): Promise<Expert[]> {
   const url = remoteUrl ?? DEFAULT_REMOTE_URL;
 
-  // 1. 立即返回：内置专家 + 本地索引（同步，无需网络）
-  const localExperts = transformLocalExperts();
+  // 1. 立即返回：内置专家 + 缓存（无论缓存是否存在，始终包含内置）
+  const cache = getCache();
   const builtInIds = new Set(builtInExperts.map(e => e.id));
-  const immediateData = [
-    ...builtInExperts,
-    ...localExperts.filter(e => !builtInIds.has(e.id)),
-  ];
+  const immediateData = cache?.data
+    ? [...builtInExperts, ...cache.data.filter(e => !builtInIds.has(e.id))]
+    : builtInExperts;
 
-  // 2. 后台异步检查远程是否有更新（非阻塞）
+  // 2. 后台异步检查远程是否有更新
   fetchRemoteExperts(url)
     .then(remote => {
       if (!remote) return;
 
-      // 判断是否有新数据
+      // 基于内置 + 缓存判断是否有新专家
       const existingIds = new Set(immediateData.map(e => e.id));
-      const hasNew = remote.experts.some(e => !existingIds.has(e.id));
-      const hasMore = remote.experts.length !== immediateData.length;
+      const hasNewExperts = remote.experts.some(e => !existingIds.has(e.id));
+      const hasMoreExperts = remote.experts.length !== immediateData.length ||
+        remote.experts.some(e => !existingIds.has(e.id));
 
-      if (!hasNew && !hasMore) {
-        // 无变化，仅刷新缓存时间戳
-        const cache = getCache();
-        if (cache) setCache(immediateData, cache.version);
-        return;
-      }
+      if (!hasNewExperts && !hasMoreExperts) return;
 
-      // 有更新：合并并写缓存
+      // 合并：内置优先，远程补充内置没有的
       const merged = [
         ...builtInExperts,
         ...remote.experts.filter(e => !builtInIds.has(e.id)),
@@ -252,40 +239,6 @@ export function getLastUpdateTime(): number | null {
 export function getCacheVersion(): string | null {
   const cache = getCache();
   return cache?.version ?? null;
-}
-
-// ============================================================
-// 本地索引转换（同步，无需网络）
-// ============================================================
-
-/**
- * 将本地索引文件（按分类组织）转换为 Expert[]
- * 与 market-loader.ts 的 transformMarketExperts 对齐
- */
-function transformLocalExperts(): Expert[] {
-  const flat: Expert[] = [];
-  for (const [category, experts] of Object.entries(EXPERTS_INDEX as Record<string, any[]>)) {
-    if (!Array.isArray(experts)) continue;
-    for (const expert of experts) {
-      const basePath = `agents/${category}/${expert.id}`;
-      const soulUrl = expert.hasSoul
-        ? `${GITHUB_RAW_BASE}/${basePath}/SOUL.md`
-        : undefined;
-      flat.push({
-        ...expert,
-        color: hexToTailwindGradient(expert.color),
-        category,
-        isRemote: true,
-        soulUrl,
-        downloadUrl: soulUrl || `${GITHUB_RAW_BASE}/${basePath}/package.tar.gz`,
-        specialties: expert.specialties || [],
-        soulContent: expert.hasSoul ? undefined : '',
-        identityContent: expert.hasIdentity ? undefined : '',
-        userName: '用户',
-      } as Expert);
-    }
-  }
-  return flat;
 }
 
 // ============================================================

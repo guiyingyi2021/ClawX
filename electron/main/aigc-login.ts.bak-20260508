@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const AIGC_COOKIE_NAME = 'token';
-const AIGC_URL = 'https://aigc.dayunzhonglian.com/hthotpc/100005';
+const AIGC_URL = 'https://aigc.dayunzhonglian.com/hthotpc/100000';
 const TOKEN_SAVE_PATH = 'aigc-token.txt';
 
 let loginWindow: BrowserWindow | null = null;

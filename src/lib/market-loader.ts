@@ -104,20 +104,44 @@ function clearCache(): void {
 // ============================================================
 
 function transformMarketExperts(): Expert[] {
-  const flat: Expert[] = (MARKET_INDEX_DATA as any)._flat || [];
-  return flat.map((e: any) => ({
-    ...e,
-    // 市场专家的 id 用 remoteId 前面加 market- 前缀
-    id: `market-${e.remoteId}`,
-    // 映射 soulUrl → downloadUrl，供召唤时下载 SOUL.md
-    downloadUrl: e.soulUrl || e.downloadUrl,
-    color: hexToTailwindGradient(e.color),
-    isMarket: true, // 标记为市场专家
-    specialties: [], // 市场专家没有预定义 specialties
-    soulContent: undefined,
-    identityContent: undefined,
-    userName: '用户',
-  }));
+  // 优先用 _flat（新格式，由 agency-agents-zh 生成脚本产生）
+  const raw = MARKET_INDEX_DATA as any;
+  if (raw._flat && Array.isArray(raw._flat) && raw._flat.length > 0) {
+    return raw._flat.map((e: any) => ({
+      ...e,
+      id: `market-${e.remoteId}`,
+      downloadUrl: e.soulUrl || e.downloadUrl,
+      color: hexToTailwindGradient(e.color),
+      isMarket: true,
+      specialties: [],
+      soulContent: undefined,
+      identityContent: undefined,
+      userName: '用户',
+    }));
+  }
+
+  // 兜底：从 categories 字段提取（当前 GitHub 上的实际格式）
+  const categories = raw.categories;
+  if (!categories || typeof categories !== 'object') return [];
+  const result: Expert[] = [];
+  for (const [category, experts] of Object.entries(categories) as any) {
+    if (!Array.isArray(experts)) continue;
+    for (const e of experts) {
+      result.push({
+        ...e,
+        id: `market-${e.remoteId}`,
+        downloadUrl: e.soulUrl || e.downloadUrl,
+        color: hexToTailwindGradient(e.color),
+        isMarket: true,
+        specialties: [],
+        soulContent: undefined,
+        identityContent: undefined,
+        userName: '用户',
+        category,
+      });
+    }
+  }
+  return result;
 }
 
 // ============================================================
@@ -162,12 +186,25 @@ export async function refreshMarketExperts(): Promise<Expert[]> {
  * 获取市场专家总数
  */
 export function getMarketStats(): { total: number; categories: Record<string, number> } {
-  const flat = (MARKET_INDEX_DATA as any)._flat || [];
+  const raw = MARKET_INDEX_DATA as any;
+  // 新格式：有 _flat
+  if (raw._flat && Array.isArray(raw._flat)) {
+    const cats: Record<string, number> = {};
+    raw._flat.forEach((e: any) => {
+      cats[e.category] = (cats[e.category] || 0) + 1;
+    });
+    return { total: raw._flat.length, categories: cats };
+  }
+  // 当前格式：只有 categories
   const cats: Record<string, number> = {};
-  flat.forEach((e: any) => {
-    cats[e.category] = (cats[e.category] || 0) + 1;
-  });
-  return { total: flat.length, categories: cats };
+  const categories = raw.categories || {};
+  let total = 0;
+  for (const [cat, experts] of Object.entries(categories) as any) {
+    const len = Array.isArray(experts) ? experts.length : 0;
+    cats[cat] = len;
+    total += len;
+  }
+  return { total, categories: cats };
 }
 
 /**

@@ -14,7 +14,7 @@
  * 项目质量 / 法务安全 / 行业顾问
  */
 import { useNavigate } from 'react-router-dom';
-import { Zap, RefreshCw, Check, Search,
+import { Sparkles, Zap, ArrowRight, RefreshCw, Check, Search,
          Flame, Star, User, Globe, Package, UserCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { EXPERTS as BUILT_IN_EXPERTS } from './experts.config';
@@ -49,31 +49,32 @@ interface ExpertCardProps {
   expert: Expert;
   onAction: (expert: Expert) => void;
   actionLabel: string;
+  actionIcon: React.ReactNode;
   actionClass?: string;
   loading: boolean;
   isInstalled?: boolean;
 }
 
 function ExpertCard({
-  expert, onAction, actionLabel, actionClass, loading, isInstalled
+  expert, onAction, actionLabel, actionIcon, actionClass, loading, isInstalled
 }: ExpertCardProps) {
   const colorClass = typeof expert.color === 'string' && expert.color.startsWith('from-')
     ? expert.color
     : hexToTailwindGradient(expert.color as string);
 
   return (
-    <div className="group relative flex flex-row gap-2 rounded-lg border border-border/80 bg-card p-2 transition-all duration-200 hover:border-primary/40 hover:shadow-sm hover:shadow-primary/5">
+    <div className="group relative flex flex-row gap-3 rounded-xl border border-border bg-card p-3 transition-all duration-200 hover:border-primary/40 hover:shadow-md hover:shadow-primary/10">
       {/* 已安装标记 */}
       {isInstalled && (
-        <div className="absolute -top-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-green-500 text-white shadow-sm z-10">
-          <Check className="h-2 w-2" />
+        <div className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-green-500 text-white shadow-md z-10">
+          <Check className="h-3 w-3" />
         </div>
       )}
 
-      {/* 头像（左侧，很小） */}
+      {/* 头像（左侧，固定大小） */}
       <div
         className={cn(
-          'flex h-7 w-7 shrink-0 items-center justify-center rounded text-xs shadow-sm',
+          'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-base shadow-sm',
           'bg-gradient-to-br',
           colorClass,
         )}
@@ -82,58 +83,63 @@ function ExpertCard({
       </div>
 
       {/* 内容区（右侧） */}
-      <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-        {/* 名字 + 角色（同一行，超长自动截断） */}
-        <div className="flex items-center min-w-0">
-          <h3 className="text-[12px] font-semibold text-foreground truncate shrink-0">{expert.name}</h3>
-          <span className="text-[10px] text-muted-foreground truncate"> · {expert.role}</span>
+      <div className="flex-1 min-w-0 flex flex-col justify-between gap-1.5">
+        {/* 名字 + 角色 */}
+        <div>
+          <h3 className="text-sm font-semibold text-foreground truncate">{expert.name}</h3>
+          <p className="text-xs text-muted-foreground leading-snug">{expert.role}</p>
         </div>
 
-        {/* 描述（最多2行，自动换行） */}
-        <p className="text-[10px] text-muted-foreground/80 leading-snug line-clamp-2">
+        {/* 描述（最多2行） */}
+        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
           {expert.description}
         </p>
 
-        {/* 擅长领域标签（横向，允许换行） */}
+        {/* 擅长领域标签 */}
         {(expert.specialties || []).length > 0 && (
-          <div className="flex flex-wrap gap-0.5">
-            {(expert.specialties || []).slice(0, 4).map((s) => (
+          <div className="flex flex-wrap gap-1">
+            {(expert.specialties || []).slice(0, 3).map((s) => (
               <span
                 key={s.label}
-                className="inline-flex items-center rounded-full bg-muted/80 px-1.5 py-0.5 text-[9px] font-medium text-muted-foreground/90"
+                className="inline-flex items-center gap-0.5 rounded-full bg-muted/80 px-1.5 py-0.5 text-xs font-medium text-muted-foreground"
               >
-                {s.label}
+                <span className="text-xs">{s.emoji}</span>
+                <span className="text-xs">{s.label}</span>
               </span>
             ))}
-            {(expert.specialties || []).length > 4 && (
-              <span className="inline-flex items-center rounded-full bg-muted/60 px-1.5 py-0.5 text-[9px] text-muted-foreground/60">
-                +{(expert.specialties || []).length - 4}
+            {(expert.specialties || []).length > 3 && (
+              <span className="inline-flex items-center rounded-full bg-muted/60 px-1.5 py-0.5 text-xs text-muted-foreground/70">
+                +{(expert.specialties || []).length - 3}
               </span>
             )}
           </div>
         )}
 
-        {/* 操作按钮（无图标，更小） */}
+        {/* 操作按钮 */}
         <button
           onClick={() => onAction(expert)}
           disabled={loading}
           className={cn(
-            'flex w-full items-center justify-center rounded px-2 py-0.5 text-[10px] font-medium transition-all mt-0.5',
-            'bg-gradient-to-r text-white',
+            'flex w-full items-center justify-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all mt-1',
+            'bg-gradient-to-r text-white shadow-sm',
             isInstalled
               ? 'from-green-500 to-emerald-500'
               : actionClass || colorClass,
-            'hover:opacity-90 active:scale-[0.97]',
+            'hover:shadow-md hover:opacity-90 active:scale-[0.97]',
             'disabled:opacity-50 disabled:cursor-not-allowed',
           )}
         >
           {loading ? (
             <>
-              <RefreshCw className="h-2 w-2 animate-spin" />
+              <RefreshCw className="h-3 w-3 animate-spin" />
               <span>召唤中...</span>
             </>
           ) : (
-            <span>{actionLabel}</span>
+            <>
+              {actionIcon}
+              <span>{actionLabel}</span>
+              {!isInstalled && <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />}
+            </>
           )}
         </button>
       </div>
@@ -166,6 +172,7 @@ function MarketCard({ expert, onSummon, loading, installedIds }: MarketCardProps
       expert={expert}
       onAction={handleAction}
       actionLabel={isInstalled ? '召唤中' : '召唤'}
+      actionIcon={isInstalled ? <Check className="h-4 w-4" /> : <Sparkles className="h-4 w-4" />}
       loading={loading && !isInstalled}
       isInstalled={isInstalled}
     />
@@ -431,9 +438,8 @@ export function ExpertCenter() {
     }
   }, [handleMarketUpdate]);
 
-  // ── 初始化加载 + Tab 切换时重置分类 ──
+  // ── 初始化加载 ──
   useEffect(() => {
-    setActiveCategory('全部');
     if (activeTab === 'my') {
       loadLocalExperts();
     } else if (activeTab === 'market') {
@@ -823,24 +829,23 @@ export function ExpertCenter() {
 
       {/* 加载骨架屏 */}
       {isCurrentTabLoading && (
-        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {[1,2,3,4].map(i => (
-            <div key={i} className="rounded-lg border border-border/80 bg-card p-2 animate-pulse">
-              <div className="flex flex-row gap-2">
+            <div key={i} className="rounded-xl border border-border bg-card p-3 animate-pulse">
+              <div className="flex flex-row gap-3">
                 {/* 头像骨架 */}
-                <div className="h-7 w-7 rounded bg-muted shrink-0" />
+                <div className="h-9 w-9 rounded-lg bg-muted shrink-0" />
                 {/* 内容区骨架 */}
-                <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-                  <div className="flex items-center gap-0.5">
-                    <div className="h-2.5 w-16 rounded bg-muted" />
-                    <div className="h-2 w-8 rounded bg-muted" />
+                <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+                  <div className="h-3.5 w-20 rounded bg-muted" />
+                  <div className="h-3 w-28 rounded bg-muted" />
+                  <div className="h-3 w-full rounded bg-muted" />
+                  <div className="h-3 w-2/3 rounded bg-muted" />
+                  <div className="flex gap-1">
+                    <div className="h-5 w-12 rounded-full bg-muted" />
+                    <div className="h-5 w-12 rounded-full bg-muted" />
                   </div>
-                  <div className="h-2 w-full rounded bg-muted" />
-                  <div className="flex gap-0.5">
-                    <div className="h-3 w-10 rounded-full bg-muted" />
-                    <div className="h-3 w-10 rounded-full bg-muted" />
-                  </div>
-                  <div className="h-4 w-full rounded bg-muted mt-0.5" />
+                  <div className="h-7 w-full rounded-lg bg-muted mt-1" />
                 </div>
               </div>
             </div>
@@ -852,7 +857,7 @@ export function ExpertCenter() {
       {!isCurrentTabLoading && (
         <>
           {visibleExperts.length > 0 ? (
-            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {visibleExperts.map(expert => {
                 if (activeTab === 'market') {
                   // 专家中心 Tab
@@ -873,6 +878,7 @@ export function ExpertCenter() {
                       expert={expert}
                       onAction={handleUseAgent}
                       actionLabel="召唤中"
+                      actionIcon={<Check className="h-4 w-4" />}
                       loading={false}
                       isInstalled={true}
                     />
@@ -886,6 +892,7 @@ export function ExpertCenter() {
                       expert={expert}
                       onAction={handleSummon}
                       actionLabel={installed ? '召唤中' : '召唤'}
+                      actionIcon={installed ? <Check className="h-4 w-4" /> : <Sparkles className="h-4 w-4" />}
                       loading={loading && loadingId === expert.id}
                       isInstalled={installed}
                     />
