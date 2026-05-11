@@ -1,0 +1,37 @@
+{
+  "version": "1.0",
+  "project": "ClawX",
+  "brand": "dclaw",
+  "applied_at": "E:\\ClawX",
+  "files": {
+    "icon_files": [
+      "resources/icons/icon.png",
+      "resources/icons/icon.ico",
+      "resources/icons/128x128.png",
+      "resources/icons/16x16.png",
+      "resources/icons/256x256.png",
+      "resources/icons/32x32.png",
+      "resources/icons/48x48.png",
+      "resources/icons/512x512.png",
+      "resources/icons/64x64.png"
+    ],
+    "text_files": [
+      "package.json",
+      "electron-builder.yml",
+      "src/assets/logo.svg",
+      "src/components/layout/Sidebar.tsx",
+      "src/pages/Settings/index.tsx",
+      "src/pages/Setup/index.tsx",
+      "src/i18n/locales/zh/settings.json",
+      "src/i18n/locales/zh/setup.json"
+    ],
+    "code_files": [
+      "src/App.tsx",
+      "src/pages/Chat/index.tsx",
+      "electron/api/routes/agents.ts",
+      "electron/utils/openclaw-workspace.ts",
+      "electron/main/updater.ts",
+      "scripts/download-bundled-uv.mjs"
+    ]
+  }
+}

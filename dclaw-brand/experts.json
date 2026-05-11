@@ -1,0 +1,72 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2026-05-01T21:00:00+08:00",
+  "数据智能": [
+    {
+      "id": "remote-phoebe",
+      "name": "Phoebe",
+      "role": "数据分析师",
+      "emoji": "📊",
+      "color": "#3B82F6",
+      "category": "数据智能",
+      "description": "专长将枯燥的数据转化为可执行、可落地、可汇报的业务洞察",
+      "downloadUrl": "https://raw.githubusercontent.com/guiyingyi2021/ClawX/dclaw-private/agents/数据智能/phoebe/package.tar.gz"
+    }
+  ],
+  "营销增长": [
+    {
+      "id": "remote-ben",
+      "name": "Ben",
+      "role": "品牌策略师",
+      "emoji": "🌟",
+      "color": "#EAB308",
+      "category": "营销增长",
+      "description": "15年品牌战略经验，帮助企业从产品思维升级到品牌思维，建立品牌资产",
+      "downloadUrl": "https://raw.githubusercontent.com/guiyingyi2021/ClawX/dclaw-private/agents/营销增长/ben/package.tar.gz"
+    },
+    {
+      "id": "remote-jude",
+      "name": "Jude",
+      "role": "电商运营专家",
+      "emoji": "🛒",
+      "color": "#F97316",
+      "category": "营销增长",
+      "description": "深耕天猫、京东、拼多多运营8年，擅长从选品到爆款打造的全链路运营",
+      "downloadUrl": "https://raw.githubusercontent.com/guiyingyi2021/ClawX/dclaw-private/agents/营销增长/jude/package.tar.gz"
+    }
+  ],
+  "内容创作": [
+    {
+      "id": "remote-kai",
+      "name": "Kai",
+      "role": "内容创作专家",
+      "emoji": "✍️",
+      "color": "#FF6B6B",
+      "category": "内容创作",
+      "description": "10年内容创作经验，深度研究小红书、抖音、公众号等平台的算法和内容生态",
+      "downloadUrl": "https://raw.githubusercontent.com/guiyingyi2021/ClawX/dclaw-private/agents/内容创作/kai/package.tar.gz"
+    },
+    {
+      "id": "remote-maya",
+      "name": "Maya",
+      "role": "抖音策略师",
+      "emoji": "🎵",
+      "color": "#8B5CF6",
+      "category": "内容创作",
+      "description": "短视频内容策略专家，精通抖音算法逻辑，擅长从0到1打造账号矩阵",
+      "downloadUrl": "https://raw.githubusercontent.com/guiyingyi2021/ClawX/dclaw-private/agents/内容创作/maya/package.tar.gz"
+    }
+  ],
+  "销售商务": [
+    {
+      "id": "remote-ulla",
+      "name": "Ulla",
+      "role": "销售教练",
+      "emoji": "💼",
+      "color": "#10B981",
+      "category": "销售商务",
+      "description": "顶级销售教练，融合多个国际销售体系，帮助销售团队从普通到卓越",
+      "downloadUrl": "https://raw.githubusercontent.com/guiyingyi2021/ClawX/dclaw-private/agents/销售商务/ulla/package.tar.gz"
+    }
+  ]
+}
