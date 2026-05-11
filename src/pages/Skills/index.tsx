@@ -105,6 +105,8 @@ function resolveSkillSourceLabel(skill: Skill, t: TFunction<'skills'>): string {
 function SkillDetailDialog({ skill, isOpen, onClose, onToggle, onUninstall, onOpenFolder }: SkillDetailDialogProps) {
   const { t } = useTranslation('skills');
   const [openedSkillFile, setOpenedSkillFile] = useState<FilePreviewTarget | null>(null);
+  const [apiKey, setApiKey] = useState('');
+  const [envVars, setEnvVars] = useState<{ key: string; value: string }[]>([]);
   const detailMetaComponents = rendererExtensionRegistry.getSkillDetailMetaComponents();
 
 

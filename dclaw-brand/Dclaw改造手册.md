@@ -1138,3 +1138,241 @@ src/pages/Experts/index.tsx ← Tab 切换时重置 activeCategory 为"全部"
 3. 在"专家中心"点击任意分类 → 切换到"我的专家"Tab → 应显示"我的专家"列表（不再空白）
 4. 切换回"专家中心"Tab → 分类应重置为"全部"
 src/lib/expert-loader.ts.bak-20260507
+
+---
+
+## 十八、内置 Skills 扩展（2026-05-11）
+
+### 18.1 改造背景
+
+Dclaw 需要更多内置 skills 来增强功能，但必须避免外部依赖（如 QClaw 专有 API）。
+
+**用户需求**：
+- 添加无外部依赖的实用 skills
+- 优先级：高（核心功能）> 中（增强能力）> 低（便利功能）
+- 有依赖的先不考虑，无依赖的安装为内置
+
+### 18.2 依赖分析结果
+
+**待评估 Skills**（来自 QClaw 内置 + WorkBuddy Marketplace）：
+
+| Skill | 功能 | 优先级 | 依赖分析 | 结论 |
+|-------|------|--------|----------|------|
+| `online-search` | 在线搜索 | 🔴 高 | 依赖 QClaw API (`/proxy/prosearch`, `AUTH_GATEWAY_PORT`) | ❌ 跳过，需适配 |
+| `qclaw-skill-creator` | Skill 创建向导 | 🔴 高 | 未找到（QClaw 专有） | ❌ 跳过 |
+| `skill-creator` | Skill 创建工具 | 🔴 高 | 无外部依赖（指南类） | ✅ 安装 |
+| `multi-search-engine` | 多搜索引擎 | 🟡 中 | 无 API key 需求（直接爬取） | ✅ 安装 |
+| `skill-vetter` | Skill 质量检查 | 🟡 中 | 无外部依赖（代码审查工具） | ✅ 安装 |
+| `ui-ux-pro-max` | UI/UX 设计专家 | 🟢 低 | 无外部依赖（bundled assets） | ✅ 安装 |
+| `imap-smtp-email` | 邮件收发 | 🟢 低 | 需要用户配置邮箱凭证（非外部 API） | ✅ 安装 |
+| `bdpan-storage` | 百度网盘集成 | 🟢 低 | 未找到 | ❌ 跳过 |
+
+### 18.3 安装的 5 个 Skills
+
+#### 1. `multi-search-engine` (v2.1.3)
+- **来源**：`/c/Users/40832/.workbuddy/skills-marketplace/skills/multi-search-engine/`
+- **功能**：集成 17 个搜索引擎（8 国内 + 9 国际），无需 API key
+- **依赖**：仅需 `web_fetch` 工具（OpenClaw 内置）
+- **文件数**：11 个（含 references/）
+
+#### 2. `skill-vetter` (v1.0.0)
+- **来源**：`/c/Users/40832/.workbuddy/skills-marketplace/skills/skill-vetter/`
+- **功能**：Skill 安全审查工具，安装前检查 red flags
+- **依赖**：无（纯审查指南）
+- **文件数**：2 个
+
+#### 3. `skill-creator` (v0.1.0)
+- **来源**：`/c/Users/40832/.workbuddy/skills-marketplace/skills/skill-creator/`
+- **功能**：创建和维护自定义 skills 的指南
+- **依赖**：无（含 Python 脚本 `init_skill.py`、`package_skill.py`）
+- **文件数**：7 个
+
+#### 4. `ui-ux-pro-max`
+- **来源**：`/c/Users/40832/.workbuddy/plugins/marketplaces/codebuddy-plugins-official/external_plugins/ui-ux-max-skill/skills/ui-ux-pro-max/`
+- **功能**：UI/UX 设计专家，生成设计系统 tokens 和代码
+- **依赖**：可选 `python3`（设计系统生成脚本）
+- **文件数**：39 个（含 data/stacks/）
+
+#### 5. `imap-smtp-email`
+- **来源**：`/c/Users/40832/.workbuddy/skills-marketplace/skills/imap-smtp-email/`
+- **功能**：通过 IMAP/SMTP 收发邮件
+- **依赖**：需要用户配置邮箱凭证（`IMAP_HOST`, `IMAP_USER`, etc.）
+- **文件数**：4 个（含 `setup.sh`, `package.json`）
+
+### 18.4 安装步骤
+
+**Step 1：复制 Skills 到内置目录**
+
+```bash
+# 工作目录：E:\ClawX
+
+# 1. multi-search-engine
+cp -r /c/Users/40832/.workbuddy/skills-marketplace/skills/multi-search-engine resources/openclaw/skills/
+
+# 2. skill-vetter
+cp -r /c/Users/40832/.workbuddy/skills-marketplace/skills/skill-vetter resources/openclaw/skills/
+
+# 3. skill-creator
+cp -r /c/Users/40832/.workbuddy/skills-marketplace/skills/skill-creator resources/openclaw/skills/
+
+# 4. ui-ux-pro-max (从 WorkBuddy 官方插件复制，避免 QClaw 特定功能)
+cp -r /c/Users/40832/.workbuddy/plugins/marketplaces/codebuddy-plugins-official/external_plugins/ui-ux-max-skill/skills/ui-ux-pro-max resources/openclaw/skills/
+
+# 5. imap-smtp-email
+cp -r /c/Users/40832/.workbuddy/skills-marketplace/skills/imap-smtp-email resources/openclaw/skills/
+```
+
+**Step 2：检查 QClaw 引用**
+
+```bash
+# 搜索是否有 QClaw 特定引用
+grep -r "qclaw\|QClaw" "E:/ClawX/resources/openclaw/skills/" 2>/dev/null
+```
+
+**结果**：仅在旧的 DClaw 内置 skills（`dclaw-env`, `dclaw-rules`）的参考文档中发现 QClaw 引用，新复制的 5 个 skills 无 QClaw 引用。
+
+**Step 3：提交到 Git**
+
+```bash
+cd E:/ClawX
+git add resources/openclaw/skills/
+git commit -m "feat: 添加 5 个无依赖内置 skills
+
+- multi-search-engine: 17 个搜索引擎集成，无需 API key
+- skill-vetter: Skill 安全审查工具
+- skill-creator: Skill 创建指南
+- ui-ux-pro-max: UI/UX 设计专家
+- imap-smtp-email: 邮件收发（需用户配置）
+
+来源: WorkBuddy skills-marketplace"
+```
+
+**Commit**：`36c1716` (branch: `sync-test`)
+
+### 18.5 验证方法
+
+**构建验证**：
+
+```bash
+cd E:\ClawX
+SKIP_PREINSTALLED_SKILLS=1 pnpm run build
+```
+
+**检查输出**：
+
+构建完成后，检查 `build/openclaw/skills/` 目录是否包含新增的 5 个 skills。
+
+**运行验证**：
+
+安装 Dclaw 后，在设置页 → Skills 管理，确认：
+- ✅ `multi-search-engine` 显示在内置 Skills 列表
+- ✅ `skill-vetter` 显示在内置 Skills 列表
+- ✅ `skill-creator` 显示在内置 Skills 列表
+- ✅ `ui-ux-pro-max` 显示在内置 Skills 列表
+- ✅ `imap-smtp-email` 显示在内置 Skills 列表
+
+### 18.6 文件清单
+
+**新增文件**（相对于 `resources/openclaw/skills/`）：
+
+```
+resources/openclaw/skills/
+├── multi-search-engine/
+│   ├── SKILL.md
+│   ├── CHANGELOG.md
+│   ├── CHANNELLOG.md
+│   ├── _skillhub_meta.json
+│   ├── config.json
+│   ├── metadata.json
+│   └── references/
+│       ├── advanced-search.md
+│       └── international-search.md
+├── skill-vetter/
+│   ├── SKILL.md
+│   └── _skillhub_meta.json
+├── skill-creator/
+│   ├── SKILL.md
+│   ├── LICENSE.txt
+│   ├── _skillhub_meta.json
+│   ├── references/
+│   │   ├── output-patterns.md
+│   │   └── workflows.md
+│   └── scripts/
+│       ├── init_skill.py
+│       ├── package_skill.py
+│       └── quick_validate.py
+├── ui-ux-pro-max/
+│   ├── SKILL.md
+│   ├── data/
+│   │   ├── charts.csv
+│   │   ├── colors.csv
+│   │   ├── icons.csv
+│   │   ├── landing.csv
+│   │   ├── products.csv
+│   │   ├── prompts.csv
+│   │   ├── react-performance.csv
+│   │   ├── styles.csv
+│   │   ├── typography.csv
+│   │   ├── ui-reasoning.csv
+│   │   ├── ux-guidelines.csv
+│   │   ├── web-interface.csv
+│   │   └── stacks/
+│   │       ├── flutter.csv
+│   │       ├── html-tailwind.csv
+│   │       ├── jetpack-compose.csv
+│   │       ├── nextjs.csv
+│   │       ├── nuxt-ui.csv
+│   │       ├── nuxtjs.csv
+│   │       ├── react-native.csv
+│   │       ├── react.csv
+│   │       ├── shadcn.csv
+│   │       ├── svelte.csv
+│   │       ├── swiftui.csv
+│   │       └── vue.csv
+│   └── scripts/
+│       ├── core.py
+│       ├── design_system.py
+│       └── search.py
+└── imap-smtp-email/
+    ├── SKILL.md
+    ├── _skillhub_meta.json
+    ├── package.json
+    └── setup.sh
+```
+
+**总计**：5 个 skills，50 个文件。
+
+### 18.7 待完成事项
+
+| 事项 | 优先级 | 状态 | 说明 |
+|------|--------|------|------|
+| `online-search` 适配 | 🔴 高 | ⏳ 待处理 | 需要替换 QClaw API 为 Dclaw 实现的搜索接口 |
+| `qclaw-skill-creator` 替代 | 🔴 高 | ⏳ 待处理 | 可用 `skill-creator` 替代，或自行开发 |
+| `bdpan-storage` 寻找 | 🟢 低 | ⏳ 待处理 | 可能在其他 marketplace 或需要自行开发 |
+| `imap-smtp-email` 依赖安装 | 🟢 低 | ⏳ 待验证 | 构建时是否需要运行 `npm install` |
+
+### 18.8 经验总结
+
+**Skills 来源优先级**：
+
+1. ✅ **WorkBuddy skills-marketplace**（`/c/Users/40832/.workbuddy/skills-marketplace/skills/`）- 推荐
+2. ✅ **WorkBuddy 官方插件**（`/c/Users/40832/.workbuddy/plugins/marketplaces/codebuddy-plugins-official/`）- 推荐
+3. ⚠️ **QClaw workspace**（`/c/Users/40832/.qclaw/workspace/skills/`）- 可能含 QClaw 特定功能
+4. ❌ **QClaw 内置**（`backup/ClawX-20260501-110625/resources/skills/`）- 含 QClaw API 依赖
+
+**依赖检查清单**：
+
+- [ ] 是否引用 QClaw API（如 `/proxy/prosearch`, `AUTH_GATEWAY_PORT`）
+- [ ] 是否需要外部 API key（如 WolframAlpha, Google Custom Search）
+- [ ] 是否依赖特定环境变量（非用户配置类）
+- [ ] 是否需要额外 `npm install`（Node.js 依赖）
+- [ ] 脚本是否调用 QClaw 专有工具
+
+**安全检查**：
+
+```bash
+# 检查恶意代码特征
+grep -r "eval\|exec\|base64\|curl.*http" "resources/openclaw/skills/<skill-name>/" 2>/dev/null
+```
+
+---
