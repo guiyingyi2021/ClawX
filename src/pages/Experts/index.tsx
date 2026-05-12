@@ -15,10 +15,11 @@
  */
 import { useNavigate } from 'react-router-dom';
 import { Zap, RefreshCw, Check, Search,
-         Flame, Star, User, Globe, Package, UserCheck } from 'lucide-react';
+         Flame, Star, User, Globe, Package, UserCheck, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { EXPERTS as BUILT_IN_EXPERTS } from './experts.config';
 import type { Expert } from '@/types/expert';
+import { getRequiredSkillsForExpertSync } from '@/lib/expert-skill-matcher';
 import { useAgentsStore } from '@/stores/agents';
 import { useChatStore } from '@/stores/chat';
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
@@ -27,6 +28,17 @@ import { hostApiFetch } from '@/lib/host-api';
 import type { AgentsSnapshot } from '@/types/agent';
 import { loadExperts, refreshExperts, hexToTailwindGradient } from '@/lib/expert-loader';
 import { convertOpenClaw } from '@/lib/convert-openclaw';
+
+// localStorage 专家技能配置 helper（内联，避免循环依赖）
+const SKILL_STORAGE_KEY_PREFIX = 'dclaw-expert-skills-';
+const saveExpertSkillsToLocalStorage = (expertId: string, skills: string[]) => {
+  try {
+    localStorage.setItem(SKILL_STORAGE_KEY_PREFIX + expertId, JSON.stringify(skills));
+    console.log(`[Experts] 已保存用户配置: ${expertId} →`, skills);
+  } catch (error) {
+    console.warn('[Experts] 保存用户配置失败:', error);
+  }
+};
 import {
   loadMarketExperts,
   refreshMarketExperts,
@@ -34,6 +46,7 @@ import {
   downloadSoulContent,
   getLastDownloadError,
 } from '@/lib/market-loader';
+import { SkillConfigDialog } from '@/components/SkillConfigDialog';
 
 // ============================================================
 // 分类和常量
@@ -52,10 +65,11 @@ interface ExpertCardProps {
   actionClass?: string;
   loading: boolean;
   isInstalled?: boolean;
+  onConfig?: (expert: Expert) => void;  // 新增：配置技能回调
 }
 
 function ExpertCard({
-  expert, onAction, actionLabel, actionClass, loading, isInstalled
+  expert, onAction, actionLabel, actionClass, loading, isInstalled, onConfig
 }: ExpertCardProps) {
   const colorClass = typeof expert.color === 'string' && expert.color.startsWith('from-')
     ? expert.color
@@ -68,6 +82,20 @@ function ExpertCard({
         <div className="absolute -top-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-green-500 text-white shadow-sm z-10">
           <Check className="h-2 w-2" />
         </div>
+      )}
+
+      {/* 配置技能按钮（右上角） */}
+      {onConfig && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onConfig(expert);
+          }}
+          className="absolute top-1 right-1 p-1 rounded-md hover:bg-muted transition-colors md:opacity-0 md:group-hover:opacity-100"
+          title="配置技能"
+        >
+          <Settings className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
+        </button>
       )}
 
       {/* 头像（左侧，很小） */}
@@ -168,6 +196,7 @@ function MarketCard({ expert, onSummon, loading, installedIds }: MarketCardProps
       actionLabel={isInstalled ? '召唤中' : '召唤'}
       loading={loading && !isInstalled}
       isInstalled={isInstalled}
+      onConfig={onConfig}
     />
   );
 }
@@ -180,6 +209,31 @@ export function ExpertCenter() {
   const navigate = useNavigate();
   const { agents, fetchAgents } = useAgentsStore();
   const { switchSession, newSessionForAgent } = useChatStore();
+  
+  // 技能配置对话框状态
+  const [showSkillConfig, setShowSkillConfig] = useState(false);
+  const [configExpert, setConfigExpert] = useState<Expert | null>(null);
+  
+  // 打开技能配置对话框
+  const handleOpenConfig = useCallback((expert: Expert) => {
+    setConfigExpert(expert);
+    setShowSkillConfig(true);
+  }, []);
+  
+  // 关闭技能配置对话框
+  const handleCloseConfig = useCallback(() => {
+    setShowSkillConfig(false);
+    setConfigExpert(null);
+  }, []);
+  
+  // 保存技能配置回调
+  const handleSaveConfig = useCallback((skills: string[]) => {
+    if (configExpert) {
+      // 保存到 localStorage
+      saveExpertSkillsToLocalStorage(configExpert.id, skills);
+      toast.success(`已为 ${configExpert.name} 配置 ${skills.length} 个技能`);
+    }
+  }, [configExpert]);
 
   // 自动清理旧版内置 agent（只执行一次）
   // 旧版内置专家的英文 ID 前缀，新版已全部改为中文 ID
@@ -447,9 +501,13 @@ export function ExpertCenter() {
     setLoading(true);
     setLoadingId(expert.id);
 
-    // ── 检查并安装专家所需技能 ──
-    if (expert.requiredSkills && expert.requiredSkills.length > 0) {
-      toast.loading(`正在为 ${expert.name} 准备所需技能...`);
+    // ── 检查并安装专家所需技能（智能匹配）──
+    const requiredSkills = getRequiredSkillsForExpertSync(expert);
+    let skillToastId: string | number | null = null;
+    if (requiredSkills.length > 0) {
+      console.log(`[handleSummon] 开始准备技能:`, requiredSkills);
+      skillToastId = toast.loading(`正在为 ${expert.name} 准备所需技能...`);
+      console.log(`[handleSummon] toast.loading ID:`, skillToastId);
       
       try {
         const result = await hostApiFetch<{
@@ -457,33 +515,58 @@ export function ExpertCenter() {
           result: { results: Array<{ slug: string; status: string; message?: string }>; allSuccess: boolean };
         }>('/api/skillhub/ensure-for-expert', {
           method: 'POST',
-          body: JSON.stringify({ requiredSkills: expert.requiredSkills }),
+          body: JSON.stringify({ 
+            requiredSkills: requiredSkills.map(slug => ({ slug, required: true, reason: '智能匹配' })) 
+          }),
         });
 
+        console.log(`[handleSummon] ensure-for-expert 返回:`, result);
+        
         // 处理安装结果
         if (result.success && result.result) {
           const { results, allSuccess } = result.result;
           const failed = results.filter(r => r.status === 'failed');
           
           if (allSuccess) {
+            console.log(`[handleSummon] 全部技能安装成功:`, results);
+            toast.dismiss(skillToastId);
             toast.success(`已安装技能：${results.map(r => r.slug).join(', ')}`);
+            skillToastId = null;
           } else if (failed.length > 0) {
+            console.warn(`[handleSummon] 部分技能安装失败:`, failed);
             // 获取手动安装指引
             try {
-              const guide = await hostApiFetch<{ instructions: string }>('/api/skillhub/manual-install-guide', {
+              const guide = await hostApiFetch<{ success: boolean; instructions: string }>('/api/skillhub/manual-install-guide', {
                 method: 'POST',
                 body: JSON.stringify({ slug: failed[0].slug }),
               });
-              toast.error(`部分技能安装失败：${failed.map(f => f.slug).join(', ')}。可以手动安装：${guide.instructions}`);
-            } catch {
-              toast.error(`部分技能安装失败：${failed.map(f => f.slug).join(', ')}`);
+              console.log(`[handleSummon] manual-install-guide 返回:`, guide);
+              toast.dismiss(skillToastId);
+              const instructions = guide.instructions || '请稍后重试或使用技能管理页面手动安装';
+              toast.error(`部分技能安装失败：${failed.map(f => f.slug).join(', ')}。${instructions}`);
+              skillToastId = null;
+            } catch (guideError) {
+              console.error(`[handleSummon] 获取手动安装指引失败:`, guideError);
+              toast.dismiss(skillToastId);
+              toast.error(`部分技能安装失败：${failed.map(f => f.slug).join(', ')}。请前往技能管理页面手动安装`);
+              skillToastId = null;
             }
           }
         }
       } catch (error: any) {
+        console.error(`[handleSummon] 技能准备异常:`, error);
         console.warn(`[handleSummon] 技能准备失败（继续召唤）:`, error);
-        // 不因技能安装失败而中断召唤
+        if (skillToastId) { toast.dismiss(skillToastId); skillToastId = null; }
       }
+    } else {
+      console.log(`[handleSummon] 专家 ${expert.name} 无需额外技能`);
+    }
+
+    // 保险：确保技能准备的 loading toast 已清除
+    if (skillToastId) { 
+      console.warn(`[handleSummon] 保险 dismiss，skillToastId=`, skillToastId);
+      toast.dismiss(skillToastId); 
+      skillToastId = null; 
     }
 
     try {
@@ -619,10 +702,12 @@ export function ExpertCenter() {
       switchSession(agent.mainSessionKey);
       toast.success(`已切换到 ${expert.name} · ${expert.role}`);
       navigate('/');
-    } catch (err) {
+      } catch (err) {
       console.error('召唤专家失败:', err);
+      if (skillToastId) { toast.dismiss(skillToastId); skillToastId = null; }
       toast.error('召唤失败，请重试');
     } finally {
+      if (skillToastId) { toast.dismiss(skillToastId); }
       setLoading(false);
       setLoadingId(null);
     }
@@ -915,6 +1000,7 @@ export function ExpertCenter() {
                       actionLabel="召唤中"
                       loading={false}
                       isInstalled={true}
+                      onConfig={handleOpenConfig}
                     />
                   );
                 } else {
@@ -928,6 +1014,7 @@ export function ExpertCenter() {
                       actionLabel={installed ? '召唤中' : '召唤'}
                       loading={loading && loadingId === expert.id}
                       isInstalled={installed}
+                      onConfig={handleOpenConfig}
                     />
                   );
                 }
@@ -995,6 +1082,17 @@ export function ExpertCenter() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* 技能配置对话框 */}
+      {showSkillConfig && configExpert && (
+        <SkillConfigDialog
+          expertId={configExpert.id}
+          expertName={configExpert.name}
+          open={showSkillConfig}
+          onClose={handleCloseConfig}
+          onSave={handleSaveConfig}
+        />
       )}
     </div>
   );

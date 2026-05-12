@@ -6,6 +6,7 @@ import type { SkillShopInstallParams } from '../../gateway/skillshop';
 import type { HostApiContext } from '../context';
 import { parseJsonBody, sendJson } from '../route-utils';
 import { getSkillHubService } from '../../gateway/skillhub-service';
+import { getExpertSkillConfig, setExpertSkillConfig, deleteExpertSkillConfig } from '../../utils/expert-skill-config';
 
 export async function handleSkillRoutes(
   req: IncomingMessage,
@@ -144,7 +145,7 @@ export async function handleSkillRoutes(
   }
 
   // ==================== SkillShop (技能商店) Routes ====================
-
+  
   if (url.pathname === '/api/skillshop/capability' && req.method === 'GET') {
     try {
       sendJson(res, 200, {
@@ -265,6 +266,45 @@ export async function handleSkillRoutes(
       sendJson(res, 200, { success: true, instructions });
     } catch (error) {
       sendJson(res, 500, { success: false, error: error instanceof Error ? error.message : String(error) });
+    }
+    return true;
+  }
+
+  // ==================== Expert Skill Config Routes ====================
+  
+  // GET /api/expert-skill-config/:expertId - 读取专家技能配置
+  if (url.pathname.startsWith('/api/expert-skill-config/') && req.method === 'GET') {
+    try {
+      const expertId = decodeURIComponent(url.pathname.replace('/api/expert-skill-config/', ''));
+      const skills = await getExpertSkillConfig(expertId);
+      sendJson(res, 200, { success: true, skills });
+    } catch (error) {
+      sendJson(res, 500, { success: false, error: String(error) });
+    }
+    return true;
+  }
+
+  // POST /api/expert-skill-config/:expertId - 保存专家技能配置
+  if (url.pathname.startsWith('/api/expert-skill-config/') && req.method === 'POST') {
+    try {
+      const expertId = decodeURIComponent(url.pathname.replace('/api/expert-skill-config/', ''));
+      const body = await parseJsonBody<{ skills: string[] }>(req);
+      await setExpertSkillConfig(expertId, body.skills);
+      sendJson(res, 200, { success: true });
+    } catch (error) {
+      sendJson(res, 500, { success: false, error: String(error) });
+    }
+    return true;
+  }
+
+  // DELETE /api/expert-skill-config/:expertId - 删除专家技能配置
+  if (url.pathname.startsWith('/api/expert-skill-config/') && req.method === 'DELETE') {
+    try {
+      const expertId = decodeURIComponent(url.pathname.replace('/api/expert-skill-config/', ''));
+      await deleteExpertSkillConfig(expertId);
+      sendJson(res, 200, { success: true });
+    } catch (error) {
+      sendJson(res, 500, { success: false, error: String(error) });
     }
     return true;
   }

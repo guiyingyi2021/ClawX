@@ -126,7 +126,7 @@ async function fetchRemoteExperts(url: string): Promise<{ experts: Expert[]; ver
       if (!Array.isArray(experts)) continue;
       for (const expert of experts) {
         // 标记为远程专家，并添加默认值
-        const basePath = `agents/${category}/${expert.id}`;
+        const basePath = `agents/${encodeURIComponent(category)}/${encodeURIComponent(expert.id)}`;
         const soulUrl = expert.hasSoul
           ? `${GITHUB_RAW_BASE}/${basePath}/SOUL.md`
           : undefined;
@@ -267,7 +267,7 @@ function transformLocalExperts(): Expert[] {
   for (const [category, experts] of Object.entries(EXPERTS_INDEX as Record<string, any[]>)) {
     if (!Array.isArray(experts)) continue;
     for (const expert of experts) {
-      const basePath = `agents/${category}/${expert.id}`;
+      const basePath = `agents/${encodeURIComponent(category)}/${encodeURIComponent(expert.id)}`;
       const soulUrl = expert.hasSoul
         ? `${GITHUB_RAW_BASE}/${basePath}/SOUL.md`
         : undefined;
