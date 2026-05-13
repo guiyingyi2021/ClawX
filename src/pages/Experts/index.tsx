@@ -196,7 +196,6 @@ function MarketCard({ expert, onSummon, loading, installedIds }: MarketCardProps
       actionLabel={isInstalled ? '召唤中' : '召唤'}
       loading={loading && !isInstalled}
       isInstalled={isInstalled}
-      onConfig={onConfig}
     />
   );
 }

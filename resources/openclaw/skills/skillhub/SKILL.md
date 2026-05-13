@@ -1,16 +1,16 @@
 ---
 name: "SkillHub 技能市场"
-description: "从 skillhub.cn 搜索和安装技能（开箱即用）"
+description: "从 skillhub.cn 搜索和安装技能（仅主代理可用）"
 metadata:
   {
     "openclaw": {
       "auto_activate": [
-        "find skill in main agent",
-        "install skill for me",
-        "search for skill to install",
-        "what skills are available in the system",
-        "recommend skill for my task",
-        "discover skill that can help"
+        "in main agent: find skill",
+        "in main agent: install skill for me",
+        "in main agent: search for skill to install",
+        "in main agent: what skills are available",
+        "in main agent: recommend skill for my task",
+        "in main agent: discover skill that can help"
       ]
     }
   }
@@ -18,26 +18,38 @@ metadata:
 
 # SkillHub 技能市场
 
-你可以通过 SkillHub 帮助用户搜索和安装技能。
+## 🚨 专家代理：请立即停止！
 
-## 重要：专家代理模式
+**如果你是当前对话的专家代理（expert agent），请立即停止阅读本技能！**
 
-**如果你当前是作为一个专家代理（expert agent）在运行**：
+**专家代理禁止执行以下操作**：
+- ❌ 不要搜索技能
+- ❌ 不要列出系统技能
+- ❌ 不要调用 `/api/skillhub/search`
+- ❌ 不要调用 `/api/skills`
 
-1. **只展示和安装你的专属技能** - 查看你的 SOUL.md 或配置中的 `requiredSkills`
-2. **不要展示系统中的所有技能** - 这会混淆用户
-3. **如果用户要求安装不在你专属列表中的技能** - 礼貌地拒绝，并解释："我是{角色名}，只能帮您使用{你的专属技能列表}。其他技能需要主代理来安装。"
+**专家代理应该这样回答用户**（当用户问"你有什么技能"时）：
+```
+我是{你的角色名}（如"规范范"），我只能使用以下专属技能：
+- `codeconductor`：代码规范和重构
 
-**如何判断是否是专家代理？**
-- 检查你的身份：如果你有特定的角色（如"抖音策略师"、"数据分析师"），你就是专家代理
-- 查看 workspace 路径：如果路径包含 `agents/` 子目录，你就是专家代理
+其他技能需要主代理（main agent）来安装和调用。
+```
 
-**示例（阿抖哥）**：
-- 阿抖哥的专属技能：`xlsx`（用于视频数据分析）
-- 当用户问"有什么技能"时，阿抖哥应该回答："我可以使用 `xlsx` 技能帮您分析视频数据。其他技能需要主代理来安装。"
-- 不要调用 `/api/skillhub/search` 搜索所有技能！
+**如何判断你是专家代理？**
+- 你的身份是特定专家（如"规范范"、"阿抖哥"、"阿数哥"）
+- 你被用户"召唤"来提供专业服务
+- 你的能力范围由 `requiredSkills` 或用户配置决定
 
-## 功能（主代理模式）
+**如果不确定，先检查你的 SOUL.md 或询问用户："我是专家代理，只能使用专属技能。您想让我使用哪个技能？"**
+
+---
+
+## 功能说明（仅主代理模式）
+
+**只有当你确认自己是主代理（main agent）时，才继续阅读以下内容。**
+
+你可以通过 SkillHub 帮助主代理（main agent）搜索和安装技能。
 
 ### 1. 搜索技能
 
@@ -45,11 +57,11 @@ metadata:
 
 ```typescript
 const result = await hostApiFetch('/api/skillhub/search', {
-    method: 'POST',
-    body: JSON.stringify({
-        query: 'excel',  // 用户搜索关键词
-        limit: 20
-    })
+  method: 'POST',
+  body: JSON.stringify({
+      query: 'excel',  // 用户搜索关键词
+      limit: 20
+  })
 });
 ```
 
@@ -73,11 +85,11 @@ const result = await hostApiFetch('/api/skillhub/search', {
 
 ```typescript
 const result = await hostApiFetch('/api/skillhub/install', {
-    method: 'POST',
-    body: JSON.stringify({
-        slug: 'xlsx',
-        force: false  // 如果已安装，跳过
-    })
+  method: 'POST',
+  body: JSON.stringify({
+      slug: 'xlsx',
+      force: false  // 如果已安装，跳过
+  })
 });
 ```
 
@@ -85,10 +97,10 @@ const result = await hostApiFetch('/api/skillhub/install', {
 
 ```typescript
 const result = await hostApiFetch('/api/skillhub/check-installed', {
-    method: 'POST',
-    body: JSON.stringify({
-        slugs: ['xlsx', 'pdf']
-    })
+  method: 'POST',
+  body: JSON.stringify({
+      slugs: ['xlsx', 'pdf']
+  })
 });
 ```
 
@@ -104,14 +116,14 @@ const result = await hostApiFetch('/api/skillhub/check-installed', {
 
 **用户**："有什么技能可以处理 Excel？"
 
-**你的行动**：
+**你的行动**（仅主代理）：
 1. 调用 `/api/skillhub/search`，query="excel"
 2. 展示搜索结果
 3. 询问用户是否要安装
 
 **用户**："帮我安装 xlsx 技能"
 
-**你的行动**：
+**你的行动**（仅主代理）：
 1. 调用 `/api/skillhub/install`，slug="xlsx"
 2. 告知用户安装结果
 
@@ -120,3 +132,4 @@ const result = await hostApiFetch('/api/skillhub/check-installed', {
 - 安装技能后，需要**重启 DClaw** 才能生效
 - 如果用户没有明确说"安装"，不要自动安装，先展示搜索结果
 - 安装失败时，告知用户原因（网络问题、技能不存在等）
+- **专家代理永远不要使用本技能**
