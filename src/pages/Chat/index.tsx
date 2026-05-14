@@ -107,6 +107,9 @@ export function Chat() {
   const currentAgentId = useChatStore((s) => s.currentAgentId);
   const sessionLabels = useChatStore((s) => s.sessionLabels);
   const loading = useChatStore((s) => s.loading);
+  const loadingMoreHistory = useChatStore((s) => s.loadingMoreHistory);
+  const hasMoreHistory = useChatStore((s) => s.hasMoreHistory);
+  const loadMoreHistory = useChatStore((s) => s.loadMoreHistory);
   const sending = useChatStore((s) => s.sending);
   const error = useChatStore((s) => s.error);
   const runError = useChatStore((s) => s.runError);
@@ -672,11 +675,21 @@ export function Chat() {
     }
   }, [userRunCards, messages, currentSessionKey]);
 
+  const platform = window.electron?.platform;
+  const isMac = platform === 'darwin';
+  const isWindows = platform === 'win32';
+
   return (
     <div
       ref={splitContainerRef}
-      className={cn('relative flex min-h-0 -m-6 transition-colors duration-500 dark:bg-background')}
-      style={{ height: 'calc(100vh - 2.5rem)' }}
+      data-testid="chat-page"
+      className={cn(
+        'relative flex min-h-0 -m-6 overflow-hidden transition-colors duration-500',
+        'bg-background',
+        isMac && 'rounded-tl-2xl shadow-[inset_1px_1px_0_hsl(var(--border)/0.55)]',
+        isWindows && 'rounded-tl-2xl',
+      )}
+      style={{ height: isMac ? '100vh' : 'calc(100vh - 2.5rem)' }}
     >
       {/* Left column: chat */}
       <div className="flex min-w-0 flex-1 flex-col">
@@ -700,6 +713,20 @@ export function Chat() {
                 <WelcomeScreen />
               ) : (
                 <>
+                  {hasMoreHistory && (
+                    <div className="flex justify-center pt-2">
+                      <button
+                        type="button"
+                        onClick={() => void loadMoreHistory()}
+                        disabled={loadingMoreHistory}
+                        className="inline-flex items-center gap-2 rounded-full border border-border bg-background/80 px-3 py-1.5 text-xs text-muted-foreground shadow-sm transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-60"
+                        data-testid="chat-load-more-history"
+                      >
+                        {loadingMoreHistory && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                        {loadingMoreHistory ? t('loadingMoreHistory', '加载更多中...') : t('loadMoreHistory', '加载更早的消息')}
+                      </button>
+                    </div>
+                  )}
                   {messages.map((msg, idx) => {
                     if (foldedNarrationIndices.has(idx)) return null;
                     const suppressToolCards = userRunCards.some((card) =>
@@ -868,7 +895,7 @@ export function Chat() {
             <PanelResizeDividerLazy containerRef={splitContainerRef} />
           </Suspense>
           <aside
-            className="hidden shrink-0 border-l border-black/5 dark:border-white/10 lg:flex lg:flex-col"
+            className="relative z-20 hidden shrink-0 border-l border-black/5 dark:border-white/10 lg:flex lg:flex-col"
             style={{ width: `${panelWidthPct}%` }}
           >
             <Suspense

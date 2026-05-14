@@ -72,6 +72,8 @@ export interface ChatSession {
   key: string;
   label?: string;
   displayName?: string;
+  derivedTitle?: string;
+  lastMessagePreview?: string;
   thinkingLevel?: string;
   model?: string;
   updatedAt?: number;
@@ -91,6 +93,8 @@ export interface ChatState {
   // Messages
   messages: RawMessage[];
   loading: boolean;
+  loadingMoreHistory: boolean;
+  hasMoreHistory: boolean;
   error: string | null;
   runError: string | null;
 
@@ -122,8 +126,10 @@ export interface ChatState {
   switchSession: (key: string) => void;
   newSession: () => void;
   deleteSession: (key: string) => Promise<void>;
+  renameSession: (key: string, label: string) => Promise<void>;
   cleanupEmptySession: () => void;
   loadHistory: (quiet?: boolean) => Promise<void>;
+  loadMoreHistory: () => Promise<void>;
   sendMessage: (
     text: string,
     attachments?: Array<{
