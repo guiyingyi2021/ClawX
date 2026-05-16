@@ -4,7 +4,7 @@
  * All file I/O is async (fs/promises) to avoid blocking the Electron
  * main thread.
  */
-import { access, readFile, writeFile, readdir, unlink } from 'fs/promises';
+import { access, readFile, writeFile, readdir, unlink, mkdir } from 'fs/promises';
 import { constants } from 'fs';
 import { join, resolve, sep } from 'path';
 import { homedir } from 'os';
@@ -393,4 +393,24 @@ async function runEnsureDclawContext(options: EnsureDclawContextOptions): Promis
 
   logger.warn(`Dclaw context merge: ${result.retryableMissing} startup file(s) still missing after ${MAX_RETRIES} retries`);
   await removeChatFirstBootstrapFiles();
+}
+
+// ── Identity file ─────────────────────────────────────────────
+
+/**
+ * Ensure IDENTITY.md exists in the workspace so the desktop workspace
+ * skips the chat-first bootstrap flow.
+ */
+export async function ensureDclawIdentityFile(
+  workspacePath: string,
+  options: { createDir?: boolean } = {}
+): Promise<void> {
+  if (options.createDir) {
+    await mkdir(workspacePath, { recursive: true });
+  }
+
+  const identityPath = join(workspacePath, 'IDENTITY.md');
+  if (!await fileExists(identityPath)) {
+    await writeFile(identityPath, '# Identity\n\n', 'utf-8');
+  }
 }
