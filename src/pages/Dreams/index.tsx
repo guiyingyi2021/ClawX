@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+﻿import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Archive,
   BookOpen,
@@ -345,7 +345,7 @@ export function Dreams() {
       await rpc<unknown>('config.patch', {
         raw: buildDreamingEnabledPatchRaw(enabled),
         baseHash: snapshot.hash,
-        note: enabled ? 'Enable memory dreaming from ClawX Dreams.' : 'Disable memory dreaming from ClawX Dreams.',
+        note: enabled ? 'Enable memory dreaming from Dclaw Dreams.' : 'Disable memory dreaming from Dclaw Dreams.',
       }, 30_000);
       const message = enabled ? t('actions.enableSuccess') : t('actions.disableSuccess');
       setDreaming((current) => ({ ...(current ?? {}), enabled }));

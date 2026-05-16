@@ -1,4 +1,4 @@
-import { app } from 'electron';
+﻿import { app } from 'electron';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { request } from 'https';
 import path from 'path';
@@ -28,7 +28,7 @@ function buildDclawUvConfigToml(): string {
 }
 
 export function getDclawUvConfigFilePath(): string {
-  return path.join(getOpenClawConfigDir(), 'dclaw', 'uv.toml'');
+  return path.join(getOpenClawConfigDir(), 'dclaw', 'uv.toml');
 }
 
 function ensureDclawUvConfigFile(): string | null {

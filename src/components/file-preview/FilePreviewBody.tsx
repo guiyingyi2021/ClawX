@@ -393,7 +393,7 @@ export function FilePreviewBody({
         <p className="max-w-md text-xs leading-relaxed text-muted-foreground">
           {directOpen
             ? t('filePreview.errors.largeBinaryOpenHint', {
-              defaultValue: 'This file is {{size}}. ClawX does not provide an inline preview for it. You can confirm to open it directly in your system default app.',
+              defaultValue: 'This file is {{size}}. Dclaw does not provide an inline preview for it. You can confirm to open it directly in your system default app.',
               size: formatFileSize(size ?? 0) || '> 2MB',
             })
             : t(
@@ -435,7 +435,7 @@ export function FilePreviewBody({
           <p>
             {directOpen
               ? t('filePreview.errors.largeBinaryOpenHint', {
-                defaultValue: 'This file is {{size}}. ClawX does not provide an inline preview for it. You can confirm to open it directly in your system default app.',
+                defaultValue: 'This file is {{size}}. Dclaw does not provide an inline preview for it. You can confirm to open it directly in your system default app.',
                 size: formatFileSize(state.size ?? size ?? 0) || '> 2MB',
               })
               : t('filePreview.errors.tooLarge', {

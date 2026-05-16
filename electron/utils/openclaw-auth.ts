@@ -1,4 +1,4 @@
-/**
+﻿/**
  * OpenClaw Auth Profiles Utility
  * Writes API keys to configured OpenClaw agent auth-profiles.json files
  * so the OpenClaw Gateway can load them for AI provider calls.
@@ -448,7 +448,7 @@ function getApiKeyFromAuthProfilesStore(
 /**
  * Read the API key OpenClaw will use for a runtime provider key.
  *
- * This intentionally reads auth-profiles.json rather than ClawX's provider
+ * This intentionally reads auth-profiles.json rather than Dclaw's provider
  * cache, so UI status can reflect providers imported or preserved by the
  * OpenClaw runtime across overwrite installs.
  */
@@ -2345,7 +2345,7 @@ export async function sanitizeOpenClawConfig(): Promise<void> {
 
       // Discover all bundled extension IDs so we can clean stale bundled
       // allowlist entries from older OpenClaw versions. Re-add only the
-      // ClawX-critical bundled plugins, active provider plugins, and explicitly
+      // Dclaw-critical bundled plugins, active provider plugins, and explicitly
       // enabled bundled plugins — not every enabledByDefault provider plugin.
       const bundled = discoverBundledPlugins();
       const installedExtensionIds = await discoverInstalledExtensionPluginIds();

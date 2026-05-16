@@ -1,8 +1,8 @@
-{
+﻿{
   "version": "1.0",
-  "project": "ClawX",
+  "project": "Dclaw",
   "brand": "dclaw",
-  "applied_at": "E:\\ClawX",
+  "applied_at": "E:\\Dclaw",
   "files": {
     "icon_files": [
       "resources/icons/icon.png",
