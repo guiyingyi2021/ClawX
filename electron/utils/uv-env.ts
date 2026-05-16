@@ -28,7 +28,7 @@ function buildDclawUvConfigToml(): string {
 }
 
 export function getDclawUvConfigFilePath(): string {
-  return path.join(getOpenClawConfigDir(), 'clawx', 'uv.toml');
+  return path.join(getOpenClawConfigDir(), 'dclaw', 'uv.toml'');
 }
 
 function ensureDclawUvConfigFile(): string | null {

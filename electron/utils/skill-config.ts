@@ -51,7 +51,7 @@ interface PreinstalledLockFile {
 }
 
 interface PreinstalledMarker {
-    source: 'clawx-preinstalled';
+    source: 'dclaw-preinstalled';
     slug: string;
     version: string;
     installedAt: string;
@@ -230,7 +230,7 @@ export async function ensureBuiltinSkillsInstalled(): Promise<void> {
 }
 
 const PREINSTALLED_MANIFEST_NAME = 'preinstalled-manifest.json';
-const PREINSTALLED_MARKER_NAME = '.clawx-preinstalled.json';
+const PREINSTALLED_MARKER_NAME = '.dclaw-preinstalled.json';
 
 async function readPreinstalledManifest(): Promise<PreinstalledSkillSpec[]> {
     const candidates = [
@@ -365,7 +365,7 @@ export async function ensurePreinstalledSkillsInstalled(): Promise<void> {
             await mkdir(targetDir, { recursive: true });
             await cpAsyncSafe(sourceDir, targetDir);
             const markerPayload: PreinstalledMarker = {
-                source: 'clawx-preinstalled',
+                source: 'dclaw-preinstalled',
                 slug: spec.slug,
                 version: desiredVersion,
                 installedAt: new Date().toISOString(),

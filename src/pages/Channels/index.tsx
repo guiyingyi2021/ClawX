@@ -65,7 +65,7 @@ interface GatewayDiagnosticSnapshot {
   platform: string;
   gateway: GatewayHealthSummary & Record<string, unknown>;
   channels: ChannelGroupItem[];
-  clawxLogTail: string;
+  dclawLogTail: string;
   gatewayLogTail: string;
   gatewayErrLogTail: string;
 }
@@ -82,7 +82,7 @@ function isGatewayDiagnosticSnapshot(value: unknown): value is GatewayDiagnostic
     && typeof snapshot.gateway === 'object'
     && snapshot.gateway !== null
     && Array.isArray(snapshot.channels)
-    && typeof snapshot.clawxLogTail === 'string'
+    && typeof snapshot.dclawLogTail === 'string'
     && typeof snapshot.gatewayLogTail === 'string'
     && typeof snapshot.gatewayErrLogTail === 'string'
   );
