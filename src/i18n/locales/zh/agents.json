@@ -22,7 +22,7 @@
     },
     "deleteDialog": {
         "title": "删除 Agent",
-        "message": "确认从 Dclaw 删除 “{{name}}”？这会永久删除该 Agent 及其由 Dclaw 管理的工作区、运行时和会话文件。"
+        "message": "确认从 ClawX 删除 “{{name}}”？这会永久删除该 Agent 及其由 ClawX 管理的工作区、运行时和会话文件。"
     },
     "settingsDialog": {
         "title": "{{name}} 设置",
@@ -37,7 +37,7 @@
         "modelIdLabel": "模型 ID",
         "modelIdPlaceholder": "model-id",
         "modelPreview": "预览",
-        "modelOverridePlaceholder": "provider/model（例如：openrouter/openai/gpt-5.4）",
+        "modelOverridePlaceholder": "provider/model（例如：openrouter/openai/gpt-5.5）",
         "modelOverrideDescription": "为该 Agent 选择 Provider 和模型 ID。",
         "unsavedChangesTitle": "未保存的修改",
         "unsavedChangesMessage": "你有未保存的修改。关闭后这些修改将被丢弃。",

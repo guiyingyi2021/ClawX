@@ -946,7 +946,7 @@ function registerCronHandlers(gatewayManager: GatewayManager): void {
   });
 
   // Create a new cron job
-  // UI-created tasks have no delivery target — results go to the Dclaw chat page.
+  // UI-created tasks have no delivery target — results go to the ClawX chat page.
   // Tasks created via external channels (Feishu, Discord, etc.) are handled
   // directly by the OpenClaw Gateway and do not pass through this IPC handler.
   ipcMain.handle('cron:create', async (_, input: {
@@ -964,7 +964,7 @@ function registerCronHandlers(gatewayManager: GatewayManager): void {
         enabled: input.enabled ?? true,
         wakeMode: 'next-heartbeat',
         sessionTarget: 'isolated',
-        // UI-created jobs deliver results via Dclaw WebSocket chat events,
+        // UI-created jobs deliver results via ClawX WebSocket chat events,
         // not external messaging channels.  Setting mode='none' prevents
         // the Gateway from attempting channel delivery (which would fail
         // with "Channel is required" when no channels are configured).
@@ -1761,7 +1761,7 @@ function registerDeviceOAuthHandlers(mainWindow: BrowserWindow): void {
     ) => {
       try {
         logger.info(`provider:requestOAuth for ${provider}`);
-        if (provider === 'google' || provider === 'openai') {
+        if (provider === 'openai') {
           await browserOAuthManager.startFlow(provider, options);
         } else {
           await deviceOAuthManager.startFlow(provider, region, options);
@@ -2067,7 +2067,7 @@ function registerProviderHandlers(gatewayManager: GatewayManager): void {
         const resolvedBaseUrl = options?.baseUrl || provider?.baseUrl || registryBaseUrl;
         const resolvedProtocol = options?.apiProtocol || provider?.apiProtocol;
 
-        console.log(`[dclaw-validate] validating provider type: ${providerType}`);
+        console.log(`[clawx-validate] validating provider type: ${providerType}`);
         return await validateApiKeyWithProvider(providerType, apiKey, {
           baseUrl: resolvedBaseUrl,
           apiProtocol: resolvedProtocol,
@@ -2356,7 +2356,6 @@ const EXT_MIME_MAP: Record<string, string> = {
   '.txt': 'text/plain',
   '.md': 'text/markdown',
   '.html': 'text/html',
-  '.htm': 'text/html',
   '.css': 'text/css',
   '.js': 'text/javascript',
   '.ts': 'text/typescript',

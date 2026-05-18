@@ -403,8 +403,7 @@ function ProviderCard({
   const [arkMode, setArkMode] = useState<ArkMode>('apikey');
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const typeInfo = PROVIDER_TYPE_INFO.find((t) => t.id === account.vendorId) ||
-    (account.vendorId.startsWith('custom-') ? PROVIDER_TYPE_INFO.find((t) => t.id === 'custom') : undefined);
+  const typeInfo = PROVIDER_TYPE_INFO.find((t) => t.id === account.vendorId);
   const providerDocsUrl = getProviderDocsUrl(typeInfo, i18n.language);
   const showModelIdField = shouldShowProviderModelId(typeInfo, devModeUnlocked);
   const codePlanPreset = typeInfo?.codePlanPresetBaseUrl && typeInfo?.codePlanPresetModelId
@@ -464,7 +463,7 @@ function ProviderCard({
         setValidating(true);
         const result = await onValidateKey(normalizedNewKey, {
           baseUrl: baseUrl.trim() || undefined,
-          apiProtocol: (account.vendorId === 'custom' || account.vendorId.startsWith('custom-') || account.vendorId === 'ollama') ? apiProtocol : undefined,
+          apiProtocol: (account.vendorId === 'custom' || account.vendorId === 'ollama') ? apiProtocol : undefined,
         });
         setValidating(false);
         if (!result.valid) {
@@ -1026,7 +1025,7 @@ function AddProviderDialog({
     ? 'oauth_browser'
     : (selectedVendor?.supportedAuthModes.includes('oauth_device')
       ? 'oauth_device'
-      : null);
+      : (selectedType === 'google' ? 'oauth_browser' : null));
   // Effective OAuth mode: pure OAuth providers, or dual-mode with oauth selected
   const useOAuthFlow = isOAuth && (!supportsApiKey || authMode === 'oauth');
 
