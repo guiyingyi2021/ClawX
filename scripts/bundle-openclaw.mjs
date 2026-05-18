@@ -454,7 +454,8 @@ patchBundledExtensionPackageJsons(extensionsDir);
 function bundleExternalExtension(pkgName, extensionId) {
   const pkgLink = path.join(NODE_MODULES, ...pkgName.split('/'));
   if (!fs.existsSync(pkgLink)) {
-    throw new Error(`Missing extension package "${pkgName}". Run pnpm install first.`);
+    echo`   ⚠️  External extension ${pkgName} not found, skipping.`;
+    return;
   }
 
   const realPath = fs.realpathSync(pkgLink);
