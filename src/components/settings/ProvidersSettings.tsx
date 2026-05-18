@@ -403,7 +403,8 @@ function ProviderCard({
   const [arkMode, setArkMode] = useState<ArkMode>('apikey');
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const typeInfo = PROVIDER_TYPE_INFO.find((t) => t.id === account.vendorId);
+  const typeInfo = PROVIDER_TYPE_INFO.find((t) => t.id === account.vendorId) ||
+    (account.vendorId.startsWith('custom-') ? PROVIDER_TYPE_INFO.find((t) => t.id === 'custom') : undefined);
   const providerDocsUrl = getProviderDocsUrl(typeInfo, i18n.language);
   const showModelIdField = shouldShowProviderModelId(typeInfo, devModeUnlocked);
   const codePlanPreset = typeInfo?.codePlanPresetBaseUrl && typeInfo?.codePlanPresetModelId
@@ -463,7 +464,7 @@ function ProviderCard({
         setValidating(true);
         const result = await onValidateKey(normalizedNewKey, {
           baseUrl: baseUrl.trim() || undefined,
-          apiProtocol: (account.vendorId === 'custom' || account.vendorId === 'ollama') ? apiProtocol : undefined,
+          apiProtocol: (account.vendorId === 'custom' || account.vendorId.startsWith('custom-') || account.vendorId === 'ollama') ? apiProtocol : undefined,
         });
         setValidating(false);
         if (!result.valid) {

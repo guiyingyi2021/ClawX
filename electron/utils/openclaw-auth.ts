@@ -1,4 +1,4 @@
-﻿/**
+/**
  * OpenClaw Auth Profiles Utility
  * Writes API keys to configured OpenClaw agent auth-profiles.json files
  * so the OpenClaw Gateway can load them for AI provider calls.
@@ -448,7 +448,7 @@ function getApiKeyFromAuthProfilesStore(
 /**
  * Read the API key OpenClaw will use for a runtime provider key.
  *
- * This intentionally reads auth-profiles.json rather than Dclaw's provider
+ * This intentionally reads auth-profiles.json rather than ClawX's provider
  * cache, so UI status can reflect providers imported or preserved by the
  * OpenClaw runtime across overwrite installs.
  */
@@ -516,6 +516,7 @@ const BUNDLED_ALLOWLIST_PRESERVE_IDS = new Set([
   'browser',
   'acpx',
   'memory-core',
+  'codex',
 ]);
 const AUTH_PROFILE_PROVIDER_KEY_MAP: Record<string, string> = {
   'openai-codex': 'openai',
@@ -1473,7 +1474,7 @@ export async function getActiveOpenClawProviders(): Promise<Set<string>> {
 
 /**
  * Read models.providers entries and agents.defaults.model from openclaw.json.
- * Used by Dclaw to seed the provider store when it's empty but providers are
+ * Used by ClawX to seed the provider store when it's empty but providers are
  * configured externally (e.g. via CLI or by editing openclaw.json directly).
  */
 export async function getOpenClawProvidersConfig(): Promise<{
@@ -1523,7 +1524,7 @@ export async function getOpenClawProvidersConfig(): Promise<{
 }
 
 /**
- * Write the Dclaw gateway token into ~/.openclaw/openclaw.json.
+ * Write the ClawX gateway token into ~/.openclaw/openclaw.json.
  */
 export async function syncGatewayTokenToConfig(token: string): Promise<void> {
   return withConfigLock(async () => {
@@ -1545,7 +1546,7 @@ export async function syncGatewayTokenToConfig(token: string): Promise<void> {
     auth.token = token;
     gateway.auth = auth;
 
-    // Packaged Dclaw loads the renderer from file://, so the gateway must allow
+    // Packaged ClawX loads the renderer from file://, so the gateway must allow
     // that origin for the chat WebSocket handshake.
     const controlUi = (
       gateway.controlUi && typeof gateway.controlUi === 'object'
@@ -1617,7 +1618,7 @@ export async function syncBrowserConfigToOpenClaw(): Promise<void> {
  * Ensure session idle-reset is configured in ~/.openclaw/openclaw.json.
  *
  * By default OpenClaw resets the "main" session daily at 04:00 local time,
- * which means conversations disappear after roughly one day.  Dclaw sets
+ * which means conversations disappear after roughly one day.  ClawX sets
  * `session.idleMinutes` to 10 080 (7 days) so that conversations are
  * preserved for a week unless the user has explicitly configured their own
  * value.  When `idleMinutes` is set without `session.reset` /
@@ -1840,7 +1841,7 @@ export async function updateSingleAgentModelProvider(
  * Removes known-invalid keys that cause OpenClaw's strict Zod validation
  * to reject the entire config on startup.  Uses a conservative **blocklist**
  * approach: only strips keys that are KNOWN to be misplaced by older
- * OpenClaw/Dclaw versions or external tools.
+ * OpenClaw/ClawX versions or external tools.
  *
  * Why blocklist instead of allowlist?
  *   • Allowlist (e.g. `VALID_SKILLS_KEYS`) would strip any NEW valid keys
@@ -2019,7 +2020,7 @@ export async function sanitizeOpenClawConfig(): Promise<void> {
 
     // ── tools.profile & sessions.visibility ───────────────────────
     // OpenClaw 3.8+ requires tools.profile = 'full' and tools.sessions.visibility = 'all'
-    // for Dclaw to properly integrate with its updated tool system.
+    // for ClawX to properly integrate with its updated tool system.
     const toolsConfig = (config.tools as Record<string, unknown> | undefined) || {};
     let toolsModified = false;
 
@@ -2036,7 +2037,7 @@ export async function sanitizeOpenClawConfig(): Promise<void> {
     }
 
     // ── tools.exec approvals (OpenClaw 3.28+) ──────────────────────
-    // Dclaw is a local desktop app where the user is the trusted operator.
+    // ClawX is a local desktop app where the user is the trusted operator.
     // Exec approval prompts add unnecessary friction in this context, so we
     // set security="full" (allow all commands) and ask="off" (never prompt).
     // If a user has manually configured a stricter ~/.openclaw/exec-approvals.json,
@@ -2047,7 +2048,7 @@ export async function sanitizeOpenClawConfig(): Promise<void> {
       execConfig.ask = 'off';
       toolsConfig.exec = execConfig;
       toolsModified = true;
-      console.log('[sanitize] Set tools.exec.security="full" and tools.exec.ask="off" to disable exec approvals for Dclaw desktop');
+      console.log('[sanitize] Set tools.exec.security="full" and tools.exec.ask="off" to disable exec approvals for ClawX desktop');
     }
 
     if (toolsModified) {
@@ -2290,32 +2291,25 @@ export async function sanitizeOpenClawConfig(): Promise<void> {
       }
 
 
-      // ── Disable built-in 'feishu' when official openclaw-lark plugin is active ──
-      // OpenClaw ships a built-in 'feishu' extension in dist/extensions/feishu/
-      // that conflicts with the official @larksuite/openclaw-lark plugin
-      // (id: 'openclaw-lark').  When the feishu channel IS configured and the
-      // canonical plugin is NOT the built-in 'feishu' itself, we must:
-      //   1. Remove bare 'feishu' from plugins.allow
-      //   2. Explicitly disable the built-in feishu extension
+      // ── Remove legacy built-in 'feishu' registration ───────────────
+      // ClawX bundles Feishu via the official @larksuite/openclaw-lark
+      // plugin and removes the old built-in dist/extensions/feishu tree.
+      // Keeping plugins.entries.feishu={enabled:false} looks harmless, but
+      // OpenClaw's channel startup planner treats it as an explicit blocker
+      // for the feishu channel owner and skips openclaw-lark at runtime.
       const allowArr2 = Array.isArray(pluginsObj.allow) ? pluginsObj.allow as string[] : [];
       if (isFeishuConfigured) {
         const hasCanonicalFeishu = allowArr2.includes(canonicalFeishuId) || !!pEntries[canonicalFeishuId];
         if (hasCanonicalFeishu && canonicalFeishuId !== 'feishu') {
-          // Remove bare 'feishu' from plugins.allow
           const bareFeishuIdx = allowArr2.indexOf('feishu');
           if (bareFeishuIdx !== -1) {
             allowArr2.splice(bareFeishuIdx, 1);
             console.log('[sanitize] Removed bare "feishu" from plugins.allow (openclaw-lark plugin is configured)');
             modified = true;
           }
-          // Explicitly disable the built-in feishu extension so it doesn't
-          // conflict with the official openclaw-lark plugin at runtime.
-          // Simply deleting the entry is NOT sufficient — the built-in
-          // extension in dist/extensions/feishu/ (enabledByDefault: true) will
-          // still load unless explicitly marked as disabled.
-          if (!pEntries.feishu || (pEntries.feishu as Record<string, unknown>).enabled !== false) {
-            pEntries.feishu = { enabled: false };
-            console.log('[sanitize] Disabled built-in feishu plugin (openclaw-lark plugin is configured)');
+          if (pEntries.feishu) {
+            delete pEntries.feishu;
+            console.log('[sanitize] Removed legacy plugins.entries.feishu (openclaw-lark plugin is configured)');
             modified = true;
           }
         }
@@ -2345,7 +2339,7 @@ export async function sanitizeOpenClawConfig(): Promise<void> {
 
       // Discover all bundled extension IDs so we can clean stale bundled
       // allowlist entries from older OpenClaw versions. Re-add only the
-      // Dclaw-critical bundled plugins, active provider plugins, and explicitly
+      // ClawX-critical bundled plugins, active provider plugins, and explicitly
       // enabled bundled plugins — not every enabledByDefault provider plugin.
       const bundled = discoverBundledPlugins();
       const installedExtensionIds = await discoverInstalledExtensionPluginIds();
@@ -2484,6 +2478,48 @@ export async function sanitizeOpenClawConfig(): Promise<void> {
         if (mirrored) {
           modified = true;
           console.log(`[sanitize] Mirrored ${channelType} default account credentials to top-level channels.${channelType}`);
+        }
+
+        if (channelType === 'discord') {
+          const sanitizeDiscordGuildChannelConfig = (channelConfig: unknown): boolean => {
+            if (!channelConfig || typeof channelConfig !== 'object' || Array.isArray(channelConfig)) return false;
+            const channelRecord = channelConfig as Record<string, unknown>;
+            let channelModified = false;
+            if (channelRecord.allow === false && channelRecord.enabled === undefined) {
+              channelRecord.enabled = false;
+              channelModified = true;
+            }
+            for (const key of ['allow']) {
+              if (key in channelRecord) {
+                delete channelRecord[key];
+                channelModified = true;
+              }
+            }
+            return channelModified;
+          };
+          const sanitizeDiscordGuilds = (target: Record<string, unknown>): boolean => {
+            const guilds = target.guilds;
+            if (!guilds || typeof guilds !== 'object' || Array.isArray(guilds)) return false;
+            let guildsModified = false;
+            for (const guildConfig of Object.values(guilds as Record<string, unknown>)) {
+              if (!guildConfig || typeof guildConfig !== 'object' || Array.isArray(guildConfig)) continue;
+              const channels = (guildConfig as Record<string, unknown>).channels;
+              if (!channels || typeof channels !== 'object' || Array.isArray(channels)) continue;
+              for (const channelConfig of Object.values(channels as Record<string, unknown>)) {
+                guildsModified = sanitizeDiscordGuildChannelConfig(channelConfig) || guildsModified;
+              }
+            }
+            return guildsModified;
+          };
+
+          const sanitizedTopLevel = sanitizeDiscordGuilds(section);
+          const sanitizedAccounts = Object.values(accounts ?? {}).some((accountConfig) => (
+            accountConfig && typeof accountConfig === 'object' && sanitizeDiscordGuilds(accountConfig)
+          ));
+          if (sanitizedTopLevel || sanitizedAccounts) {
+            modified = true;
+            console.log('[sanitize] Removed incompatible Discord channel allow flags');
+          }
         }
       }
     }
