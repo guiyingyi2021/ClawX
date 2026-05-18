@@ -7,9 +7,26 @@
  * - 平滑切换体验
  */
 
-import { BrowserView, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserView, BrowserWindow, ipcMain, ipcRenderer } from 'electron';
+import { join } from 'path';
+import { readFileSync, existsSync, watchFile } from 'fs';
 
-const AIGC_URL = 'https://aigc.dayunzhonglian.com/hthotpc/100005';
+// AIGC site_id 配置（可配置，避免硬编码）
+// 优先级：1. ~/.dclaw/aigc-config.json  2. 默认值 100000
+function getAigcSiteId(): string {
+  try {
+    const configPath = join(app.getPath('home'), '.dclaw', 'aigc-config.json');
+    if (existsSync(configPath)) {
+      const config = JSON.parse(readFileSync(configPath, 'utf8'));
+      if (config.siteId) return config.siteId;
+    }
+  } catch { /* ignore */ }
+  return '100000'; // 默认 site_id
+}
+
+function getAigcUrl(): string {
+  return `https://aigc.dayunzhonglian.com/hthotpc/${getAigcSiteId()}`;
+}
 
 let aigcView: BrowserView | null = null;
 let mainWindowRef: BrowserWindow | null = null;
@@ -37,8 +54,10 @@ function createAigcView(mainWindow: BrowserWindow): BrowserView {
     }
   });
 
-  // 加载 AIGC 站点
-  view.webContents.loadURL(AIGC_URL);
+  // 加载 AIGC 站点（动态 URL，支持配置 site_id）
+  const aigcUrl = getAigcUrl();
+  console.log('[AIGC] 加载 URL:', aigcUrl);
+  view.webContents.loadURL(aigcUrl);
 
   // 监听加载状态
   view.webContents.on('did-finish-load', () => {
