@@ -249,14 +249,26 @@ function normalizeStreamingMessage(message: unknown): unknown {
  * is important: the user bubble renders the cleaned text, so the comparison
  * used to dedupe optimistic vs server echoes must operate on the same
  * cleaned form — otherwise the same visible message renders twice.
+ *
+ * Order matters: the `[media attached: ...]` lines are commonly emitted
+ * BETWEEN the Sender block and the `[Mon ... GMT+8]` timestamp prefix.
+ * If we strip the timestamp before the media-attached lines, the timestamp
+ * regex (`^\s*\[(?:Mon|...)]`) can never match because the leading `[` is
+ * `[media attached:` instead — leaving the timestamp in the normalized
+ * comparison text and breaking optimistic-vs-echo dedupe.
  */
 function stripGatewayUserMetadata(text: string): string {
   return text
-    .replace(/^\s*\[(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}\s+[^\]]+\]\s*/i, '')
     .replace(/\s*\[media attached:[^\]]*\]/g, '')
     .replace(/\s*\[message_id:\s*[^\]]+\]/g, '')
+    .replace(/^Sender\s*\([^)]*\):\s*```[a-z]*\n[\s\S]*?```\s*/i, '')
+    .replace(/^Sender\s*\([^)]*\):\s*\{[\s\S]*?\}\s*/i, '')
+    .replace(/^Sender\s*:\s*```[a-z]*\n[\s\S]*?```\s*/i, '')
+    .replace(/^Sender\s*:\s*\{[\s\S]*?\}\s*/i, '')
+    .replace(/^Sender\s*:\s*[^\n]*(?:\n\s*)*/i, '')
     .replace(/^Conversation info\s*\([^)]*\):\s*```[a-z]*\n[\s\S]*?```\s*/i, '')
-    .replace(/^Conversation info\s*\([^)]*\):\s*\{[\s\S]*?\}\s*/i, '');
+    .replace(/^Conversation info\s*\([^)]*\):\s*\{[\s\S]*?\}\s*/i, '')
+    .replace(/^\s*\[(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}\s+[^\]]+\]\s*/i, '');
 }
 
 function normalizeComparableUserText(content: unknown): string {
@@ -1427,6 +1439,35 @@ function collectToolUpdates(message: unknown, eventState: string): ToolStatus[] 
   return updates;
 }
 
+/**
+ * True when an assistant message is still waiting on a tool result, i.e. it
+ * represents an intermediate tool-use turn rather than a finished reply.
+ * Detected via:
+ *   - explicit stop_reason = "tool_use" / "toolUse"
+ *   - any tool_use / toolCall block in `content`
+ *   - OpenAI-format `tool_calls` array
+ * Used by applyLoadedMessages and the runtime `final` handler to keep the
+ * `sending` / `activeRunId` / `pendingFinal` flags armed across tool rounds.
+ */
+function hasPendingToolUse(message: RawMessage | undefined): boolean {
+  if (!message) return false;
+  const reason = getMessageStopReason(message);
+  if (reason === 'tool_use' || reason === 'tooluse') return true;
+
+  const content = message.content;
+  if (Array.isArray(content)) {
+    for (const block of content as ContentBlock[]) {
+      if (block.type === 'tool_use' || block.type === 'toolCall') return true;
+    }
+  }
+
+  const msg = message as unknown as Record<string, unknown>;
+  const toolCalls = msg.tool_calls ?? msg.toolCalls;
+  if (Array.isArray(toolCalls) && toolCalls.length > 0) return true;
+
+  return false;
+}
+
 function hasNonToolAssistantContent(message: RawMessage | undefined): boolean {
   if (!message) return false;
   if (typeof message.content === 'string' && message.content.trim()) return true;
@@ -1434,8 +1475,7 @@ function hasNonToolAssistantContent(message: RawMessage | undefined): boolean {
   const content = message.content;
   if (Array.isArray(content)) {
     for (const block of content as ContentBlock[]) {
-      if (block.type === 'text' && block.text && block.text.trim()) return true;
-      if (block.type === 'thinking' && block.thinking && block.thinking.trim()) return true;
+       if (block.type === 'text' && block.text && block.text.trim()) return true;
       if (block.type === 'image') return true;
     }
   }
