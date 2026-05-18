@@ -12,7 +12,7 @@ import { join } from 'path';
 import { readFileSync, existsSync, watchFile } from 'fs';
 
 // AIGC site_id 配置（可配置，避免硬编码）
-// 优先级：1. ~/.dclaw/aigc-config.json  2. 默认值 100000
+// 优先级：1. ~/.dclaw/aigc-config.json  2. 默认值 100005
 function getAigcSiteId(): string {
   try {
     const configPath = join(app.getPath('home'), '.dclaw', 'aigc-config.json');
@@ -21,7 +21,7 @@ function getAigcSiteId(): string {
       if (config.siteId) return config.siteId;
     }
   } catch { /* ignore */ }
-  return '100000'; // 默认 site_id
+  return '100005'; // 默认 site_id（与原硬编码值保持一致）
 }
 
 function getAigcUrl(): string {
