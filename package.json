@@ -1,6 +1,6 @@
 {
   "name": "dclaw",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@discordjs/opus",
