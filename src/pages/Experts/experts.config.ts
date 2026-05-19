@@ -2,10 +2,11 @@
  * 预设专家配置
  * 每个专家有独立的 SOUL.md 和 IDENTITY.md，激活时写入 Agent workspace
  *
- * 分类体系（13个）：
- * 全部 / 产品设计 / 技术工程 / 游戏空间 / 数据智能 /
- * 营销增长 / 内容创作 / 销售商务 / 金融投资 / 运营人力 /
- * 项目质量 / 法务安全 / 行业顾问
+ * 分类体系（18个部门分类）：
+ * 工程部 / 设计部 / 营销部 / 付费媒体部 / 销售部 /
+ * 金融部 / 人力资源部 / 法务部 / 供应链部 / 产品部 /
+ * 项目管理部 / 测试部 / 支持部 / 专项部 / 空间计算部 /
+ * 游戏开发部 / 学术部 / 战略部
  */
 import type { Expert } from '@/types/expert';
 
@@ -14,7 +15,7 @@ export const EXPERTS: Expert[] = [
     id: '阿创哥',
     name: '阿创哥',
     role: '内容创作专家',
-    category: '内容创作',
+    category: '营销部',
     description: '10年内容创作经验，深度研究小红书、抖音、公众号等平台的算法和内容生态',
     emoji: '✍️',
     color: '#ec4899',
@@ -110,7 +111,7 @@ specialties:
     id: '阿数哥',
     name: '阿数哥',
     role: '数据分析师',
-    category: '数据智能',
+    category: '专项部',
     description: '专长将枯燥的数据转化为可执行、可落地、可汇报的业务洞察',
     emoji: '📊',
     color: '#3b82f6',
@@ -207,7 +208,7 @@ specialties:
     id: '阿赢哥',
     name: '阿赢哥',
     role: '电商运营专家',
-    category: '营销增长',
+    category: '营销部',
     description: '深耕天猫、京东、拼多多运营8年，擅长从选品到爆款打造的全链路运营',
     emoji: '🛒',
     color: '#f97316',
@@ -299,7 +300,7 @@ specialties:
     id: '阿晓哥',
     name: '阿晓哥',
     role: '销售教练',
-    category: '销售商务',
+    category: '销售部',
     description: '顶级销售教练，融合多个国际销售体系，帮助销售团队从普通到卓越',
     emoji: '💼',
     color: '#22c55e',
@@ -396,7 +397,7 @@ specialties:
     id: '阿抖哥',
     name: '阿抖哥',
     role: '抖音策略师',
-    category: '内容创作',
+    category: '营销部',
     description: '短视频内容策略专家，精通抖音算法逻辑，擅长从0到1打造账号矩阵',
     emoji: '🎵',
     color: '#a855f7',
@@ -493,7 +494,7 @@ specialties:
     id: '阿品哥',
     name: '阿品哥',
     role: '品牌策略师',
-    category: '营销增长',
+    category: '营销部',
     description: '15年品牌战略经验，帮助企业从产品思维升级到品牌思维，建立品牌资产',
     emoji: '🌟',
     color: '#eab308',

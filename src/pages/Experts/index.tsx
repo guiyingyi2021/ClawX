@@ -8,10 +8,11 @@
  *
  * 召唤 = 下载 SOUL.md + 创建 Agent + 切换对话，一键完成
  *
- * 固定分类（13个）：
- * 全部 / 产品设计 / 技术工程 / 游戏空间 / 数据智能 /
- * 营销增长 / 内容创作 / 销售商务 / 金融投资 / 运营人力 /
- * 项目质量 / 法务安全 / 行业顾问
+ * 固定分类（18个部门分类）：
+ * 工程部 / 设计部 / 营销部 / 付费媒体部 / 销售部 /
+ * 金融部 / 人力资源部 / 法务部 / 供应链部 / 产品部 /
+ * 项目管理部 / 测试部 / 支持部 / 专项部 / 空间计算部 /
+ * 游戏开发部 / 学术部 / 战略部
  */
 import { useNavigate } from 'react-router-dom';
 import { Zap, RefreshCw, Check, Search,
@@ -53,6 +54,27 @@ import { SkillConfigDialog } from '@/components/SkillConfigDialog';
 // ============================================================
 
 const PAGE_SIZE = 12;
+
+// 旧分类到新部门分类的映射（与 market-loader.ts 保持一致）
+const LEGACY_CATEGORY_MAPPING: Record<string, string> = {
+  '销售商务': '销售部',
+  '营销增长': '营销部',
+  '产品设计': '产品部', // 产品设计可能涉及产品和设计，暂归产品部
+  '技术工程': '工程部',
+  '游戏空间': '游戏开发部',
+  '数据智能': '专项部', // 数据智能属于专项领域
+  '内容创作': '营销部', // 内容创作属于营销范畴
+  '金融投资': '金融部',
+  '运营人力': '人力资源部',
+  '项目质量': '项目管理部',
+  '法务安全': '法务部',
+  '行业顾问': '战略部', // 行业顾问属于战略规划
+};
+
+// 将专家分类映射到新的部门分类
+function mapExpertCategory(category: string): string {
+  return LEGACY_CATEGORY_MAPPING[category] || category;
+}
 
 // ============================================================
 // ExpertCard - 通用卡片（我的专家 & 使用中 共用）
@@ -379,10 +401,10 @@ export function ExpertCenter() {
         // 不过滤
       } else if (activeCategory === '更多') {
         result = result.filter(e =>
-          !ALL_CATEGORIES.slice(0, -2).includes(e.category as any)
+          !ALL_CATEGORIES.slice(0, -2).includes(mapExpertCategory(e.category) as any)
         );
       } else {
-        result = result.filter(e => e.category === activeCategory);
+        result = result.filter(e => mapExpertCategory(e.category) === activeCategory);
       }
     }
 
@@ -732,10 +754,10 @@ export function ExpertCenter() {
     if (category === '全部') return sourceList.length;
     if (category === '更多') {
       return sourceList.filter(e =>
-        !ALL_CATEGORIES.slice(0, -2).includes(e.category as any)
+        !ALL_CATEGORIES.slice(0, -2).includes(mapExpertCategory(e.category) as any)
       ).length;
     }
-    return sourceList.filter(e => e.category === category).length;
+    return sourceList.filter(e => mapExpertCategory(e.category) === category).length;
   }, [activeTab, summonedExperts, marketExperts, experts, ALL_CATEGORIES]);
 
   // ── 判断当前 Tab 的加载状态 ──
